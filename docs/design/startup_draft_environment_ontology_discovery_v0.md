@@ -19,6 +19,9 @@
 >   draft were aligned to the governing v0.2 issue body. The technical repository inventory
 >   (commit evidence, schema/validator/firewall constraints, collision verification, consumer
 >   findings) is unchanged.
+> - **Operator architecture invariant:** Joseph approved adding the source truth → artifact →
+>   adapter → surface invariant to this canonical document on 2026-07-17. The invariant constrains
+>   later design but activates no frontier and authorizes no implementation.
 > - This document contains **no startup-draft concept definitions, no schema changes, and no
 >   implementation**. It inventories current state and constraints so later frontiers start from
 >   verified inputs. Nothing here activates Q2–Q8, any later discovery frontier, or implementation.
@@ -363,7 +366,68 @@ D1 therefore did **not** need to fail closed.
 
 ---
 
-## 9. Proposed next frontier (NOT activated)
+## 9. Architecture invariant — source truth → artifact → adapter → surface
+
+This operator-approved invariant constrains all later startup-draft capability design. It does not
+activate D2, authorize implementation, or expand the writable path set.
+
+1. **Source truth** owns the underlying fact, observation, model output, strategy definition, or
+   operator declaration. Sources must remain distinguishable by owner, provenance, timestamp,
+   freshness, and authority class.
+
+2. **Artifact** binds source material into a deterministic, versioned, schema-validated contract.
+   Missing or invalid required inputs fail closed rather than being inferred, blended, or smoothed
+   over.
+
+3. **Adapter** validates artifact identity and version, preserves provenance and unknowns, and maps
+   the artifact into stable consumer-facing types. An adapter must not silently introduce new
+   strategy, model inference, recommendation, or action authority.
+
+4. **Surface** presents observed state, structural reads, uncertainty, tradeoffs, and required
+   operator inputs. Presentation does not create new authority and must not convert conditional
+   strategy into an autonomous recommendation or action.
+
+Ownership under this invariant:
+
+- **TIBER-Strategy** owns stable structural vocabulary, definitions, guard rules, and explanation
+  contracts. It ships rules, not player-specific labels or live decision instances.
+- A **runtime producer** owns the league-specific decision-envelope instance and binds current
+  league rules, board state, source artifacts, and operator declarations without confusing those
+  source classes.
+- **TIBER-Fantasy** owns league context, consumer adapters/orchestration, and product presentation.
+- **The human operator** owns the final decision and action.
+
+The startup-draft work must preserve two adjacent but separate artifact responsibilities:
+
+```text
+Strategy source truth
+→ stable strategy ontology artifact
+→ strategy adapter
+→ teaching / interpretation surface
+
+Live league, draft, model, and operator source truths
+→ runtime decision-envelope artifact
+→ runtime adapter / orchestration
+→ contextual decision-support surface
+```
+
+The stable Strategy artifact defines what a concept means. The runtime decision envelope records
+whether and how that concept applies in one current league state. Neither artifact may claim that
+the system selected an optimal player or action.
+
+Operator review questions for every later checkpoint:
+
+1. **Source truth:** Where did this claim come from, who owns it, how current is it, and what
+   authority class does it carry?
+2. **Artifact:** What versioned object binds it, and does missing evidence fail closed?
+3. **Adapter:** Is the adapter only validating and translating, or is it quietly inventing new
+   reasoning or authority?
+4. **Surface:** What does the user see, and did presentation gain more authority than the
+   underlying evidence supports?
+
+---
+
+## 10. Proposed next frontier (NOT activated)
 
 ```text
 D2 — startup-draft environment definition and format-input separation
