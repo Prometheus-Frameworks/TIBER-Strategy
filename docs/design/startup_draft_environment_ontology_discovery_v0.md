@@ -10,8 +10,15 @@
 > - **D1 activation:** signed comment by Joseph (`@Prometheus-Frameworks`), issue #2,
 >   [comment 5008074123](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5008074123),
 >   2026-07-17.
-> - **Independent review of the draft issue:** PASS_WITH_FINDINGS,
+> - **Independent review of draft v0.1:** PASS_WITH_FINDINGS,
 >   [comment 5007955898](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5007955898).
+>   The issue body was subsequently revised to **v0.2**, which incorporates those findings and is
+>   the governing control text for D1 (see the control-source record in §1).
+> - **Revision note:** this document received a narrow control-record correction under Joseph's
+>   D1 correction instruction (2026-07-17): statements that relied on the superseded v0.1 issue
+>   draft were aligned to the governing v0.2 issue body. The technical repository inventory
+>   (commit evidence, schema/validator/firewall constraints, collision verification, consumer
+>   findings) is unchanged.
 > - This document contains **no startup-draft concept definitions, no schema changes, and no
 >   implementation**. It inventories current state and constraints so later frontiers start from
 >   verified inputs. Nothing here activates Q2–Q8, any later discovery frontier, or implementation.
@@ -32,6 +39,21 @@
 | History | 3 commits: `a559404` (initial) → `b6db2c0` (Phase 1 foundation) → `bd8244a` (merge of PR #1) |
 
 All statements below about "current state" refer to commit `bd8244a` unless marked otherwise.
+
+### Control sources (mutable issue text) versus commit evidence (immutable)
+
+D1 distinguishes two classes of inspected sources. GitHub issue text is **mutable** — it can be
+edited after the fact — so it is recorded here with fetch-time state; commit SHAs are
+**immutable** and are the durable technical evidence. Per `docs/boundary.md` rule 7, issue text
+is control-record data, not self-executing authority.
+
+| Control source | State used for D1 | Nature |
+|---|---|---|
+| Issue #2 body | **Draft v0.2** (`updated_at` 2026-07-17T22:32:57Z), re-fetched for this record. v0.2 incorporates the v0.1 review findings and is the governing control text for D1. | mutable issue text |
+| D1 activation comment | [comment 5008074123](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5008074123), posted 2026-07-17T22:26:54Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D1 — current ontology and ownership-boundary inventory` exactly, states D1 is the sole active frontier, and states later requirements remain inactive. | mutable issue comment (content requirements recorded here) |
+| v0.1 independent review | [comment 5007955898](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5007955898), verdict PASS_WITH_FINDINGS against the superseded v0.1 draft | mutable issue comment (historical record) |
+| TIBER-Strategy code state | commit `bd8244a8b4f8b88c6a1e08835ce58546ca18ad87` | immutable |
+| TIBER-Fantasy code state (read-only) | commit `d35d440f24beaa275f6eb2f36cdd37a9c4989c3f` | immutable |
 
 ### Files inspected (complete list)
 
@@ -194,18 +216,21 @@ editing this schema plus the version bump discipline in §2.
 
 ## 5. Fields proposed by issue #2 that would require a schema change
 
-Issue #2 §6 requires every accepted concept to carry: stable ID; label; group; description;
-explicit boundary; use case; positive signals; negative signals; **misread risks**;
-**required structural inputs**; consumer guidance; related concepts.
+Issue #2 v0.2 §6 requires every accepted concept to carry: stable ID; label; group;
+**`input_class: format_static | board_dynamic | hybrid`**; description; explicit boundary;
+use case; positive signals; negative signals; **misread risks**; **required structural inputs
+with availability status** (`required_structural_inputs`); consumer guidance; related concepts.
+v0.2 §3 itself now states that path A "requires an explicit schema-version and migration
+decision rather than a silent same-schema addition" — consistent with the deltas below.
 
 Delta against the current `concepts` item schema (10 fields):
 
 | Proposed field | Current schema status | Change required |
 |---|---|---|
 | `misread_risks` | absent from `concepts` (present only on `roster_state_definitions`) | add to concept item schema (or new artifact's schema) |
-| required structural inputs (e.g. `required_inputs`) | absent from `concepts` (present on archetypes/timeline rules) | add; and contract-check cross-referencing against declared manifest inputs should extend to it |
-| `group` values for startup families (league/lineup structure, board/supply state, pick cadence, roster construction, decision framing) | `group` enum closed to 2 values | extend enum (path A) or define new enum (path B) |
-| static/dynamic classification per concept (review finding 5, e.g. `input_class`) | absent | add if adopted; also absent from issue #2's own required-field list — flagged in review |
+| `required_structural_inputs` (with availability status) | absent from `concepts` (plain `required_inputs` exists on archetypes/timeline rules, without per-entry status) | add; and contract-check cross-referencing against declared manifest inputs should extend to it |
+| `group` values for startup families (league/lineup structure, board/supply state, pick cadence and transaction structure, roster construction, decision-environment framing) | `group` enum closed to 2 values | extend enum (path A) or define new enum (path B) |
+| `input_class` (`format_static \| board_dynamic \| hybrid`) | absent | **explicitly required by v0.2 §6** (v0.1 omitted it; review finding 5, adopted in v0.2); add as enum field |
 
 Additional structural consequences already fixed by current tooling:
 
@@ -225,32 +250,51 @@ None of these changes are authorized or performed under D1; this section records
 
 ## 6. Naming and semantic collisions with existing concepts
 
-Verified against the promoted artifact's actual ID inventory at `bd8244a`.
+Verified against the promoted artifact's actual ID inventory at `bd8244a`. Candidate-inventory
+statements below are versioned: the v0.1 draft inventory was revised by issue body v0.2, which
+already resolves several v0.1-review findings. Historical v0.1 items are recorded as history, not
+as unresolved current candidates.
 
-### Direct collisions (existing ID or near-identical meaning)
+### Live collisions in the current v0.2 inventory (against artifact @ `bd8244a`)
 
-| Issue #2 candidate | Existing artifact entry | Collision type |
+| v0.2 candidate | Existing artifact entry | Collision type |
 |---|---|---|
-| `concentration_tradeoff` | `alpha_concentration` (concept, `roster_structure`) + `tr_concentration_share_is_not_quality` (rule) | semantic overlap: distribution-of-value vocabulary already exists with a tested "concentration ≠ quality" guard; a startup twin must either reuse or explicitly differentiate (draft-time concentration choice vs. roster-state concentration read) |
-| `structural_slot_security` | `role_security` (concept, `timeline_value`) | naming proximity with different meaning (lineup-slot structure vs. player role stability); confusable pair, rename or cross-boundary note required |
 | `waiver_scarcity_transfer` | `market_liquidity` (concept, future-contract status) | adjacent semantics: both describe post-acquisition liquidity; must be distinguished (trade-market liquidity vs. waiver-pool depletion) and both are future-contract-input territory |
-| `turn_distance` | — (no artifact collision) | **boundary collision inside issue #2 itself**: Q8 lists "picks until next turn" as consumer-owned runtime data; identical quantity appears as a §6 candidate concept (review finding 4) |
+| any concentration concept (none currently named in v0.2) | `alpha_concentration` (concept, `roster_structure`) + `tr_concentration_share_is_not_quality` (rule) | v0.2 §6 already directs: "any concentration concept must explicitly reuse, extend, or distinguish itself from existing `alpha_concentration`" — the tested "concentration ≠ quality" guard is the reuse target |
+| any slot-security replacement (none currently named in v0.2) | `role_security` (concept, `timeline_value`) | v0.2 §6 already directs: any replacement for the dropped `structural_slot_security` "must use a name clearly distinguishable from existing player-level `role_security`" |
 
-### Within-inventory duplicate clusters (from the accepted independent review, restated for D1 record)
+### v0.1 candidates already resolved by issue body v0.2 (historical record)
 
-- `tier_extinction_risk` / `tier_survival_window` — same phenomenon, currently in different groups.
-- `round_trip_exposure` / `selection_gap_risk` — overlapping cadence-risk framings.
-- `roster_path_optionality` / `best_surviving_build_path` / `local_value_vs_path_value` — overlapping
-  path-value framings; `best_surviving_build_path` and `scarcity_adjusted_choice` additionally carry
-  valuation/decision language flagged for rename.
+| v0.1 candidate | v0.2 resolution |
+|---|---|
+| `turn_distance` | **reclassified as a consumer-owned input** — v0.2 §6: "`turn_distance` is an input, not an ontology concept"; v0.2 Q4 places pick/turn numerics with the consumer |
+| `best_surviving_build_path` | **replaced by `surviving_build_paths`** (valuation word removed); v0.2 §6 also bans concept IDs implying a computed optimum, mandatory choice, or recommendation |
+| `scarcity_adjusted_choice` | **replaced by `scarcity_conditioned_tradeoff`** (decision word removed) |
+| `local_value_vs_path_value` | renamed `local_value_path_tension` |
+| `structural_slot_security` | dropped; replaced by the naming constraint vs. `role_security` noted above |
+| `concentration_tradeoff` | dropped; replaced by the explicit reuse/extend/distinguish directive vs. `alpha_concentration` noted above |
+| `tier_survival_window` | dropped as a named candidate; v0.2 directs merging tier-extinction risk with "any tier-survival-window framing" |
 
-### Non-collisions (clean namespace at `bd8244a`)
+### Duplicate clusters still directed to merge-or-distinguish in v0.2
 
-`league_size_compression`, `starter_demand_ratio`, `bench_demand_pressure`, `flex_elasticity`,
-`superflex_quarterback_pressure`, `positional_supply_pressure`, `replacement_cliff`,
-`replacement_displacement`, `position_run_exposure`, `tier_survival_window`,
-`build_path_fragility`, `structural_coverage`, `future_slot_obligation`,
-`format_assumption_mismatch` have no existing counterpart in any artifact collection.
+Retained from the v0.1 review only where v0.2 keeps them open as explicit discovery work:
+
+- `round_trip_exposure` / `selection_gap_risk` (v0.2 §6, pick cadence group);
+- `tier_extinction_risk` / any tier-survival-window framing (v0.2 §6, board state group);
+- `roster_path_optionality` / `surviving_build_paths` / local-value-versus-path-value framing
+  (v0.2 §6, roster construction group).
+
+### Non-collisions (clean namespace against artifact @ `bd8244a`)
+
+The remaining current v0.2 candidates — `league_size_compression`, `starter_demand_ratio`,
+`bench_demand_pressure`, `flex_elasticity`, `superflex_quarterback_pressure`, `draft_mechanism`,
+`player_pool_composition`, `roster_mechanics_pressure`, `positional_supply_pressure`,
+`replacement_cliff`, `replacement_displacement`, `tier_extinction_risk`, `position_run_exposure`,
+`round_trip_exposure`, `selection_gap_risk`, `cadence_mutability`, `pick_liquidity`,
+`roster_path_optionality`, `build_path_fragility`, `structural_coverage`,
+`future_slot_obligation`, `surviving_build_paths`, `scarcity_conditioned_tradeoff`,
+`format_assumption_mismatch`, `local_value_path_tension` — have no existing counterpart in any
+promoted-artifact collection.
 
 ### Cross-repository semantic overlap (verified, see §7)
 
@@ -293,8 +337,10 @@ and has not been done; it is recorded here as a finding.
 - Absence of any market-data producer in the chain (asserted by `docs/boundary.md`; consistent
   with everything inspected, but non-existence across the org is not provable from this scope).
 
-Per the accepted review finding, later frontiers should carry these as *declared assumptions
-pending confirmation*, not as verified facts.
+Issue body v0.2 §2 codifies this requirement: cross-repository ownership statements must be
+classified as `verified_from_current_source` or `declared_assumption_pending_confirmation`, and
+an inaccessible external repository must not by itself make the discovery incomplete. The tables
+above already follow that classification.
 
 ---
 
@@ -302,12 +348,12 @@ pending confirmation*, not as verified facts.
 
 | # | Question | State | Notes |
 |---|---|---|---|
-| P1 | Where do later discovery deliverables (concept map, heuristic matrix, implementation proposal, review record) live? | **Parked** | D1's location was fixed by the activation comment (this file). Issue #2 does not fix the medium for D2+ deliverables; review finding 1a. Decision owner: Joseph, at next activation. |
-| P2 | Concrete definition of a valid "signed" activation comment | **Parked** | Review finding 3. D1 proceeded on an owner-account comment with explicit scope; formalizing the test remains open. |
+| P1 | Where do later discovery deliverables (concept map, heuristic matrix, implementation proposal, review record) live? | **Resolved (v0.2)** | Issue body v0.2 §4 fixes the canonical discovery package at `docs/design/startup_draft_environment_ontology_discovery_v0.md` (this file) and requires the independent completion review to be a permanent issue #2 comment citing the exact reviewed commit SHA and document path. Review finding 1a is closed. |
+| P2 | Concrete definition of a valid "signed" activation comment | **Resolved (v0.2)** | Issue body v0.2 §14 defines the concrete test: posted through Joseph's authenticated `@Prometheus-Frameworks` account, begins with the exact provenance label `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names the exact frontier, states it is the sole active frontier, and states later requirements remain inactive. The D1 activation comment `5008074123` satisfies all six requirements (verified in §1). Review finding 3 is closed. |
 | P3 | README consumption-status claim is stale (live consumer exists) | **Blocked under D1** | Fix requires touching `README.md`, which D1 does not authorize. Should be corrected under whatever frontier next authorizes repo-doc changes, or a separately authorized housekeeping commit. |
 | P4 | How league-size/lineup quantities are expressed under the no-numerics firewall and forbidden-key list (`teams`, etc.) | **Parked** | Constraint recorded in §2/§5; resolution belongs to the artifact-shape/schema frontier, not D1. |
 | P5 | Path A vs. path B (extend V1 vs. new `STARTUP_DRAFT_ENVIRONMENT_ONTOLOGY_V1`) | **Parked by design** | Issue #2 deliverable 7. D1 contributes the constraint set: closed schema, closed `group` enum, envelope consts, validator allowlist, live V1 consumer (§7). |
-| P6 | Tier-based candidate concepts presuppose a consumer tiering model that no artifact in the chain currently produces | **Parked** | Review finding 2; any accepted tier concept enters as `future_contract` input territory. |
+| P6 | Tier-based candidate concepts presuppose a consumer tiering model that no artifact in the chain currently produces | **Resolved at spec level (v0.2)** | v0.2 Q8/§6 now mandate that tier-dependent concepts declare their tier input `future_contract` until a consumer-side tier producer exists (review finding 2 adopted). The tier producer itself remains future work. |
 | P7 | Supersede-vs-fork of TIBER-Fantasy dormant doctrine now provably extends to startup heuristics (`roster_construction_heuristics.ts`) | **Parked (consumer-side)** | TIBER-Fantasy Phase 2 migration question; recorded so the Q7 frontier does not re-invent vocabulary the consumer must later reconcile. |
 | P8 | TIBER-Ops #34 not directly verifiable from this scope | **Accepted risk for D1** | Mitigated by the owner-signed activation comment on issue #2. |
 
@@ -331,10 +377,11 @@ inventory (Q5–Q7 clusters), the replacement taxonomy (Q3), and the input contr
 `required_inputs.status` enum (`available/derived/future_contract`) is a directly reusable carrier
 for that separation, so D2 can be specified against verified current machinery.
 
-Suggested D2 boundaries, for the activation decision: same single-document scope
-(this file, v0 → extended in place or a sibling under `docs/design/`, per P1), no schema or source
-changes, players/ranks/ADP prohibitions unchanged, and resolution of P1 (deliverable medium) in
-the activation comment.
+Suggested D2 boundaries, for the activation decision: same single-document scope — issue body
+v0.2 §4 fixes this file as the canonical (and sole authorized) discovery-package path unless
+Joseph separately approves an amended path list — no schema or source changes, and
+players/ranks/ADP prohibitions unchanged. Any D2 activation comment must satisfy the v0.2 §14
+requirements verified in §1.
 
 **No activation is implied by this proposal.** D2, all other frontiers (Q2–Q8 work, D4–D6,
 TIBER-Ops #31 / amendment v0.2 / #15 R2), and implementation remain inactive until a signed
