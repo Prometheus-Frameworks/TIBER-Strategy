@@ -1442,9 +1442,10 @@ structures in §18.2 and never emits, stores, or computes any of these values.
   presupposes, and the named mechanism must support that structure (snake round-trip/turn logic
   is invalid under M2 linear and M4 auction; boundary-turn logic requires M3). Mechanism
   undeclared (M5) → fail closed.
-- **T12 — R3 mechanism gate.** R3 is undefined under mechanisms without ordered future
-  selections (M4), with no remaining pick, or with an undeclared mechanism (M5 → unresolved).
-  Reject the reference; do not resolve it.
+- **T12 — R3 mechanism gate.** R3 is undefined under M4, where no ordered future selection
+  exists, and under M1–M3 when no future pick remains. Under M5, mechanism applicability is
+  unresolved and the claim fails closed. Reject the reference in every case; do not resolve it.
+  Undefined and unresolved are distinct states and must not be interchanged.
 - **T13 — Staleness gate.** Every cadence-dependent read carries the trade-event stamp it
   observed; any later trade event invalidates it. A stale read must not be presented as current —
   re-resolve or fail closed. Stale ≠ current, and unresolved ≠ either.
