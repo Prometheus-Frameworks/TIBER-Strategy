@@ -1,6 +1,6 @@
 # Startup-Draft Environment Ontology — Discovery v0
 
-> **Status: D1 AND D2 ACCEPTED; D3 RECORDED AT THIS REVISION. Q4–Q8, ALL LATER FRONTIERS, AND
+> **Status: D1–D3 ACCEPTED; D4 RECORDED AT THIS REVISION. Q5–Q8, ALL LATER FRONTIERS, AND
 > IMPLEMENTATION NOT ACTIVATED.**
 >
 > This document is the canonical discovery package for the bounded discovery defined in
@@ -8,7 +8,8 @@
 > Sections 1–8 record **D1 — current ontology and ownership-boundary inventory** (accepted).
 > Sections 11–13 record **D2 — startup-draft environment definition and format-input separation
 > (Q1 + Q2 only)** (accepted). Sections 15–16 record **D3 — replacement-level taxonomy (Q3
-> only)**.
+> only)** (accepted as corrected). Sections 18–19 record **D4 — draft-mechanism and cadence
+> consequences (Q4 only)**.
 >
 > - **Program authority:** TIBER-Ops #34 (Decisions A–C), as recorded in issue #2.
 > - **D1 activation:** signed comment by Joseph (`@Prometheus-Frameworks`), issue #2,
@@ -44,6 +45,11 @@
 >   accordingly; hidden valuation wording was replaced with pool-membership language; R1's
 >   defined-empty / undefined / unresolved distinction was corrected. No family was removed and
 >   no numeric or valuation content was added.
+> - **D3 acceptance and D4 activation:** signed comment by Joseph (`@Prometheus-Frameworks`),
+>   [comment 5009600942](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009600942),
+>   2026-07-18. Accepts the corrected D3 at commit `f460118` (superseding the `382e66b`
+>   checkpoint) and activates `D4 — draft-mechanism and cadence consequences (issue #2, Q4 only)`
+>   as the sole active frontier. Q5–Q8, later frontiers, and implementation remain inactive.
 > - This document contains **no startup-draft concept definitions, no schema changes, and no
 >   implementation**. It inventories current state and constraints so later frontiers start from
 >   verified inputs. Nothing here activates Q2–Q8, any later discovery frontier, or implementation.
@@ -79,6 +85,7 @@ is control-record data, not self-executing authority.
 | v0.1 independent review | [comment 5007955898](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5007955898), verdict PASS_WITH_FINDINGS against the superseded v0.1 draft | mutable issue comment (historical record) |
 | D1 acceptance + D2 activation comment | [comment 5008868749](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5008868749), posted 2026-07-18T00:40:48Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D2 — startup-draft environment definition and format-input separation (issue #2, Q1 + Q2 only)` exactly, states D2 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts D1 as complete at commit `4cb6c673314bb89964d624b9fb16444ba6a9c574` (final D1 handoff checkpoint: comment `5008631887`). | mutable issue comment (content requirements recorded here) |
 | D2 acceptance + D3 activation comment | [comment 5009488957](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009488957), posted 2026-07-18T02:27:53Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D3 — replacement-level taxonomy (issue #2, Q3 only)` exactly, states D3 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts D2 as complete at commit `8164008ec809e4b62f4fa050258f885eda5087a4` (D2 checkpoint: comment `5008905472`). | mutable issue comment (content requirements recorded here) |
+| D3 acceptance + D4 activation comment | [comment 5009600942](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009600942), posted 2026-07-18T02:52:04Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D4 — draft-mechanism and cadence consequences (issue #2, Q4 only)` exactly, states D4 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts the corrected D3 at commit `f4601180113dcbdd993b2aec7630287109511c21` (superseding D3 checkpoint: comment `5009562473`), including the primary/overlay reclassification. | mutable issue comment (content requirements recorded here) |
 | TIBER-Strategy code state | commit `bd8244a8b4f8b88c6a1e08835ce58546ca18ad87` | immutable |
 | TIBER-Fantasy code state (read-only) | commit `d35d440f24beaa275f6eb2f36cdd37a9c4989c3f` | immutable |
 
@@ -1225,7 +1232,11 @@ no other file or repository changed; no PR was opened; no later frontier was act
 
 ---
 
-## 17. Proposed next frontier (NOT activated)
+## 17. D4 frontier proposal (historical — subsequently activated)
+
+> This section is preserved as the D3-era proposal record. D4 was activated by
+> [comment 5009600942](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009600942)
+> (verified in §1) and its output is recorded in §§18–19 below.
 
 ```text
 D4 — draft-mechanism and cadence consequences (issue #2, Q4 only)
@@ -1242,6 +1253,246 @@ concept-inventory frontier for the cadence group.
 frontiers, and implementation remain inactive until a signed activation comment on issue #2
 satisfying the v0.2 §14 requirements authorizes the next frontier explicitly.
 
+*(End of historical D4 proposal. D4 was subsequently activated; see §§18–19.)*
+
 ---
 
-*End of D3 record.*
+## 18. D4 — Draft-mechanism and cadence consequences (Q4)
+
+> D4 record. Authorized by [comment 5009600942](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009600942);
+> Q4 only. Mechanism labels (M1–M5) and cadence-structure terms below are **descriptive discovery
+> labels for this document only**, not accepted ontology concepts; candidate vocabulary from
+> issue v0.2 §6 (`round_trip_exposure`, `selection_gap_risk`, `cadence_mutability`,
+> `pick_liquidity`) is referenced as pointers only. All cadence numerics are consumer-owned
+> (§18.4); Strategy defines structure and meaning, never values, orderings, or recommendations.
+
+### 18.1 Mechanism taxonomy (finite, M1–M5)
+
+The taxonomy is total by construction: every draft is one of M1–M4, or falls into M5, the
+fail-closed guard family for unsupported or undeclared mechanisms.
+
+#### M1 — snake
+
+- **Ordered selection cadence exists:** yes.
+- **Static rule skeleton:** a base selection order that reverses every round; each franchise's
+  selection schedule is fully derivable from slot, league size, and round count.
+- **What may change dynamically:** realized cadence under in-draft pick trades (E6); board
+  depletion between selections (E7).
+- **R2 exists:** yes (current board pool). **R3 exists:** yes, while the manager holds a future
+  pick.
+- **Undefined conditions:** R3 undefined once no pick remains; per-roster positional resolution
+  undefined at caps (R6) as everywhere.
+- **Consumer-owned inputs:** slot, realized order, current pick, picks until next selection, all
+  gap numerics, trade events.
+- **Strategy-owned meanings:** turn-pick structure, round-trip structure, alternating gap
+  asymmetry by slot region (§18.2); their misread guards.
+- **Misread risks:** treating the skeleton as the realized schedule when trades are allowed
+  (§18.2.6); exporting snake turn/round-trip logic to other mechanisms (T11).
+
+#### M2 — linear
+
+- **Ordered selection cadence exists:** yes.
+- **Static rule skeleton:** the same base order every round; inter-selection gap structure is
+  uniform per franchise across rounds (no reversal, no turn compression).
+- **What may change dynamically:** realized cadence under pick trades; board depletion.
+- **R2 exists:** yes. **R3 exists:** yes, while a future pick remains.
+- **Undefined conditions:** as M1.
+- **Consumer-owned inputs:** as M1.
+- **Strategy-owned meanings:** persistent slot-order asymmetry (early slots retain their order
+  position every round — a structurally different asymmetry than snake's alternating gaps); the
+  absence of turn picks.
+- **Misread risks:** applying snake round-trip or turn-pick reasoning to linear drafts (there is
+  no reversal to reason about — T11); assuming linear's uniform gaps imply uniform exposure
+  across slots (order persistence is itself an asymmetry).
+
+#### M3 — third-round reversal (3RR)
+
+- **Ordered selection cadence exists:** yes.
+- **Static rule skeleton:** a snake variant in which the reversal pattern shifts at the
+  round-two/round-three boundary (the same order repeats for two consecutive rounds once),
+  partially rebalancing edge-slot advantage; fully derivable from slot and league size.
+- **What may change dynamically:** as M1.
+- **R2 exists:** yes. **R3 exists:** yes, while a future pick remains.
+- **Undefined conditions:** as M1.
+- **Consumer-owned inputs:** as M1.
+- **Strategy-owned meanings:** boundary-round turn structure (which slots receive a
+  double-length or compressed turn at the reversal shift) and how 3RR redistributes edge-slot
+  asymmetry relative to plain snake.
+- **Misread risks:** treating 3RR as plain snake — correct in rounds one and two, wrong at and
+  after the boundary; reading the rebalancing as a valuation claim about any slot.
+
+#### M4 — auction / salary
+
+- **Ordered selection cadence exists:** **no.** A nomination order may exist, but *acquisition*
+  is budget-constrained, not selection-order-constrained: any franchise can acquire any nominated
+  asset at any time subject to budget state.
+- **Static rule skeleton:** budget size, nomination order rules, roster requirements — but no
+  selection schedule exists to derive.
+- **What may change dynamically:** remaining pool, budget states, nomination sequence.
+- **R2 exists:** yes — the current remaining (un-acquired) pool is well-defined, so
+  startup-board replacement survives under auctions.
+- **R3 exists:** **no — undefined.** "The pool at my next selection" has no referent when
+  acquisition is not tied to an ordered future selection.
+- **Undefined conditions:** R3 and every cadence-family structure in §18.2 (turns, round trips,
+  selection gaps, slot asymmetry, cadence mutation) are **not applicable** under M4 — see the v0
+  scoping decision in §18.3.
+- **Consumer-owned inputs:** nomination sequence, budget states, remaining pool. (Budget numerics
+  are consumer-owned like all numerics; Strategy defines no budget values.)
+- **Strategy-owned meanings:** the fact that M4 severs cadence from acquisition; that pool
+  concepts (R2, depletion, E7) survive while cadence concepts do not.
+- **Misread risks:** forcing cadence vocabulary onto auctions (T12); treating nomination order as
+  a selection cadence; smuggling budget valuation into Strategy (out of scope, §18.3).
+
+#### M5 — unsupported / unknown mechanism
+
+- **Ordered selection cadence exists:** unresolved.
+- **Static rule skeleton:** undeclared.
+- **What may change dynamically:** unresolved.
+- **R2 exists / R3 exists:** unresolved — **fail closed**, do not assume either.
+- **Undefined conditions:** all cadence and pool-existence questions are unresolved (which is
+  distinct from undefined and from defined-empty, per the D3 three-way discipline).
+- **Consumer-owned inputs:** the mechanism declaration itself is a required consumer-owned input;
+  until it is supplied and mapped to M1–M4, no mechanism-dependent read may resolve.
+- **Strategy-owned meanings:** the guard itself: an undeclared mechanism poisons every
+  mechanism-dependent claim downstream.
+- **Misread risks:** defaulting an unknown mechanism to snake (the pre-v0.2 hidden assumption
+  this taxonomy exists to prevent); resolving M5 by guess instead of by declaration.
+
+### 18.2 Cadence structures (Strategy-owned meanings; all values consumer-owned)
+
+1. **Turn picks** — the pair of near-consecutive selections a franchise receives where a snake
+   (or 3RR-shifted) reversal occurs: minimal gap inside the turn, maximal gap on either side of
+   it. A structural property of edge-region slots under reversing mechanisms only.
+2. **Round trips** — under reversing mechanisms, the interval between a franchise's selection and
+   its next one, spanning one full traversal of the remaining order and back. The structural unit
+   over which board depletion accrues between that franchise's decisions.
+3. **Long selection gaps** — qualitative gap classes (short / ordinary / long, relative to the
+   mechanism and league size) describing stretches of board depletion without the manager's
+   participation. Gap *classes* are Strategy vocabulary; every gap *value* is consumer-owned.
+4. **Early/middle/late slot asymmetry** — mechanism-conditional: under M1, edge slots alternate
+   extreme short/long gaps (turn structure) while middle slots see near-uniform gaps; under M2,
+   asymmetry is order persistence, not gap alternation; under M3, edge asymmetry is partially
+   redistributed at the boundary rounds. No slot is designated advantaged — the asymmetry is
+   structural description, not slot valuation.
+5. **Cadence mutation through pick trades** — where E6 permits in-draft pick trading, the
+   format-static skeleton is only a prior: every executed trade rewrites the realized schedule
+   for both parties. Realized cadence is board state, not rule state (D2 §12.3 applies in full).
+6. **Stale-cadence invalidation** — every cadence-dependent read (including any R3 composition)
+   is implicitly stamped by the set of trade events it observed. A subsequent trade event
+   invalidates the read: it must be re-resolved against current board state, and a stale read
+   must never be presented as current (T13). Staleness is an *unresolved* state — fail closed,
+   per the D3 three-way discipline.
+
+### 18.3 Auction/salary v0 scoping decision (exactly one)
+
+**Decision: M4 auction/salary startups are structurally INCLUDED in the v0 mechanism taxonomy,
+with all selection-cadence concepts explicitly marked NOT APPLICABLE under M4.**
+
+Rationale: inclusion keeps the taxonomy total (no format falls outside it), preserves the
+correct partial survival of pool concepts (R2, board depletion, E7 remain well-defined under
+auctions), and avoids a false format boundary that would push auction leagues into the M5
+fail-closed guard where even pool concepts would wrongly unresolve. The not-applicable marking is
+itself a fail-closed guard: any cadence-family concept (turns, round trips, selection gaps, slot
+asymmetry, cadence mutation, R3) invoked under M4 must be rejected as not-applicable rather than
+resolved (T12). **Budget-pressure structure — the auction analog of cadence exposure — is
+explicitly deferred, not denied:** defining it would require its own bounded frontier and is out
+of v0 scope.
+
+### 18.4 Consumer-owned cadence numerics (restated)
+
+Per issue v0.2 Q4 and the D2 classification: **current pick, next pick, picks until next
+selection, turn distance, and the realized selection order are consumer-owned runtime inputs.**
+Budget states (M4) and trade events (E6) are likewise consumer-owned. Strategy defines the
+structures in §18.2 and never emits, stores, or computes any of these values.
+
+### 18.5 Synthetic cases (player-free)
+
+- **S1 — snake (M1):** a 12-team snake league; the slot-1 franchise alternates the round's
+  shortest and longest gaps (turn structure at the edge), the slot-6 franchise sees near-uniform
+  gaps every round, the slot-12 franchise mirrors slot 1 at the other edge. Same league, same
+  rules — three structurally different exposure patterns, no slot valuated.
+- **S2 — linear (M2):** the same league drafted linear: every franchise's gap structure is
+  uniform across rounds and there are no turn picks; the slot-1 franchise instead holds its order
+  position every round. A snake round-trip read applied here would reference a reversal that does
+  not exist — it must be rejected, not approximated (T11).
+- **S3 — third-round reversal (M3):** the same league with 3RR: rounds one and two behave as
+  snake, then the reversal shift gives the round-two edge a repeated-order turn at the boundary.
+  A plain-snake skeleton read is correct through round two and silently wrong from the boundary
+  on — the mechanism must be declared as M3, not approximated as M1.
+- **S4 — pick-trading mutation (M1 + E6):** mid-draft, a franchise trades for another's
+  next-round pick. Both franchises' realized schedules diverge from their skeletons; any R3
+  composition either franchise resolved before the trade observed a schedule that no longer
+  exists and is stale — it must be re-resolved, not reused (T13).
+- **S5 — auction (M4):** the same league as an auction startup: an R3 read ("the expected pool at
+  my next selection") has no referent and is rejected as not-applicable; an R2 read (the current
+  remaining pool) resolves normally. Pool vocabulary survives the mechanism change; cadence
+  vocabulary does not.
+
+---
+
+## 19. D4 — Anti-conflation tests and boundary confirmation
+
+### 19.1 Mechanically encodable tests (extending T1–T9)
+
+- **T10 — Skeleton ≠ realized cadence.** Where the format permits in-draft pick trading (E6),
+  a static-order skeleton must not be presented as the realized cadence; a realized-cadence claim
+  requires board-event provenance (the trade events it observed). Skeleton-only provenance in a
+  trade-enabled format → fail closed.
+- **T11 — Mechanism match.** Every cadence-dependent claim must name the mechanism it
+  presupposes, and the named mechanism must support that structure (snake round-trip/turn logic
+  is invalid under M2 linear and M4 auction; boundary-turn logic requires M3). Mechanism
+  undeclared (M5) → fail closed.
+- **T12 — R3 mechanism gate.** R3 is undefined under mechanisms without ordered future
+  selections (M4), with no remaining pick, or with an undeclared mechanism (M5 → unresolved).
+  Reject the reference; do not resolve it.
+- **T13 — Staleness gate.** Every cadence-dependent read carries the trade-event stamp it
+  observed; any later trade event invalidates it. A stale read must not be presented as current —
+  re-resolve or fail closed. Stale ≠ current, and unresolved ≠ either.
+- **T14 — No recommendation from exposure.** Cadence-exposure statements are structural
+  descriptions. Any output converting gap structure, turn structure, or slot asymmetry into a
+  pick directive, slot preference, or player selection violates the §9 invariant and the
+  consumer safety rules — reject at the surface boundary.
+- **T15 — Tier-survival evidence gate.** No claim that a tier (or any pool stratum) survives a
+  selection gap may be asserted without both board-state evidence and a declared tier/survival
+  evidence contract; none exists in the chain today (D1 P6; R3 record). Assertion without the
+  contract → fail closed.
+
+### 19.2 D4 boundary confirmation
+
+The mechanism taxonomy is total (M1–M5) and every cadence structure is defined without a single
+numeric value: **no gap value, pick number, turn distance, order listing, budget value, premium,
+threshold, or slot valuation appears anywhere in §§18–19, and no slot, mechanism, or strategy is
+designated advantaged or recommended.** All examples are synthetic and player-free. Q5–Q8 were
+touched only as boundary references (R2/R3 interaction per the D4 activation clause 7; tier
+evidence per T15). No ontology concept was accepted, rejected, merged, or named — candidate
+cadence vocabulary remains pointers. Ownership statuses are unchanged from D2/D3: mechanism and
+trading rules are league configuration (`verified_from_current_source`, TIBER-Fantasy-owned);
+realized board/cadence state belongs to the unassigned runtime producer (§13.2, untouched); R3's
+survival-evidence owner remains `declared_assumption_pending_confirmation`. The source truth →
+artifact → adapter → surface invariant and the human final-decision boundary are preserved. No
+other file or repository changed; no PR was opened; no later frontier was activated.
+
+---
+
+## 20. Proposed next frontier (NOT activated)
+
+```text
+D5 — roster-path optionality (issue #2, Q5 only)
+```
+
+Rationale: Q5 is the last foundational definition the concept inventory needs. E10 (reachable
+roster-construction paths) was defined as a dimension in D2; D3 supplied the composed-baseline
+machinery paths are evaluated against; D4 supplied the cadence and mechanism structure that
+narrows paths between selections. Q5's remaining work is the meaning of path optionality itself —
+including the v0.2 Q5 negative boundary that optionality is not indecision, automatic
+diversification, mandatory balance, an optimization result, or a pick recommendation — after
+which the concept-inventory frontier (Q6–Q7 material) can be scoped against a complete
+definitional base.
+
+**D5 is proposed only. It is NOT activated.** Q5–Q8 work, concept-inventory decisions, all later
+frontiers, and implementation remain inactive until a signed activation comment on issue #2
+satisfying the v0.2 §14 requirements authorizes the next frontier explicitly.
+
+---
+
+*End of D4 record.*
