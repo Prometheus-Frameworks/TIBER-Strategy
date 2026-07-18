@@ -38,6 +38,12 @@
 >   `D3 — replacement-level taxonomy (issue #2, Q3 only)` as the sole active frontier. D3
 >   identifies which comparison pool or baseline is meant; it never calculates baseline values.
 >   Q4–Q8, later frontiers, and implementation remain inactive.
+> - **D3 taxonomy correction:** narrow operator-directed correction (2026-07-18): the six
+>   replacement families were reclassified into three primary pool baselines (R1–R3) and three
+>   conditioning overlays (R4–R6); the composition rule and anti-conflation tests were corrected
+>   accordingly; hidden valuation wording was replaced with pool-membership language; R1's
+>   defined-empty / undefined / unresolved distinction was corrected. No family was removed and
+>   no numeric or valuation content was added.
 > - This document contains **no startup-draft concept definitions, no schema changes, and no
 >   implementation**. It inventories current state and constraints so later frontiers start from
 >   verified inputs. Nothing here activates Q2–Q8, any later discovery frontier, or implementation.
@@ -836,26 +842,66 @@ satisfying the v0.2 §14 requirements authorizes the next frontier explicitly.
 > **descriptive discovery labels for this document only** — they are not accepted ontology concept
 > IDs; concept-inventory decisions (naming, acceptance, merging) remain a later frontier.
 
-### 15.1 Scope and structure
+### 15.1 Scope and structure — primary pool baselines and conditioning overlays
 
-Issue v0.2 Q3 prohibits one universal replacement baseline across formats. D3 therefore defines
-**six baseline families** — five genuine baselines plus one modifier family (R6) that transforms
-the others — each recorded with the twelve attributes required by the D3 instruction. Input
-classes and E-dimension references use the D2 framework (§§11–12) unchanged.
+Issue v0.2 Q3 prohibits one universal replacement baseline across formats. D3 defines **six
+replacement families** in two structurally different roles:
 
-A single global rule precedes all records: **every replacement claim must name exactly one
-baseline.** An unqualified "replacement level" is undefined in this taxonomy and must fail closed
-(test T1, §16.3).
+**Primary comparison-pool baselines** — each independently identifies the *source pool* a
+replacement claim compares against:
+
+- **R1** — ordinary waiver replacement (the unrostered acquisition pool);
+- **R2** — current startup-board replacement (the draftable board pool, now);
+- **R3** — expected next-selection replacement (the future board pool at the manager's next
+  selection).
+
+**Conditioning overlays** — none independently identifies a source pool; each *transforms,
+filters, or qualifies* the pool (or the demand regime it is compared under) of a named primary
+baseline:
+
+- **R4** — post-required-starters / roster-fill regime overlay;
+- **R5** — flex/superflex slot-eligibility substitution overlay;
+- **R6** — roster-mechanics and player-pool filtering overlay.
+
+An overlay invoked without a primary baseline is an **incomplete replacement reference**: there is
+no pool to transform. All six families required by issue v0.2 Q3 are retained; the classification
+changes what each family may claim, not whether it exists.
+
+Each record carries the twelve attributes required by the D3 instruction. Input classes and
+E-dimension references use the D2 framework (§§11–12) unchanged. Throughout, Strategy defines
+**pools and their boundaries** — eligible comparison-set membership, availability, depletion, and
+degeneracy. Selecting a pool's "best" member, ordering members, or valuing them is a
+**consumer-resolved frontier under a separately declared ordering/evidence contract** (none exists
+today) and is never a Strategy output.
+
+**Global composition rule.** Every replacement claim must name:
+
+1. exactly **one** primary pool baseline from R1–R3;
+2. **every** conditioning overlay from R4–R6 that applies in the format and roster context;
+3. explicit **provenance** for the runtime resolution of each named component (which source
+   resolved the pool observation, the fill state, the eligibility union, the mechanics filter).
+
+Fail closed when: no primary pool baseline is named; more than one incompatible primary baseline
+is silently blended; an overlay is used as though it were a standalone pool; an applicable
+overlay is omitted; or a composition is asserted without its required format, roster, or board
+evidence (tests T1/T9, §16.3).
 
 ### 15.2 Baseline records
 
-#### R1 — `baseline_waiver_ordinary` (ordinary waiver replacement)
+#### R1 — `baseline_waiver_ordinary` (ordinary waiver replacement) — primary pool baseline
 
-- **Comparison pool:** the best asset acquirable from the league's unrostered
-  (waiver/free-agent) pool at a given moment, per position or slot eligibility class.
-- **When it exists:** whenever an unrostered acquirable pool exists — the in-season steady state
-  of most leagues. In extreme-depth formats the pool may be *degenerate* (approaching empty)
-  immediately post-startup: still defined, but structurally near-worthless (E9).
+- **Comparison pool:** the eligible comparison pool of unrostered assets acquirable through the
+  league's waiver/free-agent mechanism at a given moment, partitioned by position or slot
+  eligibility class. Strategy defines the pool's boundary; identifying, ordering, or valuing pool
+  members is a consumer-resolved frontier under a separately declared ordering/evidence contract.
+- **When it exists (three-way distinction):**
+  - *defined-empty / degenerate* — the acquisition mechanism exists but the eligible unrostered
+    pool is empty or nearly empty (the extreme-depth post-startup state, E9): the baseline is
+    defined and its pool is observed to be depleted;
+  - *undefined* — the format has **no unrostered acquisition mechanism at all** (no waiver or
+    free-agent process): R1 does not exist in that format;
+  - *unresolved* — the mechanism exists but the current pool observation is unavailable: **fail
+    closed** and report unresolved; an unresolved pool must never be reported as empty.
 - **Source / owner:** waiver-system rules → league configuration (TIBER-Fantasy, verified);
   realized pool state → runtime consumer (producer unassigned, §13.2).
 - **Input class:** `hybrid` — waiver system and roster totals are `format_static`; the realized
@@ -863,23 +909,28 @@ baseline.** An unqualified "replacement level" is undefined in this taxonomy and
 - **Availability:** `consumer_owned` today; `future_contract` for any Strategy rule consuming it.
 - **E-dimensions required:** E1 (franchise count), E2 (roster totals/mechanics), E5 (pool
   composition), E9 (waiver consequences).
-- **Strategy may define:** the meaning of an acquisition floor conditioned on format; that the
-  floor is format-conditional and can be degenerate; misread guards.
+- **Strategy may define:** the pool's boundary and format-conditioning; the
+  defined-empty / undefined / unresolved distinction; misread guards. Never pool membership
+  selection, ordering, or value.
 - **Consumer must compute:** the actual unrostered pool and its per-position composition.
-- **What it is not:** a constant; a startup-board baseline; a promise that anything useful is
-  unrostered; a player label.
+- **What it is not:** a constant; a startup-board baseline; a claim that any particular pool
+  member is adequate; a player label.
 - **Misread risks:** importing shallow-league waiver intuition into deep formats; assuming
-  post-startup liquidity (issue v0.2 §9 negative case); treating the current pool state as
-  permanent (see non-equivalence NE7, §16.2).
+  post-startup pool availability (issue v0.2 §9 negative case); treating the current pool state
+  as permanent (see non-equivalence NE7, §16.2); reporting an unresolved pool observation as an
+  empty pool.
 - **Synthetic example:** in an ordinary 12-team one-QB format, the unrostered pool after a
   startup retains startable-position depth; in a 32-team format with the same roster mechanics,
-  nearly the entire startable population is rostered when the draft ends, so this baseline is
-  defined but degenerate — "replacement from waivers" names an almost-empty pool.
+  nearly the entire startable population is rostered when the draft ends, so R1 is defined but
+  degenerate — "replacement from waivers" names an almost-empty comparison pool. In a
+  hypothetical format with no waiver or free-agent process at all, R1 is undefined — not empty.
 
-#### R2 — `baseline_startup_board` (startup-draft replacement)
+#### R2 — `baseline_startup_board` (startup-draft replacement) — primary pool baseline
 
-- **Comparison pool:** the best asset still available on the startup draft board at a given
-  board state, per position or eligibility class.
+- **Comparison pool:** the eligible comparison pool of assets still available on the startup
+  draft board at the current board state, partitioned by position or eligibility class. Strategy
+  defines pool membership boundaries; identifying or ordering members is consumer-resolved under
+  a separately declared ordering/evidence contract.
 - **When it exists:** only while the startup draft is in progress; it ceases to exist at the
   final selection. Transient by construction.
 - **Source / owner:** live draft board → runtime consumer (live board ingestion is explicitly
@@ -895,15 +946,18 @@ baseline.** An unqualified "replacement level" is undefined in this taxonomy and
 - **What it is not:** waiver replacement (different pool); a stable baseline; a survival claim
   about any future pick (that is R3).
 - **Misread risks:** substituting remembered or assumed board state for observed state;
-  conflating with R1 because both are "best available" phrasings over different pools.
+  conflating with R1 because both are "available pool" phrasings over different pools.
 - **Synthetic example:** in a combined rookie/veteran startup, mid-draft board replacement at a
   position includes undrafted rookies; in a vets-only startup with a separate rookie draft, the
   same phrase names a strictly smaller pool — same words, different baseline resolution via E5.
 
-#### R3 — `baseline_next_selection` (next-selection replacement)
+#### R3 — `baseline_next_selection` (next-selection replacement) — primary pool baseline
 
-- **Comparison pool:** the best asset *expected to survive* on the board until the manager's next
-  selection — a future board state, not the current one.
+- **Comparison pool:** the future comparison pool expected to remain available on the board at
+  the manager's next selection — a pool-membership expectation about a future board state, not
+  the current one, and **not** an identification of any particular expected survivor. Which
+  members the expected pool contains, and any ordering over them, is consumer-resolved under a
+  separately declared ordering/evidence contract.
 - **When it exists:** only while the manager holds at least one future pick **and** the mechanism
   is selection-order-based. Undefined when no pick remains, and undefined under auction/salary
   mechanisms, where acquisition is not order-constrained (E4). Reshaped mid-draft by pick trades
@@ -922,124 +976,160 @@ baseline.** An unqualified "replacement level" is undefined in this taxonomy and
 - **Consumer must compute:** current board state, realized cadence, and any survival estimation
   (with its own evidence contract).
 - **What it is not:** a stable season-long baseline; current-board replacement (R2); a guarantee
-  of anything surviving; a Strategy-computable quantity.
-- **Misread risks:** treating a per-pick, expectation-conditioned floor as a durable valuation
-  base (NE2); assuming survival without evidence; ignoring that pick trades mutate the gap it is
-  defined over.
+  of anything surviving; an identification of a best expected survivor; a Strategy-computable
+  quantity.
+- **Misread risks:** treating a per-pick, expectation-conditioned pool as a durable season-long
+  comparison pool (NE2); assuming survival without evidence; ignoring that pick trades mutate the
+  gap it is defined over.
 - **Synthetic example:** a manager at the turn of a snake draft has two consecutive picks then a
-  long gap: for the first pick of the pair, next-selection replacement is nearly current-board
-  replacement (one pick elapses); for the second, it is conditioned on two full rounds of
-  depletion. Same manager, same round — two different R3 resolutions.
+  long gap: for the first pick of the pair, the expected remaining pool is nearly the current
+  board pool (one selection elapses); for the second, it is conditioned on two full rounds of
+  depletion. Same manager, same round — two different R3 pool resolutions.
 
-#### R4 — `baseline_post_starters` (post-required-starters replacement)
+#### R4 — `overlay_roster_fill_regime` (post-required-starters / roster-fill regime) — conditioning overlay
 
-- **Comparison pool:** the relevant available pool (board during the startup, waivers after)
-  evaluated against a roster **whose required starting obligations are already filled** — the
-  baseline shifts from starter-demand-driven to bench/depth-demand-driven when obligations are
-  met.
-- **When it exists:** per-roster and regime-dependent: before the fill point, replacement
-  questions are governed by unmet starter demand; at the fill point the baseline switches
-  identity. Two managers at adjacent picks can be in different regimes.
+*(Discovery label revised from `baseline_post_starters`; the family itself is unchanged.)*
+
+- **Overlay effect (not a source pool):** qualifies which **demand regime** governs the
+  comparison over a named primary baseline's pool (R2/R3 in-draft, R1 in season): before a
+  roster's required starting obligations are filled, the comparison is governed by unmet starter
+  demand; once obligations are met, the *same* primary pool is compared under bench/depth demand.
+  R4 never identifies a pool of its own — it states which question is being asked of an R1–R3
+  pool.
+- **When it applies:** per-roster and regime-dependent; two managers at adjacent picks can be in
+  different regimes over the identical primary pool.
 - **Source / owner:** lineup requirements → league configuration (verified); roster fill state →
   manager roster state, a consumer-owned runtime value (issue v0.2 Q8).
 - **Input class:** `hybrid` — requirements are `format_static`; fill state is runtime.
 - **Availability:** `consumer_owned`; `future_contract` for Strategy-rule consumption.
 - **E-dimensions required:** E1, E2, E3, plus manager roster state (a consumer-owned runtime
-  value, not an E-dimension).
-- **Strategy may define:** the two-regime structure and the fact of the switch; that the baseline
-  is roster-relative, never league-wide.
-- **Consumer must compute:** each roster's actual fill state and the resulting pool comparison.
-- **What it is not:** a league-wide baseline; identical across managers; a statement about which
-  regime is better.
-- **Misread risks:** applying one roster's baseline to another roster; missing the regime switch
-  and comparing bench demand against starter-demand floors (NE3).
-- **Synthetic example:** two 16-team managers pick back-to-back; one has every required starter
-  filled, the other has an open starting slot. The board is identical, but "what replacement
-  looks like" resolves differently for each — R4 is relative to roster state, not to the board
-  alone.
+  value, not an E-dimension) — plus whichever dimensions the named primary baseline requires.
+- **Strategy may define:** the two-regime structure and the fact of the switch; that the overlay
+  is roster-relative, never league-wide; that it composes with a primary and cannot stand alone.
+- **Consumer must compute:** each roster's actual fill state and the composed comparison over the
+  named primary pool.
+- **What it is not:** a standalone pool; a league-wide baseline; identical across managers; a
+  statement about which regime is better.
+- **Misread risks:** invoking R4 as though it named a pool (overlay-alone reference — fail
+  closed, T1/T9); applying one roster's regime to another roster; missing the regime switch and
+  comparing bench demand against starter-demand pool boundaries (NE3).
+- **Synthetic example:** two 16-team managers pick back-to-back over an identical board — one
+  shared R2 primary pool; one manager has every required starter filled, the other has an open
+  starting slot. The primary pool is the same; R4 resolves differently per roster, so the two
+  composed reads (`R2 + R4`) differ while neither manager has a private board.
 
-#### R5 — `baseline_eligibility_substitution` (flex/superflex substitution replacement)
+#### R5 — `overlay_slot_eligibility_substitution` (flex/superflex substitution) — conditioning overlay
 
-- **Comparison pool:** the best asset eligible for a *slot*, taken across the union of all
-  positions that slot accepts — slot-relative, not position-relative. Superflex is the special
-  case where quarterback eligibility joins a flex union.
-- **When it exists:** whenever the lineup contains flex-class slots (E3). In lineups with no
-  flex slots it collapses into same-position replacement.
-- **Source / owner:** eligibility rules → league configuration (verified); realized best-eligible
-  → runtime consumer.
-- **Input class:** `hybrid` — eligibility union is `format_static`; realized membership is
+*(Discovery label revised from `baseline_eligibility_substitution`; the family itself is
+unchanged.)*
+
+- **Overlay effect (not a source pool):** re-partitions a named primary baseline's pool by slot
+  eligibility: for a flex-class slot, the eligible comparison set is the **union of all positions
+  the slot accepts**, applied to whichever primary pool is named (the board pool for R2/R3, the
+  unrostered pool for R1). Superflex is the special case where quarterback eligibility joins a
+  flex union. R5 defines union *membership boundaries* only; it never identifies, orders, or
+  values any member of the union.
+- **When it applies:** whenever the lineup contains flex-class slots (E3). In lineups with no
+  flex slots it is the identity overlay — the positional partition of the primary pool is
+  unchanged.
+- **Source / owner:** eligibility rules → league configuration (verified); realized union
+  membership → runtime consumer.
+- **Input class:** `hybrid` — the eligibility union is `format_static`; realized membership is
   `board_dynamic`.
 - **Availability:** `consumer_owned`; `future_contract` for Strategy-rule consumption.
-- **E-dimensions required:** E1, E3, E7.
-- **Strategy may define:** the slot-relative/position-relative distinction; that eligibility
-  substitution changes which positions compete for the same floor; that superflex creates
-  cross-position eligibility **without establishing any numeric quarterback premium** — the size
-  of any premium is a valuation question owned by nobody in this taxonomy.
-- **Consumer must compute:** actual union pools and best-eligible state.
-- **What it is not:** same-position replacement (NE4); a premium calculation (NE5); a directive
-  to draft any position early.
-- **Misread risks:** collapsing a flex floor into a positional floor; converting superflex
-  eligibility into "therefore QBs are worth N more" (numeric premium — prohibited); ignoring that
-  flex unions couple positional runs across positions.
-- **Synthetic example:** a lineup with one RB/WR/TE flex defines that slot's replacement over the
-  three-position union; adding superflex adds a second union slot that also accepts QB. The
-  *structure* of competition changes; nothing numeric about any position's value follows.
+- **E-dimensions required:** E1, E3, E7, plus whichever dimensions the named primary baseline
+  requires.
+- **Strategy may define:** the slot-relative/position-relative partition distinction; that
+  eligibility substitution changes which positions compete within the same primary pool; that
+  superflex creates cross-position eligibility **without establishing any numeric quarterback
+  premium** — the magnitude of any premium is a valuation question this taxonomy does not answer
+  and Strategy may never compute.
+- **Consumer must compute:** actual union membership within the named primary pool.
+- **What it is not:** a standalone pool; same-position replacement (NE4); a premium calculation
+  (NE5); a directive to draft any position early.
+- **Misread risks:** invoking R5 as though "flex replacement" named a pool without an R1–R3
+  primary (overlay-alone reference — fail closed, T1/T9); collapsing a slot-union comparison set
+  into a positional one; converting superflex eligibility into a numeric premium (prohibited);
+  ignoring that flex unions couple positional runs across positions.
+- **Synthetic example:** a lineup with one RB/WR/TE flex partitions the named primary pool (say
+  R2, the current board) by a three-position union for that slot; adding superflex adds a second
+  union slot that also accepts QB. The *structure* of the comparison set changes; nothing numeric
+  about any position's value follows.
 
-#### R6 — `baseline_mechanics_conditioned` (roster-mechanics and pool-conditioned replacement)
+#### R6 — `overlay_mechanics_pool_filter` (roster-mechanics and player-pool filtering) — conditioning overlay
 
-- **Comparison pool:** not a seventh pool — a **modifier family** that transforms the pool of any
-  other baseline by eligibility mechanics: taxi eligibility (rookie-only stash slots), IR
-  designation rules, positional roster caps, and combined-versus-separated rookie pools.
-- **When it exists:** whenever E2/E5 mechanics constrain who may occupy which roster slot.
-  Notable boundary condition: for a roster at a positional cap, positional replacement at that
-  position is **undefined for that roster** even if board supply remains.
+*(Discovery label revised from `baseline_mechanics_conditioned`; the family itself is unchanged.)*
+
+- **Overlay effect (not a source pool):** filters a named primary baseline's pool by eligibility
+  mechanics: taxi eligibility (rookie-only stash slots), IR designation rules, positional roster
+  caps, and combined-versus-separated rookie pools. The filter is applied to the primary pool
+  **before** any comparison; R6 has no pool of its own to offer.
+- **When it applies:** whenever E2/E5 mechanics constrain who may occupy which roster slot.
+  Boundary condition: for a roster at a positional cap, per-roster positional resolution of
+  **any** primary baseline is undefined for that position even if pool supply remains.
 - **Source / owner:** mechanics rules → league configuration (verified); filtered realized pools
   → runtime consumer.
 - **Input class:** `hybrid` (static mechanics over dynamic pools).
 - **Availability:** `consumer_owned`; `future_contract` for Strategy-rule consumption.
-- **E-dimensions required:** E2, E5, plus whichever dimensions the modified baseline requires.
-- **Strategy may define:** modifier semantics — how each mechanic transforms an eligible
-  comparison pool; the undefined-conditions it creates.
-- **Consumer must compute:** the actual filtered pools per roster and mechanic.
-- **What it is not:** a standalone universal baseline; a reason to treat capped or taxi-gated
-  assets as interchangeable with active-roster assets.
-- **Misread risks:** computing a floor over an ineligible pool (counting taxi-stashed assets as
-  active replacements; counting cap-blocked positions as open); ignoring that rookie-pool
-  separation changes R1/R2 pools structurally.
+- **E-dimensions required:** E2, E5, plus whichever dimensions the named primary baseline
+  requires.
+- **Strategy may define:** filter semantics — how each mechanic transforms an eligible comparison
+  pool's membership boundary; the undefined-conditions it creates.
+- **Consumer must compute:** the actual filtered pool membership per roster and mechanic.
+- **What it is not:** a standalone pool or universal baseline; a reason to treat capped or
+  taxi-gated assets as interchangeable with active-roster assets.
+- **Misread risks:** invoking R6 as though "after taxi filtering" named a pool without an R1–R3
+  primary (overlay-alone reference — fail closed, T1/T9); comparing over an unfiltered
+  (ineligible-inclusive) pool: counting taxi-stashed assets as active-roster comparison members,
+  or counting cap-blocked positions as open; ignoring that rookie-pool separation changes R1/R2
+  pool membership structurally.
 - **Synthetic example:** a league with a rookies-only taxi squad: for an active-roster question,
-  taxi-eligible rookies are outside the comparison pool even though they are rostered assets; for
-  a taxi-slot question, the pool is rookies only. One league, one moment — two differently
-  filtered baselines.
+  taxi-eligible rookies are outside the comparison-set membership even though they are rostered
+  assets; for a taxi-slot question, the membership is rookies only. One league, one moment, one
+  named primary pool — two differently filtered comparison sets.
 
 ---
 
 ## 16. D3 — Baseline relationships, non-equivalences, and anti-conflation tests
 
-### 16.1 Baseline relationship matrix
+### 16.1 Baseline relationships: primary pairs and overlay application
 
-Codes: **C** — can coincide in particular formats/moments; **D** — ordinarily differ; **N** —
-must never be substituted for one another without explicit evidence; **U** — the pair contains a
-member that becomes undefined under some mechanism or roster rule; **M** — modifier relation (R6
-transforms the other baseline rather than competing with it).
+Primary baselines (R1–R3) are **alternatives**: a single replacement read names exactly one.
+Overlays (R4–R6) are **not** alternatives to primaries or to each other: each composes over
+whichever primary is named, and none stands alone.
 
-| | R2 startup board | R3 next selection | R4 post-starters | R5 slot substitution | R6 mechanics |
-|---|---|---|---|---|---|
-| **R1 waiver** | D, N (different pools; late-draft board ≈ early waiver pool only in shallow formats — C requires that evidence) | D, N, U (R3 undefined post-draft, R1 degenerate in-draft) | C (for filled rosters in season, waiver adds are bench adds) | C (a waiver floor for a flex slot is slot-relative — the baselines compose) | M, U (caps/taxi filter the waiver pool; capped position → undefined) |
-| **R2 startup board** | — | D, N, C-at-clock (they coincide exactly when the referenced pick is the current pick), U (R3 undefined under auction; R2 undefined post-draft) | D (R4 is roster-relative; R2 is board-relative — they compose, never substitute) | D (slot-union vs position pools on the same board — compose) | M, U (rookie-pool separation redefines R2's pool; caps create per-roster undefinedness) |
-| **R3 next selection** | | — | C (both can condition the same decision simultaneously — orthogonal axes) | C (survival can be evaluated over a slot union — compose) | M, U (a cap reached before the next pick voids R3 for that position/roster) |
-| **R4 post-starters** | | | — | C (post-starters replacement is typically slot/bench-relative — strong composition in flex-heavy formats) | M (taxi/IR/caps define which slots can still generate demand) |
-| **R5 slot substitution** | | | | — | M (mechanics filter the union membership) |
+**Primary × primary relations** (codes: **C** — can coincide, only with the stated evidence;
+**D** — ordinarily differ; **N** — must never be substituted without explicit evidence; **U** —
+undefinedness conditions apply, see register):
 
-Undefined-condition register (the U cells, stated once):
+| Primary pair | Relation | Note |
+|---|---|---|
+| R1 waiver ↔ R2 startup board | D, N (conditional C) | Different pools: post-draft unrostered residue vs. current draftable board. Late-draft board ≈ early waiver pool only in shallow formats, and only with that format evidence cited. |
+| R1 waiver ↔ R3 next selection | D, N, U | R3 is undefined post-draft; R1 can be degenerate in-draft. Never interchangeable. |
+| R2 startup board ↔ R3 next selection | D, N, C-at-clock, U | Coincide exactly when the referenced selection is the current pick. R3 is undefined under auction mechanisms or with no remaining pick; R2 is undefined outside the draft. |
+
+**Overlay application** (each overlay composes over each primary; overlay-alone references fail
+closed):
+
+| Overlay | Over R1 (waiver pool) | Over R2 (current board) | Over R3 (expected future pool) | Undefinedness introduced |
+|---|---|---|---|---|
+| R4 fill regime | applies in season: same pool, bench-demand vs. starter-demand regime per roster | applies in-draft, per roster | applies to future-pool comparisons, per roster | none — a regime switch, not undefinedness |
+| R5 slot eligibility | re-partitions unrostered pool membership by slot unions | re-partitions board pool membership | re-partitions expected pool membership | none — identity overlay where no flex slots exist |
+| R6 mechanics filter | filters acquirable membership (taxi/IR/caps/pool separation) | filters draftable membership | filters expected membership | at a reached positional cap, per-roster positional resolution of **any** primary is undefined |
+
+**Undefined-condition register:**
 
 - **R2** is undefined outside the startup draft.
-- **R3** is undefined when the manager holds no further pick, and under auction/salary
-  mechanisms where acquisition is not selection-order-constrained (E4). It is *reshaped* (not
-  voided) by in-draft pick trades (E6).
-- **Positional replacement under any baseline** is undefined, per roster, at a reached positional
-  cap (R6).
-- **R1** is never undefined but can be **degenerate** (near-empty pool) — degeneracy is an
-  observed state, not undefinedness, and the two must not be conflated.
+- **R3** is undefined when the manager holds no further pick, and under auction/salary mechanisms
+  where acquisition is not selection-order-constrained (E4). It is *reshaped* (not voided) by
+  in-draft pick trades (E6).
+- **R1 three-way distinction:** *defined-empty / degenerate* when the acquisition mechanism
+  exists but the eligible unrostered pool is empty or nearly empty (an observed state, not
+  undefinedness); **undefined** when the format has no unrostered acquisition mechanism at all;
+  *unresolved → fail closed* when the mechanism exists but the pool observation is unavailable —
+  unresolved must never be reported as empty, and none of the three states may be conflated.
+- **Per-roster positional resolution** of any primary baseline is undefined at a reached
+  positional cap (R6).
 
 ### 16.2 Mandatory non-equivalences
 
@@ -1048,11 +1138,13 @@ Undefined-condition register (the U cells, stated once):
   N-cell), not habit.
 - **NE2 — next-pick replacement is not a season-long baseline.** R3 is per-pick,
   expectation-conditioned, and dies with the draft. Nothing derived from R3 may be carried
-  forward as a stable valuation floor.
-- **NE3 — post-starters replacement switches regimes.** R4 changes identity at the moment lineup
-  obligations are met; any claim citing R4 must state which regime the roster is in.
-- **NE4 — flex substitution ≠ same-position replacement.** A slot-union floor (R5) and a
-  positional floor answer different questions; collapsing them mislabels which pool was compared.
+  forward as a stable season-long comparison pool.
+- **NE3 — the post-starters overlay switches regimes.** R4 changes the governing demand regime at
+  the moment lineup obligations are met; any claim citing R4 must state which regime the roster
+  is in, and must name the primary pool the regime governs.
+- **NE4 — flex substitution ≠ same-position replacement.** A slot-union comparison set (R5 over a
+  named primary) and a positional comparison set answer different questions; collapsing them
+  mislabels which pool membership was compared.
 - **NE5 — superflex eligibility establishes no numeric quarterback premium.** R5 defines *who
   competes for the slot*; the magnitude of any resulting premium is a valuation output that this
   taxonomy does not produce and Strategy may never compute.
@@ -1075,31 +1167,52 @@ Undefined-condition register (the U cells, stated once):
 Decision questions a later, separately authorized implementation could encode as contract checks.
 Each failing test means **fail closed** — report the read unavailable rather than guessing.
 
-- **T1 — Baseline named.** Does the statement name exactly one baseline ID? Zero or more than one
-  → undefined reference.
-- **T2 — Pool exists.** Does the named baseline exist in this format, mechanism, and moment
-  (R2 in-draft only; R3 requires a remaining pick and a selection-order mechanism; cap-reached
-  positions void positional resolution)? No → undefined, not zero.
-- **T3 — Mechanics filtered.** Has R6 filtering (taxi/IR/caps/pool separation) been applied
-  before any comparison? Unfiltered pool → wrong pool.
-- **T4 — Roster-relative reads stay home.** If the baseline is roster-relative (R4), was it
-  resolved against the same roster whose state was read?
-- **T5 — Slot/position match.** Does the claim's wording match the pool actually compared
-  (slot-union R5 vs. positional)?
-- **T6 — Substitution evidenced.** If one baseline stands in for another, does a matrix C-cell
-  apply *and* is the enabling format/board evidence cited? N-cells without evidence → reject.
+- **T1 — Composition complete.** Does the claim name exactly **one** primary pool baseline
+  (R1–R3), **every** conditioning overlay (R4–R6) applicable in the format and roster context,
+  and explicit provenance for each component's runtime resolution? Fail closed when: no primary
+  is named; more than one incompatible primary is silently blended; an overlay is used as though
+  it were a standalone pool; an applicable overlay is omitted; or a composition is asserted
+  without its required format, roster, or board evidence.
+- **T2 — Pool exists and is resolved.** Is the named primary defined in this format, mechanism,
+  and moment (R2 in-draft only; R3 requires a remaining pick and a selection-order mechanism; R1
+  requires an unrostered acquisition mechanism)? If defined, is the pool observation actually
+  available? **Undefined ≠ empty ≠ unresolved:** defined-empty is a valid observed state;
+  undefined means the baseline does not exist here; unresolved (observation unavailable) means
+  fail closed without asserting either. Cap-reached positions void per-roster positional
+  resolution (R6).
+- **T3 — Mechanics filtered.** Has the R6 filter (taxi/IR/caps/pool separation) been applied to
+  the named primary pool before any comparison? Unfiltered pool → wrong pool.
+- **T4 — Roster-relative reads stay home.** If the composition includes the roster-relative
+  overlay (R4), was it resolved against the same roster whose state was read?
+- **T5 — Slot/position match.** Does the claim's wording match the comparison-set membership
+  actually used (slot-union R5 over a named primary vs. positional partition)?
+- **T6 — Primary substitution evidenced.** If one primary baseline stands in for another, does a
+  C relation in the primary-pair table apply *and* is the enabling format/board evidence cited?
+  N relations without evidence → reject. (Overlays never "stand in" for primaries at all — that
+  is a T1 failure, not a substitution.)
 - **T7 — No numerics.** Does the statement attach a number, score, rank, premium, or threshold to
   any baseline? Inside Strategy → prohibited outright; numeric replacement and VOR computation
   are consumer-owned per issue v0.2 Q8 and prohibited in Strategy by §9's negative cases.
 - **T8 — No player labels.** Does any output bind a baseline to a named player or player ID
   inside Strategy? → firewall violation (NE8).
+- **T9 — Composed-read validity (worked test).** `R2 + R5 + R6` is a **valid** composed
+  startup-board replacement read in a flex-format draft with taxi/cap mechanics: R2 names the
+  source pool (current board), R5 re-partitions its membership by slot unions, R6 filters
+  eligibility — provided each component carries its provenance (board observation, lineup rules,
+  mechanics rules). By contrast, `R5` alone ("flex replacement") or `R6` alone ("after taxi
+  filtering") names **no source pool** and must fail closed under T1. An implementation encoding
+  this taxonomy must accept the former and reject both of the latter.
 
 ### 16.4 D3 boundary confirmation
 
-The taxonomy defines which baseline is meant — nothing more. **No numeric replacement value, VOR,
-replacement-adjusted rank, scarcity premium, point value, projection, or threshold appears
-anywhere in §§15–16, and no baseline is designated optimal or universal.** All examples are
-synthetic and player-free. The source truth → artifact → adapter → surface invariant (§9) is
+The taxonomy defines which composed baseline is meant — exactly one primary pool baseline
+(R1–R3) plus every applicable conditioning overlay (R4–R6) — and nothing more. Strategy defines
+eligible comparison pools and their membership boundaries; **selecting, ordering, or valuing pool
+members is a consumer-resolved frontier under a separately declared ordering/evidence contract,
+and no such contract exists today.** **No numeric replacement value, VOR, replacement-adjusted
+rank, scarcity premium, point value, projection, or threshold appears anywhere in §§15–16, and no
+baseline or composition is designated optimal or universal.** All examples are synthetic and
+player-free. The source truth → artifact → adapter → surface invariant (§9) is
 preserved: baseline *meanings* belong to the stable Strategy artifact; baseline *resolutions*
 (actual pools, fill states, survival evidence) belong to consumer-side runtime computation with
 per-input provenance and fail-closed gaps; no surface may convert a baseline statement into a
