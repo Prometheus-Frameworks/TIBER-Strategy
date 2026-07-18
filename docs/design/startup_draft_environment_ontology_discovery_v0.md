@@ -1,6 +1,6 @@
 # Startup-Draft Environment Ontology — Discovery v0
 
-> **Status: D1–D3 ACCEPTED; D4 RECORDED AT THIS REVISION. Q5–Q8, ALL LATER FRONTIERS, AND
+> **Status: D1–D4 ACCEPTED; D5 RECORDED AT THIS REVISION. Q6–Q8, ALL LATER FRONTIERS, AND
 > IMPLEMENTATION NOT ACTIVATED.**
 >
 > This document is the canonical discovery package for the bounded discovery defined in
@@ -9,7 +9,8 @@
 > Sections 11–13 record **D2 — startup-draft environment definition and format-input separation
 > (Q1 + Q2 only)** (accepted). Sections 15–16 record **D3 — replacement-level taxonomy (Q3
 > only)** (accepted as corrected). Sections 18–19 record **D4 — draft-mechanism and cadence
-> consequences (Q4 only)**.
+> consequences (Q4 only)** (accepted as corrected). Sections 21–22 record **D5 — roster-path
+> optionality (Q5 only)**.
 >
 > - **Program authority:** TIBER-Ops #34 (Decisions A–C), as recorded in issue #2.
 > - **D1 activation:** signed comment by Joseph (`@Prometheus-Frameworks`), issue #2,
@@ -50,9 +51,17 @@
 >   2026-07-18. Accepts the corrected D3 at commit `f460118` (superseding the `382e66b`
 >   checkpoint) and activates `D4 — draft-mechanism and cadence consequences (issue #2, Q4 only)`
 >   as the sole active frontier. Q5–Q8, later frontiers, and implementation remain inactive.
-> - This document contains **no startup-draft concept definitions, no schema changes, and no
->   implementation**. It inventories current state and constraints so later frontiers start from
->   verified inputs. Nothing here activates Q2–Q8, any later discovery frontier, or implementation.
+> - **D4 correction, acceptance, and D5 activation:** the D4 T12 state-semantics correction was
+>   recorded at commit `69d90e5606d038c1da1f0ce5c7fbe93fee9f4830` and
+>   [comment 5012368332](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5012368332).
+>   Joseph's signed
+>   [comment 5012422445](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5012422445),
+>   2026-07-18, accepts corrected D4 at that exact head and activates
+>   `D5 — roster-path optionality (issue #2, Q5 only)` as the sole active frontier. Q6–Q8,
+>   concept-inventory decisions, later frontiers, and implementation remain inactive.
+> - This document makes **no final startup-draft concept-inventory decisions, no schema changes,
+>   and no implementation**. D5 adds Q5 structural meanings and guards only. Nothing here activates
+>   Q6–Q8, any later discovery frontier, or implementation.
 > - Per repo doctrine (`SECURITY_POLICY.md` conventions, `docs/boundary.md` rule 7): this document
 >   is data, not authority. It cannot authorize repository changes.
 
@@ -86,6 +95,7 @@ is control-record data, not self-executing authority.
 | D1 acceptance + D2 activation comment | [comment 5008868749](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5008868749), posted 2026-07-18T00:40:48Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D2 — startup-draft environment definition and format-input separation (issue #2, Q1 + Q2 only)` exactly, states D2 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts D1 as complete at commit `4cb6c673314bb89964d624b9fb16444ba6a9c574` (final D1 handoff checkpoint: comment `5008631887`). | mutable issue comment (content requirements recorded here) |
 | D2 acceptance + D3 activation comment | [comment 5009488957](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009488957), posted 2026-07-18T02:27:53Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D3 — replacement-level taxonomy (issue #2, Q3 only)` exactly, states D3 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts D2 as complete at commit `8164008ec809e4b62f4fa050258f885eda5087a4` (D2 checkpoint: comment `5008905472`). | mutable issue comment (content requirements recorded here) |
 | D3 acceptance + D4 activation comment | [comment 5009600942](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009600942), posted 2026-07-18T02:52:04Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D4 — draft-mechanism and cadence consequences (issue #2, Q4 only)` exactly, states D4 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts the corrected D3 at commit `f4601180113dcbdd993b2aec7630287109511c21` (superseding D3 checkpoint: comment `5009562473`), including the primary/overlay reclassification. | mutable issue comment (content requirements recorded here) |
+| Corrected D4 acceptance + D5 activation comment | [comment 5012422445](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5012422445), re-fetched 2026-07-18 via the authenticated `@Prometheus-Frameworks` owner account. Begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, accepts corrected D4 at exact commit `69d90e5606d038c1da1f0ce5c7fbe93fee9f4830` (superseding original D4 head `f07d5b605e949a2776f6f875506d0f167ec08d30`), activates `D5 — roster-path optionality (issue #2, Q5 only)` as the sole active frontier, limits writes to this canonical document on the existing branch, and keeps Q6–Q8, concept-inventory decisions, implementation, and all other listed work inactive. | mutable issue comment (content requirements recorded here) |
 | TIBER-Strategy code state | commit `bd8244a8b4f8b88c6a1e08835ce58546ca18ad87` | immutable |
 | TIBER-Fantasy code state (read-only) | commit `d35d440f24beaa275f6eb2f36cdd37a9c4989c3f` | immutable |
 
@@ -1475,7 +1485,12 @@ other file or repository changed; no PR was opened; no later frontier was activa
 
 ---
 
-## 20. Proposed next frontier (NOT activated)
+## 20. D5 frontier proposal (historical — subsequently activated)
+
+> This section is preserved as the D4-era proposal record. D5 was activated by
+> [comment 5012422445](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5012422445)
+> (verified in §1) from corrected D4 head
+> `69d90e5606d038c1da1f0ce5c7fbe93fee9f4830`; its output is recorded in §§21–22 below.
 
 ```text
 D5 — roster-path optionality (issue #2, Q5 only)
@@ -1490,10 +1505,224 @@ diversification, mandatory balance, an optimization result, or a pick recommenda
 which the concept-inventory frontier (Q6–Q7 material) can be scoped against a complete
 definitional base.
 
-**D5 is proposed only. It is NOT activated.** Q5–Q8 work, concept-inventory decisions, all later
-frontiers, and implementation remain inactive until a signed activation comment on issue #2
-satisfying the v0.2 §14 requirements authorizes the next frontier explicitly.
+The proposal above was inactive when written. The signed activation cited above later authorized
+Q5 only; Q6–Q8, concept-inventory decisions, all later frontiers, and implementation remained
+inactive.
 
 ---
 
-*End of D4 record.*
+## 21. D5 — Roster-path optionality (Q5)
+
+### 21.1 Structural path and reachability model
+
+A **roster-construction path** is a player-independent sequence of admissible structural-state
+transitions from the current draft state to a complete-roster state that satisfies the declared
+format constraints. Its state description may contain only structural facts: remaining lineup and
+roster obligations, slot-eligibility and cap conditions, available acquisition-opportunity types,
+remaining-supply classes, and the provenance and freshness of those facts. It contains no player
+identity, ranking, projection, tier, ADP, market value, or preferred outcome.
+
+For D5, two executions belong to the same structural path when they pass through the same classes
+of constraints and obligations, even if a future consumer would populate them with different
+players. A **complete-roster state** means only that declared structural requirements can be
+satisfied; it says nothing about quality, competitiveness, balance, concentration, or fitness for
+a particular manager.
+
+Let `P(s, I)` denote the set of structural paths reachable from state `s` under declared inputs
+`I`. Reachability means that at least one admissible sequence of remaining acquisition
+opportunities has a witness satisfying every applicable format constraint. Strategy may define
+that predicate and its guards. A consumer must resolve `s`, `I`, the witness set, and every state
+transition at runtime. `P` is a set of possibilities, not a score, ordering, objective function,
+or recommendation.
+
+The terms in this section are Q5 descriptive machinery only. They do **not** accept, reject,
+merge, rename, or finally name any candidate in the issue's concept inventory. In particular,
+`roster_path_optionality`, `surviving_build_paths`, and `local_value_path_tension` remain unmerged
+and unaccepted pointers pending a separately activated concept-inventory frontier.
+
+### 21.2 Local comparison versus the reachable path set
+
+A **local comparison** ranges only over structurally eligible choices available at the current
+state. D5 does not order or value those choices. A **path-set read** asks a different question:
+after a structurally described selection transition, which complete-roster constraint patterns
+still have at least one admissible witness?
+
+Formally, a current action `a` may move state `s` to `s′`; the relevant structural consequence is
+the relationship between `P(s, I)` and `P(s′, I′)`, where `I′` includes the board and transaction
+events observed by the successor state. Membership in the local choice set does not establish
+path preservation, and path preservation does not make a local choice preferable.
+
+| Selection consequence | Mechanical meaning | Required guard |
+|---|---|---|
+| preserves multiple paths | after the transition, more than one distinct complete-roster constraint pattern still has a resolved witness | says only that alternatives remain reachable; it does not require diversification or keeping them open |
+| closes a path | a path with a resolved witness before the transition has a defined-empty witness set after it, under fresh inputs | requires comparable pre/post state and event provenance; it is not a claim that the selection was wrong |
+| makes a path unresolved | the transition leaves a required input missing, unavailable, undeclared, or stale, so current reachability cannot be determined | fail closed; do not relabel the path closed, empty, or unreachable |
+| leaves a defined path structurally unreachable | the path specification remains applicable, all required inputs are resolved, and its current witness set is defined-empty | preserve the definition/witness distinction; theoretical meaning does not imply current attainability |
+
+A later board or transaction event may change reachability again. A claim that a path was closed or
+preserved is state-stamped, not permanent. D5 defines no requirement to keep every path open and no
+preference between a wider, narrower, balanced, or concentrated reachable set.
+
+### 21.3 Four-state semantics
+
+Every path or path-set claim must emit exactly one applicable state:
+
+- **defined** — the path predicate applies, every required input is declared, available, and
+  current, and the witness set is resolved. When it contains a witness, the path is currently
+  reachable.
+- **defined-empty** — the predicate applies and every required input is resolved and current, but
+  no admissible witness satisfies the path's constraints from the present state. This is the
+  mechanically precise state for a theoretically defined but structurally unreachable path.
+- **undefined** — the referenced path predicate has no referent or is not applicable under the
+  declared mechanism or format. Absence of an applicable opportunity is not an observed empty
+  witness set.
+- **unresolved** — applicability or reachability cannot be determined because a required
+  declaration, observation, contract, provenance stamp, or freshness condition is missing. Fail
+  closed without asserting defined, defined-empty, or undefined.
+
+State propagation is strict. A defined-empty result is permitted only after all required inputs
+are defined and current and the consumer has resolved the witness set. Missing or stale evidence
+propagates `unresolved`; a genuinely inapplicable required predicate propagates `undefined` to the
+claim that depends on it. The states must never be interchanged.
+
+Mechanism-specific consequences preserve D4: under M4, R3 is `undefined`, but auction/salary path
+reachability need not be undefined when current-pool, budget-state, eligibility, and roster
+constraints are all resolved. Under M5, mechanism-dependent reachability is `unresolved`. Under
+M1–M3 with no future pick, R3 is `undefined`; whether a complete-roster path is defined-empty or
+remains reachable through another declared acquisition opportunity is a separate, resolved
+structural question.
+
+### 21.4 Composition with D2, D3, and D4
+
+- **D2 / E10:** D5 supplies the reachability semantics that E10 deliberately deferred. E1–E6
+  provide the static constraint skeleton; E7–E9 provide dynamic supply, cadence, and residual-pool
+  state where a claim requires them; E10 is the derived hybrid path set. No E-dimension value moves
+  into Strategy.
+- **D3 replacement taxonomy:** a path claim that uses replacement evidence must name exactly one
+  applicable primary baseline (R1–R3) and every applicable conditioning overlay (R4–R6), following
+  T1–T9. A baseline describes a comparison pool, never a path, and cannot by itself prove that a
+  path is reachable. Undefined, unresolved, or stale baseline components propagate through any
+  path claim that requires them; an observed defined-empty pool may support a defined-empty path
+  witness set only after all other constraints are resolved.
+- **D4 mechanism and cadence:** under M1–M3, future-selection opportunities and realized cadence
+  may constrain witnesses. Under M4, selection cadence and R3 do not apply, while current-pool and
+  budget-constrained acquisition opportunities may still support path witnesses. Under M5, every
+  mechanism-dependent path claim is unresolved. Where pick trading is allowed, the static cadence
+  skeleton is insufficient; a later trade invalidates the prior path read until both cadence and
+  reachability are re-resolved from current event provenance (T10/T13).
+- **Invariant composition:** stable path meanings belong to Strategy; current path instances stay
+  in the runtime decision envelope. No adapter or surface may turn reachability, closure, or path
+  count into a directive. Human decision authority remains final.
+
+### 21.5 Required inputs, availability, and ownership
+
+The structural class and runtime/contract status are separate axes. `consumer_owned` values never
+become Strategy content; `future_contract` marks the interface required before a Strategy rule may
+consume them. `unavailable` means no current producer or declared contract can resolve the input.
+
+| Required input | Structural class | Runtime / availability status | Ownership and D5 use |
+|---|---|---|---|
+| E1–E6 format constraints: lineup and roster obligations, eligibility/caps, scoring modifiers, mechanism, pool composition, and pick-trading permission | `format_static` | `consumer_owned`; `future_contract` for Strategy-rule use | league configuration is verified TIBER-Fantasy-owned; Strategy defines constraint meanings only |
+| current structural roster state: occupied eligibility classes, open obligations, and reached caps, without player identity | `board_dynamic` | `consumer_owned`; `future_contract` for Strategy-rule use | runtime consumer resolves it; D5 performs no roster ingestion |
+| E7 current board depletion and remaining structural supply | `board_dynamic` | `consumer_owned`; tier-shaped evidence remains `unavailable` and would require a `future_contract` | runtime producer remains unassigned; D5 uses no tiers or player rows |
+| E8 future acquisition opportunities and realized cadence under M1–M3 | `hybrid` | `consumer_owned`; `future_contract`; any R3 survival evidence remains `unavailable` | static skeleton comes from rules; runtime consumer resolves current opportunities and event stamps |
+| D3 primary-baseline plus applicable-overlay composition, when a path claim depends on replacement evidence | `hybrid` | component values are `consumer_owned`; `future_contract` for Strategy-rule use | Strategy owns composition guards; consumer resolves pools and filters |
+| executed pick trades and freshness/provenance stamps | `board_dynamic` | `consumer_owned`; `future_contract` | runtime consumer resolves them; any stale dependent read becomes unresolved |
+| M4 current-pool, budget-state, eligibility, and roster constraints | `board_dynamic` over a `format_static` mechanism, therefore `hybrid` as a composition | `consumer_owned`; `future_contract` | runtime consumer resolves all values; Strategy defines no budget number or valuation |
+| E9 residual acquisition state, only when a path extends through a declared post-startup mechanism | `hybrid` | `consumer_owned`; `future_contract` | runtime producer remains unassigned; an unavailable pool observation makes the dependent claim unresolved |
+| E10 path witnesses and the resulting reachable-set state | `hybrid` | derived runtime value; producer and contract currently `unavailable`; requires a `future_contract` | Strategy owns the predicate and state guards; the unassigned runtime decision-envelope producer must resolve instances |
+
+This table does not assign the runtime producer. The owner remains
+`declared_assumption_pending_confirmation` under §13.2.
+
+### 21.6 Synthetic cases (player-free)
+
+1. **D5-S1 — ordinary ordered startup, alternatives preserved.** A declared snake format has
+   fresh roster-obligation, current-board, and realized-cadence inputs. A structurally eligible
+   selection satisfies one open obligation while leaving witnesses for distinct completion
+   patterns through later declared opportunities. The successor path set is defined and multiple;
+   no path is preferred and no diversification instruction follows.
+2. **D5-S2 — extreme-depth defined-empty path.** In an extreme-depth format, fresh board evidence
+   shows that a structural supply class required by one otherwise valid completion pattern has no
+   remaining eligible witness. The path specification remains defined, but its current witness set
+   is defined-empty and the path is structurally unreachable. It is neither undefined nor
+   unresolved, and the result contains no player valuation.
+3. **D5-S3 — pick-trading staleness.** A path read under an ordered mechanism cites the observed
+   trade-event set and realized future opportunities. A later pick trade changes those
+   opportunities. The prior reachability claim becomes unresolved; it may be described as closed,
+   preserved, or reopened only after re-resolution against the new event state.
+4. **D5-S4 — auction path without R3.** Under M4, R3 and selection-cadence predicates are
+   undefined. With fresh current-pool, budget-state, eligibility, and roster-constraint inputs, an
+   auction acquisition path can nevertheless be defined and its witness set resolved. Importing a
+   next-selection gap would be invalid; importing budget valuation would exceed D5.
+5. **D5-S5 — undeclared mechanism.** With M5, the mechanism declaration needed to choose the
+   applicable acquisition-opportunity model is absent. Mechanism-dependent path reachability is
+   unresolved and fails closed. It must not be reported as a defined-empty path or silently
+   resolved using snake assumptions.
+
+---
+
+## 22. D5 — Anti-conflation tests and boundary confirmation
+
+### 22.1 Mechanically encodable tests (extending T1–T15)
+
+- **T16 — Local choice ≠ reachable path set.** A currently eligible choice and a path witness are
+  different objects. Local availability alone cannot prove path preservation, closure, quality,
+  or preference; a path claim requires a successor-state reachability resolution.
+- **T17 — Four-state gate.** `defined`, `defined-empty`, `undefined`, and `unresolved` are distinct.
+  Emit defined-empty only after all required inputs are resolved and no witness exists; missing,
+  stale, or undeclared evidence emits unresolved; inapplicability emits undefined. Any interchange
+  fails validation.
+- **T18 — Path-transition provenance.** A preserve/close claim must cite comparable pre-transition
+  and post-transition structural states plus the board and transaction events observed. Missing or
+  mismatched provenance makes the transition claim unresolved.
+- **T19 — D3 composition gate.** When path reachability depends on replacement evidence, the claim
+  must name one primary baseline and all applicable overlays. A baseline or overlay cannot stand
+  in for a path, and an unresolved or undefined required component must propagate rather than be
+  treated as an empty path set.
+- **T20 — Mechanism-opportunity match.** M1–M3 witnesses may depend on ordered future selections;
+  M4 witnesses must use auction/salary opportunity inputs and must not reference R3 or cadence;
+  M5 mechanism-dependent witnesses are unresolved. A mechanism-mismatched witness is rejected.
+- **T21 — Stale opportunity invalidation.** In a trade-enabled format, any later trade event
+  invalidates a path read that depended on the prior realized opportunity set. Re-resolve from the
+  new event state or fail closed; do not preserve the old result as current.
+- **T22 — No advice, optimization, or superiority.** No path width, closure, concentration, or
+  balance statement may emit a pick directive, computed best path, requirement to keep every path
+  open, manager-specific strategy, or claim that balanced or concentrated construction is
+  superior. Any such conversion is rejected at the artifact, adapter, and surface boundaries.
+
+### 22.2 D5 boundary confirmation
+
+D5 answers Q5 only. It defines structural paths, reachability transitions, four-state semantics,
+cross-frontier composition, required input classes, and fail-closed tests without evaluating a
+player or selecting a path. All examples are synthetic and contain no player, ranking, tier,
+projection, ADP, market, live-draft, or roster-ingestion data. No numeric cadence, budget,
+replacement, scarcity, or valuation value is introduced. No path is called optimal; no balanced
+or concentrated structure is preferred; no imperative or recommendation is emitted.
+
+No candidate concept was accepted, rejected, merged, renamed, or finally named. Q6–Q8, heuristic
+evaluation, artifact-shape selection, schema or implementation proposals, runtime-producer
+assignment, adapters, product behavior, promoted-ontology changes, implementation, and all other
+repositories remain inactive. Only this canonical document changed; no PR or merge is authorized.
+
+---
+
+## 23. Proposed next frontier (NOT activated)
+
+```text
+D6 — unusual-format stress-test matrix (issue #2, Q6 only)
+```
+
+Rationale: D1–D5 now provide the ownership, environment, replacement, mechanism/cadence, and path
+semantics needed to test which hidden ordinary-format assumptions fail under the synthetic cases
+required by Q6. A bounded Q6-only frontier can exercise those meanings across the required format
+families without evaluating heuristics, deciding the concept inventory, selecting an artifact
+shape, or implementing anything.
+
+**D6 is proposed only. It is NOT activated.** Q6–Q8, concept-inventory decisions, heuristic
+evaluation, artifact-shape work, all later frontiers, and implementation remain inactive until a
+new signed activation comment on issue #2 authorizes the next frontier explicitly.
+
+---
+
+*End of D5 record.*
