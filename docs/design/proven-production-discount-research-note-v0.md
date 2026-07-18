@@ -81,7 +81,7 @@ Candidate outcome measures include next-season PPG, total points, games played, 
 rate, value over same-ADP alternatives, and hit/failure rates by failure-mechanism class. No one
 metric should silently replace the frozen study question.
 
-## 5. Source-truth inventory as of 2026-07-18
+## 5. Source-truth inventory as of 2026-07-17
 
 ### TIBER-Data player production and history
 
