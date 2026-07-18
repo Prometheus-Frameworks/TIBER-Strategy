@@ -1,13 +1,14 @@
 # Startup-Draft Environment Ontology — Discovery v0
 
-> **Status: D1 ACCEPTED; D2 RECORDED AT THIS REVISION. Q3–Q8, ALL LATER FRONTIERS, AND
+> **Status: D1 AND D2 ACCEPTED; D3 RECORDED AT THIS REVISION. Q4–Q8, ALL LATER FRONTIERS, AND
 > IMPLEMENTATION NOT ACTIVATED.**
 >
 > This document is the canonical discovery package for the bounded discovery defined in
 > [TIBER-Strategy issue #2](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2).
 > Sections 1–8 record **D1 — current ontology and ownership-boundary inventory** (accepted).
 > Sections 11–13 record **D2 — startup-draft environment definition and format-input separation
-> (Q1 + Q2 only)**.
+> (Q1 + Q2 only)** (accepted). Sections 15–16 record **D3 — replacement-level taxonomy (Q3
+> only)**.
 >
 > - **Program authority:** TIBER-Ops #34 (Decisions A–C), as recorded in issue #2.
 > - **D1 activation:** signed comment by Joseph (`@Prometheus-Frameworks`), issue #2,
@@ -31,6 +32,12 @@
 >   `D2 — startup-draft environment definition and format-input separation (Q1 + Q2 only)` as the
 >   sole active frontier. D2 authorizes writing to this file only; Q3–Q8, later frontiers, and
 >   implementation remain inactive.
+> - **D2 acceptance and D3 activation:** signed comment by Joseph (`@Prometheus-Frameworks`),
+>   [comment 5009488957](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009488957),
+>   2026-07-18. Accepts D2 as complete at commit `8164008` and activates
+>   `D3 — replacement-level taxonomy (issue #2, Q3 only)` as the sole active frontier. D3
+>   identifies which comparison pool or baseline is meant; it never calculates baseline values.
+>   Q4–Q8, later frontiers, and implementation remain inactive.
 > - This document contains **no startup-draft concept definitions, no schema changes, and no
 >   implementation**. It inventories current state and constraints so later frontiers start from
 >   verified inputs. Nothing here activates Q2–Q8, any later discovery frontier, or implementation.
@@ -65,6 +72,7 @@ is control-record data, not self-executing authority.
 | D1 activation comment | [comment 5008074123](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5008074123), posted 2026-07-17T22:26:54Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D1 — current ontology and ownership-boundary inventory` exactly, states D1 is the sole active frontier, and states later requirements remain inactive. | mutable issue comment (content requirements recorded here) |
 | v0.1 independent review | [comment 5007955898](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5007955898), verdict PASS_WITH_FINDINGS against the superseded v0.1 draft | mutable issue comment (historical record) |
 | D1 acceptance + D2 activation comment | [comment 5008868749](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5008868749), posted 2026-07-18T00:40:48Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D2 — startup-draft environment definition and format-input separation (issue #2, Q1 + Q2 only)` exactly, states D2 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts D1 as complete at commit `4cb6c673314bb89964d624b9fb16444ba6a9c574` (final D1 handoff checkpoint: comment `5008631887`). | mutable issue comment (content requirements recorded here) |
+| D2 acceptance + D3 activation comment | [comment 5009488957](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009488957), posted 2026-07-18T02:27:53Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D3 — replacement-level taxonomy (issue #2, Q3 only)` exactly, states D3 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts D2 as complete at commit `8164008ec809e4b62f4fa050258f885eda5087a4` (D2 checkpoint: comment `5008905472`). | mutable issue comment (content requirements recorded here) |
 | TIBER-Strategy code state | commit `bd8244a8b4f8b88c6a1e08835ce58546ca18ad87` | immutable |
 | TIBER-Fantasy code state (read-only) | commit `d35d440f24beaa275f6eb2f36cdd37a9c4989c3f` | immutable |
 
@@ -794,7 +802,11 @@ document was modified. No PR was opened. No later frontier was activated.
 
 ---
 
-## 14. Proposed next frontier (NOT activated)
+## 14. D3 frontier proposal (historical — subsequently activated)
+
+> This section is preserved as the D2-era proposal record. D3 was activated by
+> [comment 5009488957](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009488957)
+> (verified in §1) and its output is recorded in §§15–16 below.
 
 ```text
 D3 — replacement-level taxonomy (issue #2, Q3 only)
@@ -812,6 +824,311 @@ machinery (§12.1) gives each baseline a ready classification frame.
 frontiers, and implementation remain inactive until a signed activation comment on issue #2
 satisfying the v0.2 §14 requirements authorizes the next frontier explicitly.
 
+*(End of historical D3 proposal. D3 was subsequently activated; see §§15–16.)*
+
 ---
 
-*End of D2 record.*
+## 15. D3 — Replacement-level taxonomy (Q3)
+
+> D3 record. Authorized by [comment 5009488957](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009488957);
+> Q3 only. The taxonomy identifies **which comparison pool or baseline is meant** when
+> "replacement" is invoked. It never calculates a baseline's value. Baseline IDs below are
+> **descriptive discovery labels for this document only** — they are not accepted ontology concept
+> IDs; concept-inventory decisions (naming, acceptance, merging) remain a later frontier.
+
+### 15.1 Scope and structure
+
+Issue v0.2 Q3 prohibits one universal replacement baseline across formats. D3 therefore defines
+**six baseline families** — five genuine baselines plus one modifier family (R6) that transforms
+the others — each recorded with the twelve attributes required by the D3 instruction. Input
+classes and E-dimension references use the D2 framework (§§11–12) unchanged.
+
+A single global rule precedes all records: **every replacement claim must name exactly one
+baseline.** An unqualified "replacement level" is undefined in this taxonomy and must fail closed
+(test T1, §16.3).
+
+### 15.2 Baseline records
+
+#### R1 — `baseline_waiver_ordinary` (ordinary waiver replacement)
+
+- **Comparison pool:** the best asset acquirable from the league's unrostered
+  (waiver/free-agent) pool at a given moment, per position or slot eligibility class.
+- **When it exists:** whenever an unrostered acquirable pool exists — the in-season steady state
+  of most leagues. In extreme-depth formats the pool may be *degenerate* (approaching empty)
+  immediately post-startup: still defined, but structurally near-worthless (E9).
+- **Source / owner:** waiver-system rules → league configuration (TIBER-Fantasy, verified);
+  realized pool state → runtime consumer (producer unassigned, §13.2).
+- **Input class:** `hybrid` — waiver system and roster totals are `format_static`; the realized
+  pool is `board_dynamic` (a post-draft outcome that keeps evolving in season).
+- **Availability:** `consumer_owned` today; `future_contract` for any Strategy rule consuming it.
+- **E-dimensions required:** E1 (franchise count), E2 (roster totals/mechanics), E5 (pool
+  composition), E9 (waiver consequences).
+- **Strategy may define:** the meaning of an acquisition floor conditioned on format; that the
+  floor is format-conditional and can be degenerate; misread guards.
+- **Consumer must compute:** the actual unrostered pool and its per-position composition.
+- **What it is not:** a constant; a startup-board baseline; a promise that anything useful is
+  unrostered; a player label.
+- **Misread risks:** importing shallow-league waiver intuition into deep formats; assuming
+  post-startup liquidity (issue v0.2 §9 negative case); treating the current pool state as
+  permanent (see non-equivalence NE7, §16.2).
+- **Synthetic example:** in an ordinary 12-team one-QB format, the unrostered pool after a
+  startup retains startable-position depth; in a 32-team format with the same roster mechanics,
+  nearly the entire startable population is rostered when the draft ends, so this baseline is
+  defined but degenerate — "replacement from waivers" names an almost-empty pool.
+
+#### R2 — `baseline_startup_board` (startup-draft replacement)
+
+- **Comparison pool:** the best asset still available on the startup draft board at a given
+  board state, per position or eligibility class.
+- **When it exists:** only while the startup draft is in progress; it ceases to exist at the
+  final selection. Transient by construction.
+- **Source / owner:** live draft board → runtime consumer (live board ingestion is explicitly
+  outside TIBER-Strategy — verified boundary; producer unassigned, §13.2).
+- **Input class:** `board_dynamic`.
+- **Availability:** `consumer_owned`; `future_contract` for Strategy-rule consumption; any
+  tier-shaped view additionally depends on the nonexistent tier producer (D1 P6).
+- **E-dimensions required:** E4 (mechanism), E5 (pool composition), E7 (board depletion/supply),
+  with E1 demand as context.
+- **Strategy may define:** that startup replacement is board-relative and transient; that its
+  pool is the *draftable* pool, not the post-draft residue; misread guards.
+- **Consumer must compute:** actual board availability at the moment of reference.
+- **What it is not:** waiver replacement (different pool); a stable baseline; a survival claim
+  about any future pick (that is R3).
+- **Misread risks:** substituting remembered or assumed board state for observed state;
+  conflating with R1 because both are "best available" phrasings over different pools.
+- **Synthetic example:** in a combined rookie/veteran startup, mid-draft board replacement at a
+  position includes undrafted rookies; in a vets-only startup with a separate rookie draft, the
+  same phrase names a strictly smaller pool — same words, different baseline resolution via E5.
+
+#### R3 — `baseline_next_selection` (next-selection replacement)
+
+- **Comparison pool:** the best asset *expected to survive* on the board until the manager's next
+  selection — a future board state, not the current one.
+- **When it exists:** only while the manager holds at least one future pick **and** the mechanism
+  is selection-order-based. Undefined when no pick remains, and undefined under auction/salary
+  mechanisms, where acquisition is not order-constrained (E4). Reshaped mid-draft by pick trades
+  (E6).
+- **Source / owner:** current board → runtime consumer; survival expectation → an
+  evidence-class question this taxonomy deliberately does not assign (forecast-class evidence is
+  outside Strategy; TIBER-Forecast's role here is `declared_assumption_pending_confirmation`).
+- **Input class:** `board_dynamic`, over a `hybrid` cadence skeleton (E8).
+- **Availability:** `consumer_owned` inputs; the survival expectation itself has **no current
+  producer** (unavailable) and would require a declared contract before any Strategy rule could
+  reference it.
+- **E-dimensions required:** E4, E6, E7, E8.
+- **Strategy may define:** that this baseline is expectation-conditioned and evidence-dependent —
+  it may not be asserted from format priors alone (issue v0.2 §9: no tier-survival assumption
+  without board-state evidence and a declared tier contract); its undefined-conditions.
+- **Consumer must compute:** current board state, realized cadence, and any survival estimation
+  (with its own evidence contract).
+- **What it is not:** a stable season-long baseline; current-board replacement (R2); a guarantee
+  of anything surviving; a Strategy-computable quantity.
+- **Misread risks:** treating a per-pick, expectation-conditioned floor as a durable valuation
+  base (NE2); assuming survival without evidence; ignoring that pick trades mutate the gap it is
+  defined over.
+- **Synthetic example:** a manager at the turn of a snake draft has two consecutive picks then a
+  long gap: for the first pick of the pair, next-selection replacement is nearly current-board
+  replacement (one pick elapses); for the second, it is conditioned on two full rounds of
+  depletion. Same manager, same round — two different R3 resolutions.
+
+#### R4 — `baseline_post_starters` (post-required-starters replacement)
+
+- **Comparison pool:** the relevant available pool (board during the startup, waivers after)
+  evaluated against a roster **whose required starting obligations are already filled** — the
+  baseline shifts from starter-demand-driven to bench/depth-demand-driven when obligations are
+  met.
+- **When it exists:** per-roster and regime-dependent: before the fill point, replacement
+  questions are governed by unmet starter demand; at the fill point the baseline switches
+  identity. Two managers at adjacent picks can be in different regimes.
+- **Source / owner:** lineup requirements → league configuration (verified); roster fill state →
+  manager roster state, a consumer-owned runtime value (issue v0.2 Q8).
+- **Input class:** `hybrid` — requirements are `format_static`; fill state is runtime.
+- **Availability:** `consumer_owned`; `future_contract` for Strategy-rule consumption.
+- **E-dimensions required:** E1, E2, E3, plus manager roster state (a consumer-owned runtime
+  value, not an E-dimension).
+- **Strategy may define:** the two-regime structure and the fact of the switch; that the baseline
+  is roster-relative, never league-wide.
+- **Consumer must compute:** each roster's actual fill state and the resulting pool comparison.
+- **What it is not:** a league-wide baseline; identical across managers; a statement about which
+  regime is better.
+- **Misread risks:** applying one roster's baseline to another roster; missing the regime switch
+  and comparing bench demand against starter-demand floors (NE3).
+- **Synthetic example:** two 16-team managers pick back-to-back; one has every required starter
+  filled, the other has an open starting slot. The board is identical, but "what replacement
+  looks like" resolves differently for each — R4 is relative to roster state, not to the board
+  alone.
+
+#### R5 — `baseline_eligibility_substitution` (flex/superflex substitution replacement)
+
+- **Comparison pool:** the best asset eligible for a *slot*, taken across the union of all
+  positions that slot accepts — slot-relative, not position-relative. Superflex is the special
+  case where quarterback eligibility joins a flex union.
+- **When it exists:** whenever the lineup contains flex-class slots (E3). In lineups with no
+  flex slots it collapses into same-position replacement.
+- **Source / owner:** eligibility rules → league configuration (verified); realized best-eligible
+  → runtime consumer.
+- **Input class:** `hybrid` — eligibility union is `format_static`; realized membership is
+  `board_dynamic`.
+- **Availability:** `consumer_owned`; `future_contract` for Strategy-rule consumption.
+- **E-dimensions required:** E1, E3, E7.
+- **Strategy may define:** the slot-relative/position-relative distinction; that eligibility
+  substitution changes which positions compete for the same floor; that superflex creates
+  cross-position eligibility **without establishing any numeric quarterback premium** — the size
+  of any premium is a valuation question owned by nobody in this taxonomy.
+- **Consumer must compute:** actual union pools and best-eligible state.
+- **What it is not:** same-position replacement (NE4); a premium calculation (NE5); a directive
+  to draft any position early.
+- **Misread risks:** collapsing a flex floor into a positional floor; converting superflex
+  eligibility into "therefore QBs are worth N more" (numeric premium — prohibited); ignoring that
+  flex unions couple positional runs across positions.
+- **Synthetic example:** a lineup with one RB/WR/TE flex defines that slot's replacement over the
+  three-position union; adding superflex adds a second union slot that also accepts QB. The
+  *structure* of competition changes; nothing numeric about any position's value follows.
+
+#### R6 — `baseline_mechanics_conditioned` (roster-mechanics and pool-conditioned replacement)
+
+- **Comparison pool:** not a seventh pool — a **modifier family** that transforms the pool of any
+  other baseline by eligibility mechanics: taxi eligibility (rookie-only stash slots), IR
+  designation rules, positional roster caps, and combined-versus-separated rookie pools.
+- **When it exists:** whenever E2/E5 mechanics constrain who may occupy which roster slot.
+  Notable boundary condition: for a roster at a positional cap, positional replacement at that
+  position is **undefined for that roster** even if board supply remains.
+- **Source / owner:** mechanics rules → league configuration (verified); filtered realized pools
+  → runtime consumer.
+- **Input class:** `hybrid` (static mechanics over dynamic pools).
+- **Availability:** `consumer_owned`; `future_contract` for Strategy-rule consumption.
+- **E-dimensions required:** E2, E5, plus whichever dimensions the modified baseline requires.
+- **Strategy may define:** modifier semantics — how each mechanic transforms an eligible
+  comparison pool; the undefined-conditions it creates.
+- **Consumer must compute:** the actual filtered pools per roster and mechanic.
+- **What it is not:** a standalone universal baseline; a reason to treat capped or taxi-gated
+  assets as interchangeable with active-roster assets.
+- **Misread risks:** computing a floor over an ineligible pool (counting taxi-stashed assets as
+  active replacements; counting cap-blocked positions as open); ignoring that rookie-pool
+  separation changes R1/R2 pools structurally.
+- **Synthetic example:** a league with a rookies-only taxi squad: for an active-roster question,
+  taxi-eligible rookies are outside the comparison pool even though they are rostered assets; for
+  a taxi-slot question, the pool is rookies only. One league, one moment — two differently
+  filtered baselines.
+
+---
+
+## 16. D3 — Baseline relationships, non-equivalences, and anti-conflation tests
+
+### 16.1 Baseline relationship matrix
+
+Codes: **C** — can coincide in particular formats/moments; **D** — ordinarily differ; **N** —
+must never be substituted for one another without explicit evidence; **U** — the pair contains a
+member that becomes undefined under some mechanism or roster rule; **M** — modifier relation (R6
+transforms the other baseline rather than competing with it).
+
+| | R2 startup board | R3 next selection | R4 post-starters | R5 slot substitution | R6 mechanics |
+|---|---|---|---|---|---|
+| **R1 waiver** | D, N (different pools; late-draft board ≈ early waiver pool only in shallow formats — C requires that evidence) | D, N, U (R3 undefined post-draft, R1 degenerate in-draft) | C (for filled rosters in season, waiver adds are bench adds) | C (a waiver floor for a flex slot is slot-relative — the baselines compose) | M, U (caps/taxi filter the waiver pool; capped position → undefined) |
+| **R2 startup board** | — | D, N, C-at-clock (they coincide exactly when the referenced pick is the current pick), U (R3 undefined under auction; R2 undefined post-draft) | D (R4 is roster-relative; R2 is board-relative — they compose, never substitute) | D (slot-union vs position pools on the same board — compose) | M, U (rookie-pool separation redefines R2's pool; caps create per-roster undefinedness) |
+| **R3 next selection** | | — | C (both can condition the same decision simultaneously — orthogonal axes) | C (survival can be evaluated over a slot union — compose) | M, U (a cap reached before the next pick voids R3 for that position/roster) |
+| **R4 post-starters** | | | — | C (post-starters replacement is typically slot/bench-relative — strong composition in flex-heavy formats) | M (taxi/IR/caps define which slots can still generate demand) |
+| **R5 slot substitution** | | | | — | M (mechanics filter the union membership) |
+
+Undefined-condition register (the U cells, stated once):
+
+- **R2** is undefined outside the startup draft.
+- **R3** is undefined when the manager holds no further pick, and under auction/salary
+  mechanisms where acquisition is not selection-order-constrained (E4). It is *reshaped* (not
+  voided) by in-draft pick trades (E6).
+- **Positional replacement under any baseline** is undefined, per roster, at a reached positional
+  cap (R6).
+- **R1** is never undefined but can be **degenerate** (near-empty pool) — degeneracy is an
+  observed state, not undefinedness, and the two must not be conflated.
+
+### 16.2 Mandatory non-equivalences
+
+- **NE1 — waiver ≠ startup-draft replacement.** R1 and R2 range over different pools (post-draft
+  residue vs. draftable board). Substituting one for the other requires format evidence (matrix
+  N-cell), not habit.
+- **NE2 — next-pick replacement is not a season-long baseline.** R3 is per-pick,
+  expectation-conditioned, and dies with the draft. Nothing derived from R3 may be carried
+  forward as a stable valuation floor.
+- **NE3 — post-starters replacement switches regimes.** R4 changes identity at the moment lineup
+  obligations are met; any claim citing R4 must state which regime the roster is in.
+- **NE4 — flex substitution ≠ same-position replacement.** A slot-union floor (R5) and a
+  positional floor answer different questions; collapsing them mislabels which pool was compared.
+- **NE5 — superflex eligibility establishes no numeric quarterback premium.** R5 defines *who
+  competes for the slot*; the magnitude of any resulting premium is a valuation output that this
+  taxonomy does not produce and Strategy may never compute.
+- **NE6 — taxi, IR, positional caps, and rookie-pool separation change the eligible comparison
+  pool.** Every baseline is resolved only after R6 filtering; an unfiltered pool is the wrong
+  pool.
+- **NE7 — a dry waiver pool does not prove no future waiver opportunity can emerge.** R1's pool
+  state is a time-indexed observation; rosters cut, mechanics free slots, and pool composition
+  changes over a season. Degenerate-now is evidence about now, not a permanent law — and equally,
+  future liquidity may not be *assumed* (the v0.2 §9 negative case cuts both ways).
+- **NE8 — "replacement-level player" must never become a player label inside Strategy.** Every
+  baseline names a pool, not a person. Attaching any baseline to a specific player is a
+  per-player label, prohibited by the repository's hard rules (`docs/boundary.md` rule 2, the
+  player-data firewall, and consumer safety rule `cannot_assign_player_labels_itself`).
+  Baseline-to-player resolution, where it ever happens, is consumer-side, evidence-gated, and
+  fail-closed.
+
+### 16.3 Anti-conflation tests (mechanically encodable)
+
+Decision questions a later, separately authorized implementation could encode as contract checks.
+Each failing test means **fail closed** — report the read unavailable rather than guessing.
+
+- **T1 — Baseline named.** Does the statement name exactly one baseline ID? Zero or more than one
+  → undefined reference.
+- **T2 — Pool exists.** Does the named baseline exist in this format, mechanism, and moment
+  (R2 in-draft only; R3 requires a remaining pick and a selection-order mechanism; cap-reached
+  positions void positional resolution)? No → undefined, not zero.
+- **T3 — Mechanics filtered.** Has R6 filtering (taxi/IR/caps/pool separation) been applied
+  before any comparison? Unfiltered pool → wrong pool.
+- **T4 — Roster-relative reads stay home.** If the baseline is roster-relative (R4), was it
+  resolved against the same roster whose state was read?
+- **T5 — Slot/position match.** Does the claim's wording match the pool actually compared
+  (slot-union R5 vs. positional)?
+- **T6 — Substitution evidenced.** If one baseline stands in for another, does a matrix C-cell
+  apply *and* is the enabling format/board evidence cited? N-cells without evidence → reject.
+- **T7 — No numerics.** Does the statement attach a number, score, rank, premium, or threshold to
+  any baseline? Inside Strategy → prohibited outright; numeric replacement and VOR computation
+  are consumer-owned per issue v0.2 Q8 and prohibited in Strategy by §9's negative cases.
+- **T8 — No player labels.** Does any output bind a baseline to a named player or player ID
+  inside Strategy? → firewall violation (NE8).
+
+### 16.4 D3 boundary confirmation
+
+The taxonomy defines which baseline is meant — nothing more. **No numeric replacement value, VOR,
+replacement-adjusted rank, scarcity premium, point value, projection, or threshold appears
+anywhere in §§15–16, and no baseline is designated optimal or universal.** All examples are
+synthetic and player-free. The source truth → artifact → adapter → surface invariant (§9) is
+preserved: baseline *meanings* belong to the stable Strategy artifact; baseline *resolutions*
+(actual pools, fill states, survival evidence) belong to consumer-side runtime computation with
+per-input provenance and fail-closed gaps; no surface may convert a baseline statement into a
+recommendation; the human manager's final decision authority is unchanged. Ownership statuses
+reuse D2's verified classifications; the runtime decision-envelope producer remains **unassigned**
+(§13.2), and R3's survival-evidence owner is recorded as
+`declared_assumption_pending_confirmation`. Q4–Q8 were touched only as boundary references (E4
+mechanism undefinedness, v0.2 Q8 consumer-owned numerics); no concept-inventory decision was made;
+no other file or repository changed; no PR was opened; no later frontier was activated.
+
+---
+
+## 17. Proposed next frontier (NOT activated)
+
+```text
+D4 — draft-mechanism and cadence consequences (issue #2, Q4 only)
+```
+
+Rationale: Q4 is the next dependency with the most D3 output feeding it: R3's
+undefined-conditions under auction mechanisms, the pick-trading reshaping of selection gaps, and
+the E8 skeleton/realization split all become Q4's subject matter. Q4 also carries the deferred v0
+scoping decision for auction/salary startups (an explicit exclusion with rationale is permitted
+by issue v0.2 Q4/Q6), which D2/D3 have twice deferred and which blocks the eventual
+concept-inventory frontier for the cadence group.
+
+**D4 is proposed only. It is NOT activated.** Q4–Q8 work, concept-inventory decisions, all later
+frontiers, and implementation remain inactive until a signed activation comment on issue #2
+satisfying the v0.2 §14 requirements authorizes the next frontier explicitly.
+
+---
+
+*End of D3 record.*
