@@ -68,6 +68,13 @@
 >   only)` as the sole active frontier. D6 permits structural format numbers (league size, lineup
 >   shape, roster capacity) in synthetic cases; Q7–Q8, concept decisions, and implementation
 >   remain inactive.
+> - **D6 semantic correction:** independent review of D6 head `4d22a98` returned
+>   REQUIRES_REVISION on semantics only (authority, pins, scope, family coverage, and guard
+>   coverage passed). This revision separates the three D6 axes (definition survival, runtime
+>   resolution, guard result), restores the exact accepted D5 runtime tokens, restores exact
+>   defined-empty semantics with stipulated synthetic observations, corrects F2/F5/F7/F8
+>   consequence claims, and removes overclaims. Accepted D1–D5 semantics were clarified, not
+>   reopened.
 > - This document makes **no final startup-draft concept-inventory decisions, no schema changes,
 >   and no implementation**. D6 adds the Q6 stress-test matrix and guards only. Nothing here
 >   activates Q7–Q8, any later discovery frontier, or implementation.
@@ -1744,27 +1751,57 @@ new signed activation comment on issue #2 authorizes the next frontier explicitl
 ## 24. D6 — Unusual-format stress-test matrix (Q6)
 
 > D6 record. Authorized by [comment 5013201489](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5013201489);
-> Q6 only. The matrix tests which ordinary startup assumptions survive, become conditional,
-> become undefined, or fail closed across unusual formats, using only the accepted D1–D5
-> machinery. Per the activation's synthetic-case boundary, structural format numbers (league
+> Q6 only. The matrix tests, across unusual formats and using only the accepted D1–D5 machinery,
+> which ordinary startup assumptions survive (with the same or redeclared inputs, or only
+> conditionally), which predicates do not apply, which reads resolve to which exact runtime
+> states, and which guarded conflations are rejected — on three separate axes (§24.1). Per the activation's synthetic-case boundary, structural format numbers (league
 > size, lineup shape, roster capacity) appear below; they are format declarations, not
 > thresholds, valuations, or advice. All cases are synthetic and player-free. This section tests
 > **definitions and structural assumptions** — it does not evaluate the Q7 heuristic inventory,
 > make concept-inventory decisions, or emit recommendations.
 
-### 24.1 Outcome classes (mechanical legend)
+### 24.1 Outcome semantics — three separate axes
 
-Every stress-test cell resolves to exactly one class:
+D6 outcomes are recorded on **three mechanically separate axes**. No token of one axis may
+substitute for a token of another; every mechanical field carries exactly one declared token.
 
-| Class | Meaning |
+**Axis A — definition-survival outcome** (one token per structural claim per family/subcase):
+
+| Token | Meaning |
 |---|---|
-| `survives_unchanged` | the D1–D5 definition applies with the same inputs and semantics as in the ordinary control case |
-| `survives_different_inputs` | the definition applies, but only after re-declaring inputs the ordinary case leaves implicit (unions, pool boundaries, demand structure) |
-| `becomes_conditional` | the definition applies only under an explicit format/board condition that must be stated and evidenced per read |
-| `undefined` | the predicate has no referent in this format (per D3/D4/D5 undefinedness rules) — reject, do not resolve |
-| `unresolved` | a required declaration or observation is missing/stale — fail closed, assert nothing (never conflate with `undefined` or `defined_empty`) |
-| `defined_empty` | the definition and inputs resolve, and the witness/pool set is observed empty or near-empty (degenerate) — a valid observed state, not an error |
-| `assumption_rejected` | a hidden ordinary-format assumption (silent snake, waiver liquidity, shared rookie-pool boundary, ignored mechanics, shallow-league scaling) is detected and rejected by a guard |
+| `survives_same_inputs` | the accepted D1–D5 definition applies with the same input declarations as the F1 control case |
+| `survives_redeclared_inputs` | the definition applies only after re-declaring inputs the control case leaves implicit (eligibility unions, pool boundaries, acquisition-opportunity structure) |
+| `survives_conditional` | the definition applies only under an explicit per-read condition (e.g. event provenance) that must be stated and evidenced on every read |
+| `does_not_apply` | the predicate has no referent in this format; every read of it resolves to runtime `undefined` |
+
+`survives_conditional` is a survival outcome, **not** a runtime state.
+
+**Axis B — runtime resolution state** (the exact accepted D5 tokens, unchanged):
+
+```text
+defined | defined-empty | undefined | unresolved
+```
+
+Axis-B rules:
+
+- runtime states resolve **per read against stipulated current observations, never per format**:
+  a format-static declaration alone establishes no current pool membership, no path witness set,
+  no fresh trade-event state, and no auction reachability;
+- **`defined-empty` for a path** holds only when the predicate applies, every required input is
+  declared, fresh, and resolved, the witness set has been resolved, and **no admissible witness
+  exists**. A near-empty witness set containing at least one witness is `defined` and reachable;
+- **pool reads:** the accepted D3 record's descriptive "degenerate" wording (empty or nearly
+  empty) is preserved as description; in axis-B terms a resolved pool with at least one eligible
+  member is `defined` (degeneracy is a description of it, not a state), and only a resolved pool
+  with **zero** eligible members is `defined-empty`. This distinguishes D3's pool-degeneracy
+  wording from D5's exact no-witness path state without altering either accepted record.
+
+**Axis C — assumption-guard result** (orthogonal to A and B): each guard (T23–T31) is `armed`
+or not per family; an armed guard **fires only when a read attempts the guarded conflation**,
+and a fired guard rejects that read. A guard result is not mutually exclusive with definition
+survival or runtime resolution: a claim may survive (axis A) and resolve (axis B) while a guard
+fires against a different, malformed read in the same family. `armed` is not an outcome and no
+guard fires in a well-formed record.
 
 ### 24.2 Format families (F1–F8)
 
@@ -1773,20 +1810,27 @@ Each record carries the eleven fields required by the activation comment.
 #### F1 — ordinary 10–12 team, one-QB snake dynasty (control case)
 
 - **Format-static inputs:** 10–12 franchises; one starting QB slot; ordinary RB/WR/TE starters
-  plus one flex; ordinary bench (~15 roster spots); no taxi, IR-only-ordinary, no positional
-  caps; no in-draft pick trading.
+  plus one flex; ordinary bench (~15 roster spots); **explicitly declared absences: no taxi
+  squad, no IR slots, no positional caps, no in-draft pick trading**.
 - **Mechanism / acquisition-opportunity structure:** M1 snake; ordered selection cadence;
-  skeleton = realized schedule (no trades).
+  skeleton = realized schedule (no trades declared).
 - **Player-pool composition:** combined rookie/veteran single startup pool (declared).
-- **Lineup/roster/taxi/IR/cap rules:** as declared above; R6 is near-identity.
+- **Lineup/roster/taxi/IR/cap rules:** as declared above (all three mechanics explicitly
+  absent); R6 is the identity overlay in this family.
 - **D2 dimensions under stress:** none — this case *generates* the ordinary assumptions; E1–E10
   sit in their ordinary ranges.
-- **D3 baseline/overlays:** R2 defined in-draft; R3 defined while picks remain; R1 defined
-  post-draft with startable-depth membership; R5 applies to the single flex; R6 near-identity.
-- **D4 cadence:** fully applicable; no staleness source exists (no trades).
-- **D5 path state:** reachability `defined`; witness sets wide across constraint patterns.
+- **D3 baseline/overlays (axis A):** R2 `survives_same_inputs` in-draft; R3
+  `survives_same_inputs` while picks remain; R1 `survives_same_inputs` post-draft; R5 applies to
+  the single flex slot; R6 identity.
+- **D4 cadence:** fully applicable; no staleness source exists (no trades declared).
+- **D5 path state (axis B, per read):** *stipulated synthetic observation O-F1p* — a mid-draft
+  read with fresh board, roster, and supply observations resolves a witness for each stated
+  constraint pattern → `defined`. Without those observations the read is `unresolved`.
+  *Stipulated observation O-F1r* — a fresh post-startup pool observation resolves at least one
+  eligible unrostered member in every declared position class → the R1 read is `defined`.
+  Without O-F1r the R1 read is `unresolved`. Format declarations alone resolve nothing.
 - **Assumption exposed:** none — F1 is the *source* of the assumptions the other rows test. Its
-  matrix role is calibration, and its danger is exportation (T25/T23 guard the export).
+  matrix role is calibration, and its danger is exportation (T23/T25 guard the export).
 - **Missing evidence/contract:** the global gaps — consumer ordering/evidence contract, tier
   contract, runtime producer — apply here as everywhere.
 - **Required guard:** F1 conclusions must never be imported into any other family without
@@ -1794,24 +1838,32 @@ Each record carries the eleven fields required by the activation comment.
 
 #### F2 — ordinary 10–12 team superflex snake dynasty
 
-- **Format-static inputs:** as F1 plus one superflex slot (QB-eligible flex).
+- **Format-static inputs:** as F1 plus one superflex slot (QB-eligible flex); F1's declared
+  absences carry over.
 - **Mechanism / acquisition:** M1 snake, as F1.
 - **Player-pool composition:** combined pool, as F1.
 - **Lineup/roster rules:** superflex changes E3 eligibility structure; otherwise as F1.
-- **D2 dimensions under stress:** E3 (lineup modifiers), E1×E3 interaction (per-franchise QB
-  demand roughly doubles against a fixed real-world QB supply bound).
-- **D3 baseline/overlays:** primaries unchanged; **R5 is now mandatory** — every QB-adjacent
-  replacement read must use the superflex union, not the one-QB positional partition.
+- **D2 dimensions under stress:** E3 (lineup modifiers). What the format declaration establishes
+  is structural only: **the superflex slot expands QB eligibility and raises the maximum
+  QB-eligible lineup capacity per franchise.** Whether realized QB demand, supply pressure, or
+  acquisition behavior changes — and by how much — requires consumer-owned roster, board,
+  supply, or behavioral evidence; without it those consequences are `unresolved`.
+- **D3 baseline/overlays (axis A):** primaries unchanged. Two distinct reads coexist and must
+  not be collapsed: a **positional read for the fixed QB slot** remains valid with the same
+  inputs (`survives_same_inputs`); a **slot-union read for the superflex slot** requires the
+  QB-inclusive union (`survives_redeclared_inputs`). A read must match its referenced slot (T5);
+  R5 is required only where the referenced predicate is the superflex slot's union.
 - **D4 cadence:** fully applicable, as F1.
-- **D5 path state:** `defined`; constraint patterns that defer QB acquisition remain defined but
-  their witness sets narrow structurally faster than in F1 (a supply-demand structure statement,
-  not a valuation).
-- **Assumption exposed:** the one-QB demand assumption. One-QB and superflex formats must not
-  silently share demand structure (T24); QB-related reads are `survives_different_inputs`.
-- **Missing evidence/contract:** as F1; additionally any survival claim about QB pool strata
-  needs the nonexistent tier/survival contract (T15).
-- **Required guard:** T24 (demand-structure re-declaration); NE5 stands — no numeric QB premium
-  may be derived from the structural demand change.
+- **D5 path state (axis B, per read):** with fresh stipulated observations as in O-F1p,
+  `defined`. No claim is made that witness sets narrow faster than F1 — any narrowing-rate
+  claim requires consumer-owned evidence and is `unresolved` without it.
+- **Assumption exposed:** the one-QB demand assumption — one-QB and superflex formats must not
+  silently share eligibility/capacity structure (T24).
+- **Missing evidence/contract:** as F1; realized-demand evidence is consumer-owned and absent;
+  any survival claim about QB pool strata needs the nonexistent tier/survival contract (T15).
+- **Required guard:** T24 (eligibility/capacity re-declaration); NE5 stands — no numeric QB
+  premium may be derived from the structural eligibility change. Q7's "QBs early in superflex"
+  heuristic remains **unevaluated**.
 
 #### F3 — 16-team deep dynasty
 
@@ -1819,19 +1871,24 @@ Each record carries the eleven fields required by the activation comment.
 - **Mechanism / acquisition:** M1 snake.
 - **Player-pool composition:** combined pool.
 - **Lineup/roster rules:** as F1; larger total rostered population.
-- **D2 dimensions under stress:** E1 (franchise count), E9 (waiver consequences), E8 (rounds are
-  structurally longer — more selections between a franchise's picks).
-- **D3 baseline/overlays:** R2/R3 defined; **R1 `becomes_conditional`** — post-draft unrostered
-  membership thins; R1 reads must carry a current pool observation rather than the F1 presumption
-  of startable depth.
-- **D4 cadence:** applicable; gap classes shift toward `long` for middle slots (structural, not
-  valuated).
-- **D5 path state:** `defined`; witness sets narrow relative to F1; no class collapses.
-- **Assumption exposed:** waiver-liquidity begins failing — ordinary and deep formats must not
-  silently share R1 state (T25).
+- **D2 dimensions under stress:** E1 (franchise count), E9 (waiver consequences), E8 (each round
+  contains more selections, so more board events occur between a franchise's picks).
+- **D3 baseline/overlays (axis A):** R2/R3 `survives_same_inputs`; **R1 `survives_conditional`**
+  — every R1 read must carry a current pool observation rather than any imported F1 presumption
+  about membership.
+- **D4 cadence:** applicable. Gap **classes** are defined relative to mechanism and league size
+  (D4 §18.2.3), so F3's classes resolve against F3's own declared format — no gap is
+  automatically `long`, and no class is imported from F1.
+- **D5 path state (axis B, per read):** *stipulated observation O-F3* — a fresh post-startup
+  pool observation resolves a reduced but non-empty eligible membership → the R1 read is
+  `defined` (degeneracy, where present, is description, not a state). Path reads with fresh
+  stipulated inputs resolve `defined`. Without the observations, `unresolved`.
+- **Assumption exposed:** waiver-liquidity portability — ordinary and deep formats must not
+  silently share R1 survival outcome or runtime state (T25).
 - **Missing evidence/contract:** current pool observation becomes load-bearing (runtime producer
   unassigned).
-- **Required guard:** T25 — R1 state must be re-resolved per format and per moment.
+- **Required guard:** T25 — R1's axis-A outcome and axis-B state must be re-resolved per format
+  and per moment.
 
 #### F4 — 32-team extreme-depth dynasty
 
@@ -1840,46 +1897,78 @@ Each record carries the eleven fields required by the activation comment.
 - **Mechanism / acquisition:** M1 snake.
 - **Player-pool composition:** combined pool.
 - **Lineup/roster rules:** as F1 at 32-franchise scale; E1 compression extreme.
-- **D2 dimensions under stress:** E1 (extreme), E7 (board depletion reaches structural exhaustion
-  per position), E9 (waiver consequences extreme), E10 (path narrowing).
-- **D3 baseline/overlays:** R2/R3 remain **defined** in-draft (definitions survive — this is the
-  matrix's central positive result); **R1 → `defined_empty`** post-startup: the mechanism exists
-  but the eligible unrostered pool is observed degenerate (D3 three-way distinction, not
-  undefinedness).
-- **D4 cadence:** applicable; per-round selection distance is structurally maximal; tier-survival
-  claims across such gaps are doubly gated (board evidence + missing tier contract → T15).
-- **D5 path state:** mixed — most patterns `defined` with narrow witness sets; some
-  complete-roster constraint patterns become `defined_empty` mid-draft (theoretically defined,
-  structurally unreachable), per the accepted D5 extreme-depth case.
-- **Assumption exposed:** two rejections — (a) modeling 32 teams as a scaled 12-team list
-  (`assumption_rejected`, T23): depth-wise the format consumes population strata that a 12-team
-  frame never prices, and every E1/E2/E9-derived input must be re-declared, not multiplied;
-  (b) post-startup waiver liquidity (`assumption_rejected`, T25).
-- **Missing evidence/contract:** as F3, more acutely; defined-empty claims require complete fresh
-  observations (D5 four-state discipline).
-- **Required guard:** T23 + T25; NE7 stands (degenerate-now is evidence about now, in both
-  directions).
+- **D2 dimensions under stress:** E1 (extreme), E7 (board depletion can reach per-position
+  exhaustion), E9 (waiver consequences extreme), E10 (path narrowing).
+- **D3 baseline/overlays (axis A):** R2/R3 `survives_same_inputs` in-draft; **R1
+  `survives_conditional`** — its runtime state is an observation question, resolved per read
+  below.
+- **D4 cadence:** applicable; the per-round selection count is the largest **within the declared
+  F1–F8 comparison set** (the stated universe). Tier-survival claims across such gaps are doubly
+  gated (board evidence + missing tier contract → T15).
+- **D5 path state (axis B, per read):** *stipulated observation O-F4r* — a fresh post-startup
+  pool observation resolves **exactly zero** eligible unrostered members in the referenced
+  position classes → that R1 read is `defined-empty`. A variant observation resolving a small
+  but non-zero membership → `defined` (degenerate as description). Without a fresh observation
+  → `unresolved`; format scale alone proves nothing. *Stipulated observation O-F4p* — a
+  mid-draft path read with every required input declared, fresh, and resolved, whose resolved
+  witness set contains **no admissible witness** for a stated constraint pattern → that path is
+  `defined-empty` (theoretically defined, structurally unreachable). Patterns whose resolved
+  witness set contains at least one witness are `defined`, however narrow. Without complete
+  fresh inputs → `unresolved`.
+- **Assumption exposed:** two guarded conflations — (a) modeling 32 teams as a scaled 12-team
+  structure: every E1/E2/E9-derived input must be re-declared against the 32-team format, not
+  multiplied up from a shallow one (T23 fires on any read that attempts the scaling);
+  (b) importing post-startup waiver-liquidity presumptions (T25 fires on the import).
+- **Missing evidence/contract:** as F3, more acutely; every `defined-empty` claim requires the
+  complete fresh observations stipulated above (D5 four-state discipline).
+- **Required guard:** T23 + T25; NE7 stands (an observed-empty state is evidence about now, in
+  both directions).
 
-#### F5 — flex-heavy / TE-premium dynasty
+#### F5 — flex-heavy / TE-premium dynasty (two explicit subcases)
 
-- **Format-static inputs:** 10–14 franchises; lineup with multiple flex slots (e.g. 2–3
-  W/R/T flexes) and/or TE-premium scoring (E3 skew).
-- **Mechanism / acquisition:** M1 snake (declared).
-- **Player-pool composition:** combined pool.
-- **Lineup/roster rules:** flex-heavy lineup shape; TE-premium is a format-static scoring rule.
-- **D2 dimensions under stress:** E3 (dominant), E1×E3 (slot-union demand replaces positional
-  demand as the binding structure).
-- **D3 baseline/overlays:** primaries unchanged; **R5 dominates** — positional-partition
-  replacement reads `survive_different_inputs` only as slot-union reads; a positional read
-  offered where a union applies is a T28 omission failure.
+Flex-heavy lineups and TE-premium scoring are structurally different modifiers and are recorded
+separately; a combined league declares both and takes both subcases' consequences.
+
+**F5a — flex-heavy subcase**
+
+- **Format-static inputs:** 10–14 franchises; lineup with multiple flex slots (e.g. 2–3 W/R/T
+  flexes); ordinary scoring; F1's declared absences carry over.
+- **Mechanism / acquisition:** M1 snake (declared). **Player-pool composition:** combined pool.
+- **D2 dimensions under stress:** E3 (eligibility structure — slot unions govern more of the
+  lineup than fixed positional slots do).
+- **D3 baseline/overlays (axis A):** primaries unchanged; for **flex-class slots**, replacement
+  reads are `survives_redeclared_inputs` (the union must be declared); for **fixed positional
+  slots**, positional reads remain `survives_same_inputs`. A positional read offered where the
+  referenced slot is a flex union is a T28 omission failure.
 - **D4 cadence:** applicable; positional-run structure couples across union positions
   (structural note, no valuation).
-- **D5 path state:** `defined`; union elasticity widens witness sets for mixed patterns while
-  TE-premium shifts which patterns bind — described structurally only.
-- **Assumption exposed:** the stable-positional-partition assumption: positional scarcity reads
-  are not portable across formats whose slot unions differ (`becomes_conditional` at minimum).
-- **Missing evidence/contract:** as F1; scoring-value mapping is consumer-side (D2 E3 record).
-- **Required guard:** T28 — applicable R5/E3 modifiers cannot be omitted; NE4 stands.
+- **D5 path state (axis B):** with fresh stipulated inputs as in O-F1p, `defined`. No claim
+  about widened or narrowed witness sets is made without consumer-owned evidence.
+- **Assumption exposed:** the stable-positional-partition assumption — positional reads are not
+  portable to slots whose eligibility is a union (T28).
+- **Missing evidence/contract:** as F1.
+- **Required guard:** T28; NE4 stands.
+
+**F5b — TE-premium-only subcase**
+
+- **Format-static inputs:** F1-like lineup (no extra flex slots); TE-premium scoring declared as
+  an E3 format-static scoring rule.
+- **Mechanism / acquisition:** M1 snake (declared). **Player-pool composition:** combined pool.
+- **D2 dimensions under stress:** E3 (scoring rule only). **TE-premium does not alter slot
+  eligibility**: no union changes, R5 consequences do not arise from it.
+- **D3 baseline/overlays (axis A):** all reads `survives_same_inputs` — the scoring rule changes
+  no pool boundary, union, or baseline structure.
+- **D4 cadence:** applicable, unchanged.
+- **D5 path state (axis B):** structural path reachability is unaffected by a scoring rule; reads
+  resolve as in F1. **Any effect of TE-premium on player value, scarcity, ordering, path
+  preference, or which roster pattern binds is consumer-owned and `unresolved` absent a declared
+  scoring/evidence contract** (none exists).
+- **Assumption exposed:** the scoring-implies-structure conflation — a scoring skew must not be
+  converted into an eligibility, scarcity, or path-reachability consequence without evidence.
+- **Missing evidence/contract:** a scoring/evidence contract (absent); consumer value mapping
+  (D2 E3 record).
+- **Required guard:** T28's input clause (E3 must be declared where present) plus T31 — no
+  scoring rule becomes structural or advisory by assertion.
 
 #### F6 — startup with in-draft pick trading
 
@@ -1889,46 +1978,59 @@ Each record carries the eleven fields required by the activation comment.
 - **Lineup/roster rules:** as F1.
 - **D2 dimensions under stress:** E6 (transaction structure), E8 (skeleton/realization split is
   now load-bearing).
-- **D3 baseline/overlays:** R2 defined; **R3 `becomes_conditional`** — every R3 composition
-  requires trade-event provenance and a current realized schedule; a skeleton-only R3 read in
-  this family is `unresolved`.
-- **D4 cadence:** applicable but **staleness-governed**: any cadence read is valid only under its
-  trade-event stamp (T10/T13); post-event reuse is `unresolved`, never "approximately right."
-- **D5 path state:** `defined` between events; any path read whose opportunity model predates a
-  trade event is `unresolved` until re-resolution (T21).
+- **D3 baseline/overlays (axis A):** R2 `survives_same_inputs`; **R3 `survives_conditional`** —
+  every R3 composition requires trade-event provenance and a current realized schedule as its
+  per-read condition.
+- **D4 cadence:** applicable but **staleness-governed**: any cadence read is valid only under
+  its trade-event stamp (T10/T13).
+- **D5 path state (axis B, per read):** *stipulated observation O-F6* — a read carrying the
+  complete fresh trade-event log and the current realized schedule, with stamp current at
+  resolution time, resolves `defined`. Any cadence, R3, or path read whose stamp predates the
+  latest observed trade event — or that carries skeleton-only provenance — is `unresolved` until
+  re-resolved (T21/T26). The format-static trading *permission* alone establishes no fresh
+  trade-event state.
 - **Assumption exposed:** the static-order assumption — order is board state here, not rule
-  state (`assumption_rejected` for skeleton-as-realized claims, T26).
+  state; T26 fires on any skeleton-as-realized read.
 - **Missing evidence/contract:** trade-event feed provenance (runtime producer unassigned — the
   gap is sharpest in this family).
 - **Required guard:** T26 (composed staleness gate over T10/T13/T21).
 
-#### F7 — combined rookie/veteran pool versus separate rookie draft
+#### F7 — combined rookie/veteran pool versus separate rookie draft (three explicit subcases)
 
-- **Format-static inputs:** two declared subcases of an F1-like league: **F7a** — rookies inside
-  the startup pool; **F7b** — rookies excluded, drafted later in a separate rookie draft
-  (commonly with taxi mechanics).
-- **Mechanism / acquisition:** M1 snake for the startup in both subcases; F7b adds a later,
-  separately declared acquisition structure.
-- **Player-pool composition:** the stressed dimension itself (E5): the two subcases have
-  **different startup supply boundaries by construction**.
-- **Lineup/roster/taxi rules:** F7b typically pairs with taxi eligibility (R6 active); declared
-  per subcase.
-- **D2 dimensions under stress:** E5 (dominant), E2 (taxi in F7b), E9 (what post-startup
-  acquisition means differs).
-- **D3 baseline/overlays:** R2 `survives_different_inputs` — the same phrase "board replacement"
-  ranges over different pools in F7a vs. F7b; R6 mandatory in F7b (taxi filtering); R1's
-  post-startup membership differs (rookie strata inside or outside it).
-- **D4 cadence:** applicable; unchanged by composition rule.
-- **D5 path state:** `defined` in both, over different opportunity structures: F7b paths that
-  depend on rookie acquisition route through a future declared opportunity (or are `unresolved`
-  if that structure is undeclared).
+A separate rookie draft does not by itself imply taxi mechanics; taxi is an independent E2 rule
+and is declared explicitly per subcase.
+
+- **Format-static inputs (subcases):** **F7a** — rookies inside the startup pool; no taxi (F1
+  absences carry over). **F7b** — rookies excluded from the startup, acquired in a separately
+  declared later rookie draft, **with an explicitly declared taxi rule**. **F7c** — as F7b but
+  **with taxi explicitly absent**.
+- **Mechanism / acquisition:** M1 snake for the startup in all subcases; F7b/F7c add a later,
+  separately declared rookie-acquisition structure.
+- **Player-pool composition:** the stressed dimension itself (E5): combined versus separated
+  pools have **different startup supply boundaries by construction**.
+- **Lineup/roster/taxi/IR/cap rules:** per subcase declaration above; no mechanic is assumed
+  common or typical.
+- **D2 dimensions under stress:** E5 (dominant), E2 (taxi in F7b only), E9 (what post-startup
+  acquisition means differs across subcases).
+- **D3 baseline/overlays (axis A):** R2 `survives_redeclared_inputs` in F7b/F7c — the same
+  phrase "board replacement" ranges over a different pool than in F7a; R2
+  `survives_same_inputs` in F7a. **R6 is mandatory in F7b only** (where the taxi rule is
+  declared); in F7a/F7c, R6 taxi filtering is `does_not_apply` and R6 is otherwise identity as
+  declared. R1's post-startup membership boundary differs per subcase (rookie strata inside or
+  outside it).
+- **D4 cadence:** applicable in all subcases; unchanged by composition rule.
+- **D5 path state (axis B, one state per read per subcase):** F7a — with fresh stipulated inputs
+  as in O-F1p, `defined`. F7b/F7c — a path read that depends on rookie acquisition is
+  `unresolved` until the rookie-draft acquisition structure is declared; with that declaration
+  plus fresh inputs, the read resolves `defined`. Non-rookie-dependent path reads resolve as in
+  F1 under fresh inputs.
 - **Assumption exposed:** the shared-supply-boundary assumption — combined and separated pools
-  must not share supply or replacement reads (`assumption_rejected` without the declaration,
-  T27).
-- **Missing evidence/contract:** F7b's rookie-draft structure must be declared before
-  rookie-dependent path reads resolve; otherwise `unresolved`.
-- **Required guard:** T27 — every supply/replacement/path read names the composition rule it
-  assumed.
+  never share supply or replacement reads by default; T27 fires on any read that omits its
+  composition declaration.
+- **Missing evidence/contract:** F7b/F7c's rookie-draft structure declaration; the taxi rule
+  declaration that separates F7b from F7c.
+- **Required guard:** T27 — every supply/replacement/path read names the composition rule (and,
+  where taxi filtering is claimed, the declared taxi rule) it assumed.
 
 #### F8 — auction/salary startup
 
@@ -1940,45 +2042,88 @@ Each record carries the eleven fields required by the activation comment.
 - **Lineup/roster rules:** as F1.
 - **D2 dimensions under stress:** E4 (dominant — the mechanism itself), E8 (inapplicable by
   mechanism).
-- **D3 baseline/overlays:** **R2 `survives_unchanged`** (the remaining nomination pool is a
-  well-defined current board pool); **R3 `undefined`** (no ordered future selection — the D4 T12
-  corrected semantics apply: undefined, not unresolved); R5/R6 compose normally over R2.
+- **D3 baseline/overlays (axis A):** **R2 `survives_redeclared_inputs`** — the meaning of the
+  current-board pool is fully preserved (the remaining nomination pool is a well-defined R2
+  pool), but under D6's own axis-A definitions the classification is `redeclared` because the
+  acquisition-opportunity structure input differs from the M1 control declaration; **R3
+  `does_not_apply`** (no ordered future selection — the corrected T12 semantics: every R3 read
+  resolves `undefined`, not `unresolved`); R5/R6 compose normally over R2.
 - **D4 cadence:** the entire cadence family (turns, round trips, gaps, slot asymmetry, cadence
-  mutation) is **not applicable** — rejected as `undefined` under the accepted §18.3 scoping
-  decision, never resolved.
-- **D5 path state:** `defined` — path reachability resolves through the auction opportunity
-  model (budget/nomination structure) per the accepted D5 auction case; budget *values* remain
-  consumer-owned and budget-pressure structure remains deferred.
-- **Assumption exposed:** cadence universality — pool and path meanings survive the mechanism
-  change; cadence meanings do not (`undefined`, not silently adapted).
+  mutation) is `does_not_apply` under the accepted §18.3 scoping decision — every read of it
+  resolves `undefined`, never adapted, never converted to `unresolved`.
+- **D5 path state (axis B, per read):** the path-reachability **predicate remains applicable**
+  through the auction opportunity model (accepted D5 auction case) — but applicability is not
+  resolution. *Stipulated observation O-F8* — a path read carrying fresh current-pool,
+  budget-state, eligibility, roster-constraint, and acquisition-opportunity observations
+  resolves `defined`. **Absent any of those inputs the read is `unresolved`.** Budget *values*
+  remain consumer-owned and budget-pressure structure remains deferred.
+- **Assumption exposed:** cadence universality — pool and path *meanings* survive the mechanism
+  change while cadence meanings do not (`undefined`); and applicability-implies-resolution is
+  itself a guarded conflation (T29).
 - **Missing evidence/contract:** the deferred budget-pressure structure (explicitly out of v0
-  scope); ordering/evidence contract as everywhere.
-- **Required guard:** T29 — preserve R2/path resolution under M4 while rejecting cadence-family
-  and R3 references as not-applicable.
+  scope); the O-F8 input set (runtime producer unassigned); ordering/evidence contract as
+  everywhere.
+- **Required guard:** T29 — preserve R2/path *applicability* under M4, reject cadence-family and
+  R3 references as `undefined`, and resolve path/pool reads only under the O-F8 input
+  conditions; otherwise `unresolved`.
 
 *(M5 — undeclared mechanism — is not a ninth format family: it is the guard state any of F1–F8
 falls into if its mechanism declaration is missing. All mechanism-dependent rows become
 `unresolved` and fail closed; nothing defaults to F1/M1 behavior. Encoded as T30.)*
 
-### 24.3 Cross-case outcome matrix (mechanical summary)
+### 24.3 Cross-case matrices (one per axis; every cell single-valued, exact tokens only)
 
-Outcome class of each structural claim per family (legend per §24.1):
+**Axis A — definition-survival outcomes** (tokens from §24.1; subcases listed separately so each
+cell is single-valued):
 
-| Structural claim | F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 |
-|---|---|---|---|---|---|---|---|---|
-| R2 current-board pool | unchanged | unchanged | unchanged | unchanged | unchanged | unchanged | different_inputs (per pool rule) | unchanged |
-| R3 next-selection pool | unchanged | unchanged | unchanged | unchanged | unchanged | conditional (event provenance) | unchanged | **undefined** |
-| R1 post-startup waiver pool | unchanged | unchanged | conditional | **defined_empty** | unchanged | unchanged | different_inputs | different_inputs |
-| D4 cadence family | unchanged | unchanged | unchanged | unchanged | unchanged | conditional (staleness-governed) | unchanged | **undefined** |
-| One-QB demand structure | unchanged | **rejected** (T24) | unchanged | unchanged | unchanged | unchanged | unchanged | unchanged |
-| Positional partition (vs. R5 union) | unchanged | different_inputs | unchanged | unchanged | different_inputs / rejected if omitted | unchanged | unchanged | different_inputs |
-| Rookie supply boundary | unchanged | unchanged | unchanged | unchanged | unchanged | unchanged | **rejected if shared** (T27) | unchanged |
-| D5 path reachability | defined | defined | defined (narrower) | defined / **defined_empty** for some patterns | defined | conditional (event provenance) | defined (per subcase) | defined (auction model) |
-| 12-team scaling of inputs | n/a (source) | rejected | rejected | **rejected** (T23) | rejected | rejected | rejected | rejected |
+| Family | R2 read | R3 read | R1 read | D4 cadence family | Fixed-slot positional read | Flex-slot union read (R5) | D5 path predicate |
+|---|---|---|---|---|---|---|---|
+| F1 | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
+| F2 | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs | survives_same_inputs |
+| F3 | survives_same_inputs | survives_same_inputs | survives_conditional | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
+| F4 | survives_same_inputs | survives_same_inputs | survives_conditional | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
+| F5a | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs | survives_same_inputs |
+| F5b | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
+| F6 | survives_same_inputs | survives_conditional | survives_same_inputs | survives_conditional | survives_same_inputs | survives_same_inputs | survives_conditional |
+| F7a | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
+| F7b | survives_redeclared_inputs | survives_same_inputs | survives_redeclared_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs |
+| F7c | survives_redeclared_inputs | survives_same_inputs | survives_redeclared_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs |
+| F8 | survives_redeclared_inputs | does_not_apply | survives_same_inputs | does_not_apply | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs |
 
-Reading discipline: `rejected` cells are guard detections, not judgments of any league design;
-`defined_empty` and `undefined` and `unresolved` cells are never interchangeable (T17); and no
-cell anywhere is a recommendation (T31).
+**Axis B — runtime resolution states** (exact D5 tokens; resolved only per stipulated read,
+never per format):
+
+| Stipulated read | Stipulated synthetic observation | State with observation | State without |
+|---|---|---|---|
+| F1 R1 post-startup read | O-F1r: fresh pool observation, at least one eligible member in every declared class | defined | unresolved |
+| F1 path read (mid-draft) | O-F1p: fresh board/roster/supply observations; witness resolved per pattern | defined | unresolved |
+| F3 R1 post-startup read | O-F3: fresh pool observation, reduced but non-empty membership | defined | unresolved |
+| F4 R1 post-startup read | O-F4r: fresh pool observation, exactly zero eligible members in referenced classes | defined-empty | unresolved |
+| F4 R1 post-startup read (variant) | O-F4r′: fresh pool observation, small non-zero membership | defined | unresolved |
+| F4 path read (stated pattern) | O-F4p: complete fresh inputs; resolved witness set contains no admissible witness | defined-empty | unresolved |
+| F4 path read (variant pattern) | O-F4p′: complete fresh inputs; at least one admissible witness | defined | unresolved |
+| F6 R3/cadence/path read | O-F6: complete fresh trade-event log + current realized schedule, stamp current | defined | unresolved |
+| F8 path read | O-F8: fresh current-pool, budget-state, eligibility, roster-constraint, acquisition-opportunity observations | defined | unresolved |
+| F8 R3 or cadence-family read | none possible — predicate does not apply | undefined | undefined |
+
+**Axis C — guard armament** (a guard fires only when a read attempts the guarded conflation;
+firing rejects that read and coexists with axis A/B results):
+
+| Guard | Armed in | Fires on |
+|---|---|---|
+| T23 | F3, F4 | a read deriving extreme-depth inputs by scaling a shallow-format declaration |
+| T24 | F1, F2 | a QB claim silently shared across one-QB and superflex eligibility structures |
+| T25 | all families | importing an R1 survival outcome or runtime state across formats or moments |
+| T26 | F6 | a skeleton-provenance or stale-stamped cadence/R3/path read |
+| T27 | F7a, F7b, F7c | a supply/replacement/path read omitting its composition (or claimed taxi) declaration |
+| T28 | F5a, F5b, F7b, and any family declaring taxi/IR/cap/flex/TE-premium rules | an applicable-overlay or input omission |
+| T29 | F8 | a cadence/R3 resolution attempt, or treating path applicability as resolution without O-F8 inputs |
+| T30 | all families | a missing mechanism declaration (M5) resolved by default instead of failing closed |
+| T31 | all families | any matrix outcome presented as advice, preference, or strategy |
+
+Reading discipline: axis tokens never mix; `defined-empty`, `undefined`, and `unresolved` are
+never interchangeable (T17); a fired guard is a rejected read, not a property of the format; and
+no cell anywhere is a recommendation (T31).
 
 ---
 
@@ -1990,14 +2135,18 @@ cell anywhere is a recommendation (T31).
   scaling a 10–12-team structure — multiplying supply, importing its strata coverage, or reusing
   its E1/E2/E9 declarations — is rejected. Extreme-depth formats require fresh input declarations
   for every E1/E2/E9-dependent claim.
-- **T24 — QB demand-structure gate.** A one-QB read and a superflex read must each declare their
-  eligibility-union and per-franchise QB demand structure; a claim that silently shares demand
-  assumptions across the two formats is rejected. No numeric premium may be attached in either
-  direction (NE5).
-- **T25 — Waiver-liquidity gate.** R1's state (`defined` / `becomes_conditional` /
-  `defined_empty` / `undefined` / `unresolved`) must be re-resolved per format and per moment;
-  importing F1's R1 state into a deeper format — or any format's prior R1 state into the present
-  — is rejected (extends NE7 and the D3 three-way distinction).
+- **T24 — QB eligibility-structure gate.** A one-QB read and a superflex read must each declare
+  their eligibility structure (fixed positional slots versus QB-eligible flex unions) and their
+  maximum QB-eligible lineup capacity; a claim that silently shares these structures across the
+  two formats is rejected. A positional read for a fixed QB slot and a union read for a
+  superflex slot are distinct and must each match the referenced slot (T5). No numeric premium
+  may be attached in either direction (NE5), and no realized-demand magnitude may be asserted
+  without consumer-owned evidence.
+- **T25 — Waiver-liquidity gate.** R1's axis-A survival outcome (`survives_same_inputs` /
+  `survives_conditional` / `survives_redeclared_inputs`) and axis-B runtime state (`defined` /
+  `defined-empty` / `undefined` / `unresolved`) must each be re-resolved per format and per
+  moment; importing F1's R1 outcome or state into a deeper format — or any format's prior R1
+  state into the present — is rejected (extends NE7 and the D3 three-way distinction).
 - **T26 — Trading staleness (composed).** In a pick-trading format, every cadence, R3, or path
   read must carry trade-event provenance; a read whose stamp predates the latest observed trade
   event is `unresolved` and must be re-resolved, never reused (composes T10, T13, T21 across
@@ -2010,10 +2159,13 @@ cell anywhere is a recommendation (T31).
   caps, flex unions, or TE-premium rules, the corresponding overlay/input (R5, R6, E2, E3) cannot
   be omitted from any applicable read: omission is a composition failure (extends T1/T3), not a
   simplification.
-- **T29 — Auction preservation gate.** Under M4, pool meanings (R2 and its overlays) and path
-  reachability (via the auction opportunity model) must resolve normally, while every
-  cadence-family or R3 reference is rejected as `undefined` (not-applicable) — never resolved,
-  never converted to `unresolved` (per the corrected T12 semantics).
+- **T29 — Auction preservation gate.** Under M4, pool meanings (R2 and its overlays) and the
+  path-reachability predicate remain **applicable** (axis A), while every cadence-family or R3
+  reference is rejected as `undefined` — never resolved, never converted to `unresolved` (per
+  the corrected T12 semantics). Applicability never implies resolution: an M4 pool or path read
+  resolves `defined` or `defined-empty` only when fresh current-pool, budget-state, eligibility,
+  roster-constraint, and acquisition-opportunity inputs are all present (O-F8); absent any of
+  them the read is `unresolved`.
 - **T30 — Undeclared-mechanism gate.** If the mechanism declaration is missing (M5), every
   mechanism-dependent matrix row for that format is `unresolved` and fails closed; no row
   defaults to F1/M1 (snake) behavior.
@@ -2024,10 +2176,15 @@ cell anywhere is a recommendation (T31).
 
 ### 25.2 D6 boundary confirmation
 
-D6 answers Q6 only. The matrix exercises accepted D1–D5 definitions across eight synthetic,
-player-free format families; the structural format numbers used (franchise counts, lineup
-shapes, approximate roster capacities) are format declarations permitted by the activation
-comment, not thresholds, valuations, or empirical claims. **No player names or IDs, rankings,
+D6 answers Q6 only. **The central result is that the D1–D5 semantic framework remains total
+across F1–F8: every structural claim resolves to an explicit axis-A survival outcome, an exact
+axis-B runtime state under stipulated observations, or an axis-C guard result — without silently
+defaulting anywhere.** Some predicates correctly resolve `undefined` (R3 and the cadence family
+under M4) and some reads correctly stay `unresolved` absent observations; totality of explicit
+outcomes, not universal survival, is the claim. The matrix exercises accepted D1–D5 definitions
+across eight synthetic, player-free format families; the structural format numbers used
+(franchise counts, lineup shapes, approximate roster capacities) are format declarations
+permitted by the activation comment, not thresholds, valuations, or empirical claims. **No player names or IDs, rankings,
 tiers, projections, ADP, trade values, market data, numeric replacement values, VOR, scarcity
 premiums, slot valuations, pick recommendations, manager-specific conclusions, or live
 draft/roster data appear anywhere in §§24–25.** The Q7 heuristic inventory was not evaluated —
