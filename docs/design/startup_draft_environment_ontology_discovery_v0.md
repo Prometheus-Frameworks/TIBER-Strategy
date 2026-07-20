@@ -1,6 +1,6 @@
 # Startup-Draft Environment Ontology — Discovery v0
 
-> **Status: D1–D5 ACCEPTED; D6 RECORDED AT THIS REVISION. Q7–Q8, ALL LATER FRONTIERS, AND
+> **Status: D1–D6 ACCEPTED; D7 RECORDED AT THIS REVISION. Q8, ALL LATER FRONTIERS, AND
 > IMPLEMENTATION NOT ACTIVATED.**
 >
 > This document is the canonical discovery package for the bounded discovery defined in
@@ -11,7 +11,8 @@
 > only)** (accepted as corrected). Sections 18–19 record **D4 — draft-mechanism and cadence
 > consequences (Q4 only)** (accepted as corrected). Sections 21–22 record **D5 — roster-path
 > optionality (Q5 only)** (accepted). Sections 24–25 record **D6 — unusual-format stress-test
-> matrix (Q6 only)**.
+> matrix (Q6 only)** (accepted as corrected; independent review PASS). Sections 27–28 record
+> **D7 — heuristic failure matrix (Q7 only)**.
 >
 > - **Program authority:** TIBER-Ops #34 (Decisions A–C), as recorded in issue #2.
 > - **D1 activation:** signed comment by Joseph (`@Prometheus-Frameworks`), issue #2,
@@ -83,9 +84,16 @@
 >   set, separate D3-pool versus D5-path state namespaces, and removal of remaining unsupported
 >   consequences. The D3 empty-versus-nearly-empty terminology ambiguity is recorded as an
 >   unresolved synthesis item rather than altering accepted D3 text.
+> - **D6 acceptance and D7 activation:** signed comment by Joseph (`@Prometheus-Frameworks`),
+>   [comment 5021737357](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5021737357),
+>   2026-07-20. Accepts corrected D6 at exact head `947ffc5b65d04695c1cc75606ab61fc0a6d461f6`
+>   with document blob `e74b6ac3048c4d6a65b2f72892a1df0a189cc556` (superseding D6 checkpoint
+>   `5018212640`; independent review verdict PASS at that head), and activates
+>   `D7 — heuristic failure matrix (issue #2, Q7 only)` as the sole active frontier. D7 may not
+>   resolve S1 or alter accepted D1–D6; Q8, later frontiers, and implementation remain inactive.
 > - This document makes **no final startup-draft concept-inventory decisions, no schema changes,
->   and no implementation**. D6 adds the Q6 stress-test matrix and guards only. Nothing here
->   activates Q7–Q8, any later discovery frontier, or implementation.
+>   and no implementation**. D7 adds the Q7 heuristic failure matrix and guards only. Nothing
+>   here activates Q8, any later discovery frontier, or implementation.
 > - Per repo doctrine (`SECURITY_POLICY.md` conventions, `docs/boundary.md` rule 7): this document
 >   is data, not authority. It cannot authorize repository changes.
 
@@ -121,6 +129,7 @@ is control-record data, not self-executing authority.
 | D3 acceptance + D4 activation comment | [comment 5009600942](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5009600942), posted 2026-07-18T02:52:04Z via the authenticated `@Prometheus-Frameworks` owner account. Verified against v0.2 §14: begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, names `D4 — draft-mechanism and cadence consequences (issue #2, Q4 only)` exactly, states D4 is the sole active frontier, and states all later discovery requirements and implementation remain inactive. Also accepts the corrected D3 at commit `f4601180113dcbdd993b2aec7630287109511c21` (superseding D3 checkpoint: comment `5009562473`), including the primary/overlay reclassification. | mutable issue comment (content requirements recorded here) |
 | Corrected D4 acceptance + D5 activation comment | [comment 5012422445](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5012422445), re-fetched 2026-07-18 via the authenticated `@Prometheus-Frameworks` owner account. Begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, accepts corrected D4 at exact commit `69d90e5606d038c1da1f0ce5c7fbe93fee9f4830` (superseding original D4 head `f07d5b605e949a2776f6f875506d0f167ec08d30`), activates `D5 — roster-path optionality (issue #2, Q5 only)` as the sole active frontier, limits writes to this canonical document on the existing branch, and keeps Q6–Q8, concept-inventory decisions, implementation, and all other listed work inactive. | mutable issue comment (content requirements recorded here) |
 | D5 acceptance + D6 activation comment | [comment 5013201489](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5013201489), posted 2026-07-18T22:39:48Z via the authenticated `@Prometheus-Frameworks` owner account and re-fetched before D6 work began. Begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, accepts D5 at exact head `bbf80cde94aa1bdf89cb0c7ce6615255cd95907f` **and pins the accepted document blob `85af74ca21561249be9f368704f6c5545963eb44`** (both pins verified against the fetched remote branch before any change), names `D6 — unusual-format stress-test matrix (issue #2, Q6 only)` exactly, states D6 is the sole active frontier, limits writes to this canonical document on the existing branch from that exact head, and keeps Q7–Q8, concept decisions, artifact-shape work, runtime-producer assignment, PRs, and implementation inactive. | mutable issue comment (content requirements recorded here) |
+| D6 acceptance + D7 activation comment | [comment 5021737357](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5021737357), posted 2026-07-20T11:30:10Z via the authenticated `@Prometheus-Frameworks` owner account and re-fetched before D7 work began. Begins with `[DECISION — APPROVED]`, identifies Joseph as human decision owner, accepts corrected D6 at exact head `947ffc5b65d04695c1cc75606ab61fc0a6d461f6` **and pins the accepted document blob `e74b6ac3048c4d6a65b2f72892a1df0a189cc556`** (both pins verified against the fetched remote branch before any change; superseding D6 checkpoint `5018212640` accepted; independent review verdict PASS at that head; S1 accepted as unresolved and untouchable under D7), names `D7 — heuristic failure matrix (issue #2, Q7 only)` exactly, states D7 is the sole active frontier, limits writes to this canonical document on the existing branch from that exact head, and keeps Q8, concept decisions, artifact-shape work, runtime-producer assignment, PRs, and implementation inactive. | mutable issue comment (content requirements recorded here) |
 | TIBER-Strategy code state | commit `bd8244a8b4f8b88c6a1e08835ce58546ca18ad87` | immutable |
 | TIBER-Fantasy code state (read-only) | commit `d35d440f24beaa275f6eb2f36cdd37a9c4989c3f` | immutable |
 
@@ -2304,7 +2313,11 @@ merge; no later frontier activated.
 
 ---
 
-## 26. Proposed next frontier (NOT activated)
+## 26. D7 frontier proposal (historical — subsequently activated)
+
+> This section is preserved as the D6-era proposal record. D7 was activated by
+> [comment 5021737357](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5021737357)
+> (verified in §1) and its output is recorded in §§27–28 below.
 
 ```text
 D7 — heuristic failure matrix (issue #2, Q7 only)
@@ -2323,6 +2336,369 @@ artifact-shape selection, all later frontiers, and implementation remain inactiv
 signed activation comment on issue #2 satisfying the v0.2 §14 requirements authorizes the next
 frontier explicitly.
 
+*(End of historical D7 proposal. D7 was subsequently activated; see §§27–28.)*
+
 ---
 
-*End of D6 record.*
+## 27. D7 — Heuristic failure matrix (Q7)
+
+> D7 record. Authorized by [comment 5021737357](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/2#issuecomment-5021737357);
+> Q7 only. Exactly the eight authorized heuristic families are evaluated, none is adopted as a
+> universal rule, and **no outcome below is advice**: every entry is a descriptive claim about
+> when a heuristic's structure holds, fails, or cannot be evaluated, phrased without imperatives.
+> All accepted D1–D6 machinery is used as-is; S1 remains unresolved and untouched. Candidate
+> concept vocabulary remains unaccepted pointers.
+
+### 27.1 Evaluation vocabulary and record shape
+
+Each heuristic is evaluated in **two forms**, never conflated (T32): its **bounded form** (the
+claim restricted to an explicitly declared context) and its **universal form** (the "always"
+claim as stated). Each form receives exactly one classification:
+
+| Classification | Meaning |
+|---|---|
+| `coherent_in_declared_context` | descriptively coherent within a stated format/evidence context, with the context named |
+| `conditional` | coherence depends on explicit format, regime, or evidence conditions that must be stated per use |
+| `unsupported` | cannot be evaluated because a required evidence source or contract is missing — preserved as `unresolved`, never resolved by assumption |
+| `inapplicable` | presupposes structure absent in the referenced format (resolves `undefined` there) |
+| `universal_form_rejected` | the "always" claim fails at least one declared family or guard; the malformed universal is rejected while bounded forms are assessed separately |
+
+Each record carries the twelve fields required by the activation comment: descriptive meaning;
+valid structural context; failure context; applicable families/subcases; D2 dimensions; D3
+baselines/overlays; D4 consequences; D5 path implications; D6 relationships (axis-A tuple
+fields, evidence conditions, runtime namespaces, guards); missing evidence/contract; misuse
+risk; and a descriptive structural consequence.
+
+### 27.2 Heuristic records (H1–H8)
+
+#### H1 — "Always take best player available"
+
+- **Descriptive meaning:** at every selection, take the top element of some ordering over
+  currently eligible assets, independent of roster structure.
+- **Valid structural context:** where a consumer-declared ordering exists *and* resolved
+  successor-state path evidence shows constraint patterns retain admissible witnesses, the
+  bounded claim "local-ordering selection did not close the observed paths" can be coherent —
+  as a resolved observation, not a rule.
+- **Failure context:** wherever path constraints bind: a locally maximal selection can map to a
+  successor state whose resolved witness set for a stated pattern is empty (F4-class states,
+  cap-constrained R6 states, late-obligation states).
+- **Families:** F1 (bounded coherence with evidence); F4 (failure exposure); all families for
+  the missing-ordering dimension.
+- **D2 dimensions:** E10, E7, E1/E2 (obligation structure).
+- **D3:** composed baseline reads enter only as guarded evidence components (T19).
+- **D4:** between-pick depletion (gap structure) determines how much board change separates
+  local reads from their successor states.
+- **D5:** T16 is the core boundary — local eligibility never substitutes for successor-state
+  path resolution; preserve/close claims need T18 provenance.
+- **D6 relationships:** the presupposed ordering is an **unavailable input** (no
+  ordering/evidence contract exists); path claims resolve only under `O-Path(F)`; T16/T18/T22
+  armed.
+- **Missing evidence/contract:** the consumer ordering/evidence contract; successor-state path
+  resolution.
+- **Misuse risk:** treating local-ordering maximality as proof of path preservation or roster
+  quality; silently substituting an undeclared ordering.
+- **Structural consequence (descriptive):** local-ordering maximality and path preservation are
+  independent properties; each requires its own resolved evidence, and neither implies the
+  other.
+- **Classification:** bounded form `conditional` (declared ordering + resolved path evidence);
+  universal form `universal_form_rejected` (T16) and `unsupported` absent the ordering contract.
+
+#### H2 — "Always secure quarterbacks early in superflex"
+
+- **Descriptive meaning:** a temporal-priority claim: expanded QB-eligible lineup capacity in
+  superflex warrants early QB acquisition.
+- **Valid structural context:** the *premise* is structurally real in F2: a superflex slot
+  expands QB eligibility and maximum QB-eligible lineup capacity (accepted D6 F2 record).
+- **Failure context:** the *timing conclusion* is an optimal-timing claim. Optimal timing is
+  prohibited output, and its evaluation would anyway require realized demand/supply/behavioral
+  evidence (consumer-owned, absent) plus an ordering contract (absent).
+- **Families:** F2 (premise); F1 (premise absent — `inapplicable`); F8 (no rounds — "early" is
+  `inapplicable` under M4).
+- **D2 dimensions:** E3, E1.
+- **D3:** fixed-QB-slot positional reads and superflex union reads remain distinct (T5/T24).
+- **D4:** "early" presupposes an ordered round structure (M1–M3 only).
+- **D5:** any claim that QB-deferring paths close faster requires `O-Path(F2)` resolution —
+  refused without it (accepted D6 F2 correction).
+- **D6 relationships:** F2 union read `⟨applies, redeclared, none⟩`; realized-demand magnitude
+  `unresolved`; T24 armed.
+- **Missing evidence/contract:** realized-demand evidence; ordering contract; survival/evidence
+  contract (R3 instances `unresolved`).
+- **Misuse risk:** converting eligibility expansion into a numeric premium (NE5) or a timing
+  command (T31); silently sharing demand structure across F1/F2 (T24).
+- **Structural consequence (descriptive):** in F2 the QB-inclusive union competes for more
+  lineup capacity than in F1; what follows for the timing of any particular selection is
+  unresolved without consumer-owned evidence.
+- **Classification:** premise `coherent_in_declared_context` (F2); timing claim `unsupported`;
+  universal form `universal_form_rejected` (also `inapplicable` in F1 and under F8/M4).
+
+#### H3 — "Avoid drafting for need"
+
+- **Descriptive meaning:** the negative form of H1: roster-obligation state ("need") ought not
+  influence selection.
+- **Valid structural context:** in resolved early states where every stated constraint pattern
+  retains wide witness sets, need is non-binding and ignoring it has no observed path
+  consequence — coherent as a bounded, evidence-resolved observation.
+- **Failure context:** when unfilled obligations approach the count of remaining acquisition
+  opportunities, need is a binding constraint: paths that ignore it resolve `defined-empty`
+  under `O-Path(F)` observation. The R4 overlay switches what "need" denotes (starter demand
+  versus bench/depth demand) at the obligation-fill regime boundary (NE3).
+- **Families:** F1 early states (bounded coherence); F3/F4 late or deep states (failure); F7b/c
+  (rookie-dependent obligations reshape need).
+- **D2 dimensions:** E1, E2, E8, E10.
+- **D3:** R4 regime overlay is load-bearing; T4 roster-relativity.
+- **D4:** remaining-opportunity counts are cadence-dependent (consumer-owned numerics).
+- **D5:** binding-need failures are exactly defined-empty witness results — never assumptions.
+- **D6 relationships:** per-read `O-Path` discipline; T4/T18 armed.
+- **Missing evidence/contract:** ordering contract; per-state path resolution.
+- **Misuse risk:** reading the heuristic's failure as advice to draft for need (both directions
+  are non-advice, T31); applying one roster's regime to another (T4).
+- **Structural consequence (descriptive):** need is a roster-relative, regime-switched
+  constraint whose bindingness is an observation, not a stance; a universal "never consider
+  need" claim ignores the regime switch and the binding case.
+- **Classification:** bounded form `conditional` (regime- and evidence-dependent); universal
+  form `universal_form_rejected` (NE3/T4).
+
+#### H4 — "Ignore roster construction until later rounds"
+
+- **Descriptive meaning:** a temporal claim that path constraints are non-binding in early
+  rounds.
+- **Valid structural context:** in F1-class formats, resolved early-state observations can show
+  wide witness sets — the bounded observation "constraints were non-binding at this observed
+  state" is coherent when resolved.
+- **Failure context:** F4-class depth can bind constraints early (with `O-Path(F4)` evidence);
+  F2 changes capacity structure; F7b/c change obligation structure; F6 makes the binding moment
+  mutable via trades; "later rounds" has no referent under F8/M4.
+- **Families:** F1 (bounded); F2/F4/F6/F7b/F7c (failure or restructure); F8 (`inapplicable`).
+- **D2 dimensions:** E8, E10, E5.
+- **D3:** R4 regime overlay; composed baselines as evidence only.
+- **D4:** round structure exists only under M1–M3; trade events move the binding moment (T21).
+- **D5:** bindingness is a per-state witness question; "early slack" is an observation, never a
+  format property.
+- **D6 relationships:** `O-Path` discipline; the undeclared threshold "later" has no mechanical
+  token — any use must declare its boundary; T23/T25-style import guards apply to slack
+  presumptions.
+- **Missing evidence/contract:** per-state path resolution; a declared threshold for
+  "early/later" (undeclared in the heuristic).
+- **Misuse risk:** importing F1 early-slack presumptions into deeper or restructured formats;
+  treating "later" as if it named a defined round.
+- **Structural consequence (descriptive):** when path constraints begin to bind is a resolved
+  property of a specific format and board state, not of round labels.
+- **Classification:** bounded form `conditional`; universal form `universal_form_rejected`;
+  `inapplicable` under F8/M4.
+
+#### H5 — "Depth can always be found on waivers"
+
+- **Descriptive meaning:** a standing R1 liquidity presumption: the post-startup unrostered
+  pool reliably contains usable depth.
+- **Valid structural context:** F1-class formats where a fresh observation resolves
+  `pool_resolved_nonempty` across declared classes — coherent as a *resolved observation about
+  that moment*.
+- **Failure context:** F3 (observation-dependent), F4 (a stipulated fresh observation can
+  resolve `pool_resolved_empty`); the issue's own §9 negative case; NE7 cuts both directions
+  (present dryness proves no permanent law; future liquidity may not be assumed either).
+- **Families:** F1 (bounded), F3/F4 (failure), F7 subcases (rookie strata move the membership
+  boundary), F8 (the waiver mechanism is independent of the draft mechanism).
+- **D2 dimensions:** E1, E2, E5, E9.
+- **D3:** R1 with R5/R6 overlays; the D3 pool-status namespace governs.
+- **D4:** none directly (waivers are post-startup).
+- **D5:** paths that depend on post-startup acquisition inherit R1's pool status as an evidence
+  component (T19).
+- **D6 relationships:** R1 tuple carries `{current_observation}` in deep formats; statuses
+  resolve only per O-F1r/O-F3r/O-F4r-class observations; T25 armed.
+- **Missing evidence/contract:** the current pool observation (runtime producer unassigned).
+- **Misuse risk:** importing pool status across formats or moments (T25); reading
+  `pool_resolved_empty` as permanent (NE7).
+- **Structural consequence (descriptive):** R1 pool status is a time-indexed, format-relative
+  observation; "always" asserts an invariant that a single `pool_resolved_empty` observation
+  falsifies.
+- **Classification:** bounded form `conditional` (per-observation); universal form
+  `universal_form_rejected` (F4 counter-observation; T25).
+
+#### H6 — "Positional runs should always be faded"
+
+- **Descriptive meaning:** a response-policy claim: when a positional run (a clustered
+  same-position selection pattern, a board-dynamic event) is observed, the structurally correct
+  response is to select elsewhere.
+- **Valid structural context:** only the *premise* is structural: runs are observable board
+  events (E7), and run exposure is real candidate vocabulary (pointer only).
+- **Failure context:** the *response* claim ("fade") is a behavioral-policy conclusion. Its
+  evaluation would require modeling other managers' behavior — **manager-tendency modeling is
+  prohibited** — plus an ordering contract. The response claim is therefore out of scope, not
+  merely unevidenced; and the mirror claim ("follow runs") is equally out of scope.
+- **Families:** any ordered-mechanism family (M1–M3) for run observation; `inapplicable` under
+  F8/M4 (no selection sequence to cluster).
+- **D2 dimensions:** E7, E8; R5 union coupling is board-evidence-dependent (accepted D6 F5a
+  correction).
+- **D3:** run effects on pools are R2-composed evidence reads (with applicable overlays).
+- **D4:** run detection requires board observation within cadence context; stale reads fail
+  (T13/T21).
+- **D5:** whether a run closes paths is an `O-Path` question, not a presumption.
+- **D6 relationships:** guards T14/T22/T31 cap any response conversion.
+- **Missing evidence/contract:** board observations; behavioral evidence (whose modeling is
+  prohibited); ordering contract.
+- **Misuse risk:** converting run detection into follow/fade directives in either direction;
+  asserting cross-union coupling without board evidence.
+- **Structural consequence (descriptive):** a run is an observable depletion pattern whose
+  path and pool consequences are resolvable per read; no response policy follows from the
+  structure alone.
+- **Classification:** premise `coherent_in_declared_context` (observed events); response claim
+  **rejected as out of scope** (prohibited modeling) — recorded as `unsupported` with a
+  prohibition, never resolvable inside Strategy; universal form `universal_form_rejected`.
+
+#### H7 — "Age and insulation always dominate current production"
+
+- **Descriptive meaning:** a weighting claim: timeline attributes (age band, role
+  security/insulation) outweigh current production evidence in asset assessment.
+- **Valid structural context:** the underlying *axis distinction* is real and already owned by
+  the accepted V1 ontology: timeline value and production evidence are distinct axes
+  (`production_window`, `role_security`, `age_curve_risk` versus FORGE production evidence).
+- **Failure context:** the accepted V1 guard structure treats the axes as jointly required and
+  mutually non-overriding — `durable_anchor` requires **both** production evidence and timeline
+  durability, and consumer safety rule `cannot_override_forge_evidence` forbids timeline
+  concepts outranking production evidence. A universal dominance claim inverts that accepted
+  structure.
+- **Families:** all — but nowhere resolvable today.
+- **D2 dimensions:** none directly (asset-level, not environment-level).
+- **D3:** interacts with baselines only through consumer evidence components.
+- **D4/D5:** no direct consequence.
+- **D6 relationships:** the inputs the heuristic weighs — `age_band`, `experience_band`,
+  `role_security_signal` — are **`future_contract` inputs with no producer** (V1 manifest; D1
+  §7): every read applying this heuristic is `unresolved` today.
+- **Missing evidence/contract:** the age/experience/role-security contracts (open
+  `future_contract_decisions` in the promoted artifact).
+- **Misuse risk:** using the heuristic to discount observed production without any resolvable
+  timeline input; presenting either axis as dominant.
+- **Structural consequence (descriptive):** under the accepted ontology the two axes are
+  jointly required and neither overrides the other; a dominance claim is structurally contrary
+  to the accepted guard rules, and no instance is resolvable while the timeline inputs lack
+  producers.
+- **Classification:** `unsupported` (missing contracts) **and** universal form
+  `universal_form_rejected` (contradicts the accepted V1 guard structure — cited, not
+  modified).
+
+#### H8 — "Balanced rosters are always safer than concentrated builds"
+
+- **Descriptive meaning:** a risk-ordering claim over roster shapes: distributed value
+  configurations carry less risk than concentrated ones.
+- **Valid structural context:** balance and concentration are legitimate *shape descriptions*
+  (V1 `alpha_concentration` distribution signal; D5 path-width descriptions) — describing a
+  shape is coherent.
+- **Failure context:** "safer" presupposes a declared risk measure. No risk/evidence contract
+  exists in the chain; and the accepted negative cases explicitly reject balance-superiority
+  and concentration-recklessness as defaults (issue v0.2 §9; D5 mandatory negative boundary;
+  V1 `tr_concentration_share_is_not_quality`).
+- **Families:** all; shape description available everywhere, risk ordering nowhere.
+- **D2 dimensions:** E10 (shape relates to path structure descriptively).
+- **D3:** `alpha_concentration` boundary applies (distribution ≠ quality).
+- **D4:** none directly.
+- **D5:** T22 — path width, balance, or concentration never becomes a superiority claim.
+- **D6 relationships:** any risk claim is `unsupported` absent a declared risk contract; T22/T31
+  armed.
+- **Missing evidence/contract:** a declared risk/evidence contract (none exists; none is
+  proposed here).
+- **Misuse risk:** presenting either shape as inherently safer or superior; converting a shape
+  description into a build preference.
+- **Structural consequence (descriptive):** shape is describable; risk ordering over shapes is
+  not resolvable without a risk contract, and the accepted records reject both default
+  superiority directions.
+- **Classification:** shape description `coherent_in_declared_context`; risk claim
+  `unsupported`; universal form `universal_form_rejected` (T22; accepted negative cases).
+
+### 27.3 Summary matrix (mechanical)
+
+| Heuristic | Bounded form | Universal ("always") form | Governing guards | Load-bearing missing evidence/contract |
+|---|---|---|---|---|
+| H1 best-player-available | conditional | universal_form_rejected | T16, T18, T22, T33, T34 | ordering/evidence contract; successor-state path resolution |
+| H2 QBs early in superflex | premise coherent_in_declared_context; timing claim unsupported | universal_form_rejected | T5, T24, T31, T33, T35 | realized-demand evidence; ordering contract; survival/evidence contract |
+| H3 avoid drafting for need | conditional | universal_form_rejected | T4, NE3, T31, T34 | ordering contract; per-state path resolution |
+| H4 ignore construction early | conditional | universal_form_rejected | T21, T23, T25, T35 | per-state path resolution; declared "early/later" boundary |
+| H5 depth from waivers | conditional | universal_form_rejected | T25, NE7, T36 | current R1 pool observation |
+| H6 always fade runs | premise coherent_in_declared_context; response unsupported (prohibited modeling) | universal_form_rejected | T13, T21, T31, T37 | board observations; behavioral evidence (modeling prohibited); ordering contract |
+| H7 age/insulation dominate | unsupported | universal_form_rejected | T38; V1 `cannot_override_forge_evidence` | age/experience/role-security `future_contract` inputs |
+| H8 balance always safer | shape coherent_in_declared_context; risk claim unsupported | universal_form_rejected | T22, T31, T39 | declared risk/evidence contract |
+
+Reading discipline: every `universal_form_rejected` is a rejection of a malformed universal
+claim, not an endorsement of its negation; every `unsupported` is preserved as `unresolved`,
+never resolved by assumption; and no cell is advice (T40).
+
+---
+
+## 28. D7 — Anti-conflation tests and boundary confirmation
+
+### 28.1 Mechanically encodable tests (extending T1–T31)
+
+- **T32 — Heuristic form gate.** Every heuristic evaluation must state whether it addresses the
+  bounded declared-context form or the universal ("always") form; conclusions about one form
+  never transfer to the other, and a rejected universal never rejects (or endorses) a bounded
+  form.
+- **T33 — Ordering-contract gate.** Any heuristic application that presupposes an ordering over
+  assets (H1, H2's timing, H3, H6's response) is `unsupported`/`unresolved` absent a declared
+  consumer ordering/evidence contract; none exists in the chain.
+- **T34 — Local/path transfer gate.** A claim that a locally selected asset preserves or closes
+  roster paths requires successor-state `O-Path` resolution with comparable pre/post states and
+  event provenance (extends T16/T18); local eligibility alone is rejected as evidence.
+- **T35 — Timing-claim gate.** "Early/late" heuristic claims require a declared ordered round
+  structure (M1–M3) and a declared boundary; they are `undefined` under M4 and `unresolved`
+  under M5; optimal-timing claims are prohibited output in every mechanism.
+- **T36 — Liquidity-presumption gate.** Any depth-from-waivers claim must carry a current R1
+  observation resolving in the D3 pool-status namespace; imports across formats or moments are
+  rejected (extends T25); a single `pool_resolved_empty` observation falsifies the universal
+  form.
+- **T37 — Run-response gate.** Run detection requires current board observation under valid
+  cadence provenance; any follow-or-fade response claim requires behavioral evidence whose
+  modeling is prohibited — the response claim is rejected as out of scope, never resolved in
+  either direction.
+- **T38 — Future-contract heuristic gate.** A heuristic weighing `future_contract` inputs
+  (age/experience/role security) is `unresolved` while those inputs lack producers; and no
+  heuristic may invert the accepted evidence structure (`cannot_override_forge_evidence`; both
+  axes jointly required per the V1 guard rules).
+- **T39 — Shape-preference gate.** Balance and concentration are shape descriptions; a safety
+  or superiority ordering over shapes requires a declared risk/evidence contract and is
+  otherwise rejected (extends T22); the rejection endorses neither shape.
+- **T40 — No heuristic becomes advice.** No D7 classification — coherent, conditional,
+  unsupported, inapplicable, or rejected — may be rendered as an imperative, preference,
+  recommendation, or claimed optimal strategy on any surface (caps the family; extends
+  T14/T22/T31).
+
+### 28.2 D7 boundary confirmation
+
+D7 answers Q7 only. All eight authorized heuristic families were evaluated in both forms; every
+universal form was rejected as malformed while bounded forms were classified descriptively;
+every evidence gap was preserved as `unresolved` rather than resolved by assumption; and the two
+prohibited response directions (follow/fade, balanced/concentrated, early/late QB timing) were
+rejected symmetrically — nothing here endorses any negation. **No player names or IDs, rankings,
+tiers, projections, ADP, market data, live draft state, replacement values, VOR, scarcity
+premiums, optimal timing, slot values, preferred players/positions/paths/shapes/slots, or
+imperative language appear in §§27–28.** Accepted D1–D6 text and semantics are unchanged; the
+accepted V1 ontology is cited, not modified; S1 remains unresolved and untouched; no
+concept-inventory decision, artifact-shape selection, implementation proposal,
+runtime-producer assignment, or Q8 synthesis occurred. Unresolved items carried forward: the
+runtime decision-envelope producer (§13.2); the ordering/evidence, tier/survival,
+risk/evidence, and age/experience/role-security contracts; the deferred budget-pressure
+structure; synthesis item S1; D1 parked items P3/P4/P5/P7/P8. Only this canonical document
+changed; no PR, no merge; D8 and all later frontiers remain inactive.
+
+---
+
+## 29. Proposed next frontier (NOT activated)
+
+```text
+D8 — minimum structural input contract (issue #2, Q8 only)
+```
+
+Rationale: Q8 is the last unanswered discovery question, and D7 sharpened exactly what it must
+synthesize: the discovery now carries a complete registry of load-bearing missing contracts
+(ordering/evidence, tier/survival, risk/evidence, age/experience/role-security, trade-event
+provenance, rookie-draft structure declarations) alongside the consumer-owned runtime values
+fixed by D2–D6. Q8's deliverable — the minimum structural input contract, classified across
+format-static / board-dynamic / hybrid / consumer-owned / unavailable / future-contract, without
+designing a TIBER-Fantasy adapter — can now be assembled from verified material only.
+
+**D8 is proposed only. It is NOT activated.** Q8 synthesis, concept-inventory decisions,
+artifact-shape selection, the implementation proposal, the terminal decision, all later
+frontiers, and implementation remain inactive until a new signed activation comment on issue #2
+satisfying the v0.2 §14 requirements authorizes the next frontier explicitly.
+
+---
+
+*End of D7 record.*
