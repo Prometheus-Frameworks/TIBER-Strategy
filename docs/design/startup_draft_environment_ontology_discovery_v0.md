@@ -102,6 +102,16 @@
 >   establishes; H8's semantic applicability separated from runtime instance resolution; all D6
 >   relationships made explicit per component; H2 wording aligned to the accepted D6 statement.
 >   Accepted D1–D6 semantics unchanged; S1 untouched.
+> - **Second D7 semantic correction (mechanical contract):** operator-directed correction after
+>   independent review (REQUIRES_REVISION on the mechanical contract only; the operational
+>   package passed). Component rows are now atomic context-keyed instances with one declared
+>   token per scalar field; null values are declared tokens (`none` / `not_applicable` /
+>   `no_runtime_read`); the policy axis is separated from evidence resolution
+>   (`policy_boundary` plus exact runtime state); runtime namespaces are exactly typed, with
+>   `d7_consumer_evidence` declared as a D7-only namespace distinct from accepted D6
+>   namespaces; H4 bindingness under M4 corrected; guard results use one D6 Axis-C result per
+>   guard ID per row, with explicitly supplied malformed reads recording
+>   `rejects_attempted_read`. Substantive H2/H5/H6/H7/H8 corrections preserved.
 > - This document makes **no final startup-draft concept-inventory decisions, no schema changes,
 >   and no implementation**. D7 adds the Q7 heuristic failure matrix and guards only. Nothing
 >   here activates Q8, any later discovery frontier, or implementation.
@@ -2360,29 +2370,35 @@ frontier explicitly.
 > All accepted D1–D6 machinery is used as-is; S1 remains unresolved and untouched. Candidate
 > concept vocabulary remains unaccepted pointers.
 
-### 27.1 Claim-component model and record shape
+### 27.1 Claim-component model and record shape (atomic mechanical contract)
 
-Each heuristic decomposes into **claim components**, and every component carries **exactly one
-value per field** — no compound results, and no field competes with a field of another kind
-(T32/T41). The component fields:
+Each mechanical row is a **component instance keyed by ⟨heuristic, component, context case⟩**.
+The context key names the format family, mechanism class, or stipulated observation case the row
+evaluates; whenever a format, mechanism, or observation changes any field value, the component
+splits into separate keyed rows. **Every scalar field contains exactly one declared token** —
+no compound cells, no undeclared dashes (T32/T41).
 
-| Field | Declared values | Notes |
+**Fields and declared token sets:**
+
+| Field | Declared tokens | Semantics |
 |---|---|---|
-| `component` | `premise` \| `descriptive_observation` \| `policy_conclusion` \| `universal_form` | what kind of claim the row evaluates |
-| `applicability` | `applies` \| `does_not_apply` | D6 axis-A semantic applicability, per format where format-relative |
-| `input_contract` | `same_as_control` \| `redeclared` \| `—` | D6 axis-A contract relationship (`—` only under `does_not_apply`) |
-| `evidence_conditions` | set from the registry (or `none`) | registry extends D6's with: `ordering_evidence_contract`, `depth_adequacy_contract`, `consumer_weighting_contract`, `risk_evidence_contract`, `acquisition_event_observation_contract` |
-| `runtime` | `⟨namespace: state⟩` or `—` | the correct D6 namespace (D5 path state / D3 pool status / D4 staleness) and its per-read state; `—` for purely definitional components with no runtime instance |
-| `policy_disposition` | `not_a_policy` \| `unresolved_pending_contract` \| `prohibited_output` | **`prohibited_output` is a permanent policy boundary and is never encoded as missing evidence**; `unresolved_pending_contract` marks claims that could resolve if a named contract existed |
-| `universal_form_guard` | `universal_form_rejected(T-ref)` \| `—` | a **form/guard result only** — it never competes with runtime states, evidence gaps, or applicability |
-| `guard_registry` | guard IDs with D6 registry results | `armed_not_triggered` throughout this well-formed record |
+| `component` | `premise` \| `descriptive_observation` \| `policy_conclusion` \| `universal_form` | the kind of claim the row evaluates |
+| `context` (row key) | a declared format family/subcase, mechanism class, or stipulated observation case; `any` when no field varies by context | the case this row is about |
+| `applicability` | `applies` \| `does_not_apply` | D6 axis-A semantic applicability in the row's context |
+| `input_contract` | `same_as_control` \| `redeclared` \| `not_applicable` | D6 axis-A contract relationship; `not_applicable` only under `does_not_apply` |
+| `evidence_conditions` | a set of registry tokens; `none` (no conditions beyond the universal freshness floor); `not_applicable` (field has no meaning for this row kind) | registry: `current_observation`, `trade_event_provenance`, `transition_provenance` (comparable pre/post `O-Path` states + event + provenance per T18), `survival_evidence_contract`, `rookie_draft_structure_declaration`, `auction_opportunity_inputs`, `ordering_evidence_contract`, `depth_adequacy_contract`, `consumer_weighting_contract`, `risk_evidence_contract`, `acquisition_event_observation_contract`, `age_experience_role_security_contracts`, `shape_instance_inputs` (resolved E10/roster/FORGE/consumer inputs) |
+| `runtime_namespace` | accepted D6 namespaces: `d5_path`, `d3_pool`, `d4_cadence`; **D7-only namespace:** `d7_consumer_evidence`; declared null: `no_runtime_read` | `d7_consumer_evidence` is declared here for consumer-owned evidence reads (adequacy, weighting, shape instances, risk orderings, board-event clustering) that have **no accepted D6 namespace — it is D7-only and is not presented as an accepted D6 namespace**. `no_runtime_read` marks rows with no runtime instance (definitional premises, format-static facts, policy conclusions, universal forms) |
+| `runtime_state` | in `d5_path`: `defined` \| `defined-empty` \| `undefined` \| `unresolved`; in `d3_pool`: `pool_resolved_nonempty` \| `pool_resolved_empty` \| `pool_unresolved` \| `pool_undefined`; in `d4_cadence`: `current` \| `unresolved`; in `d7_consumer_evidence`: `resolved` \| `unresolved`; under `no_runtime_read`: `not_applicable` | exactly one state, valid in the row's namespace |
+| `policy_boundary` | `descriptive_only` \| `prohibited_output` \| `not_applicable` | the policy axis, fully separate from evidence resolution: a row can be `descriptive_only` **and** runtime-`unresolved` at once. `prohibited_output` is a permanent boundary that no contract can cure and is never carried in any missing-contract registry |
+| `guard_results` | keyed map `T-id → result`, exactly one D6 Axis-C result per guard ID per row: `not_applicable` \| `armed_not_triggered` \| `rejects_attempted_read` | there is **no separate form-guard axis**: universal-form rows and prohibited policy-conclusion rows are **explicitly supplied malformed/prohibited reads** (supplied by the heuristic inventory itself), so their governing guard records `rejects_attempted_read` *in that row*; the same guard remains `armed_not_triggered` in well-formed rows. A guard ID never carries two results in one row |
 
-A rejected universal form endorses nothing — not its negation, and not any bounded component.
-Missing-evidence outcomes are preserved as `unresolved` in the correct runtime namespace;
-prohibited outputs are marked `prohibited_output` and are **not** carried in any
-missing-contract registry. Each heuristic record also retains the twelve narrative fields
-required by the activation comment; the component table is the mechanical surface, and the
-narrative never overrides it.
+Rules: a rejected universal form endorses nothing — not its negation and not any bounded
+component. Missing-evidence outcomes are preserved as the exact `unresolved` state of the row's
+namespace. `unresolved_pending_contract` is **removed from the policy axis**: pending-contract
+status is expressed by `runtime_state` = `unresolved` plus the named contract token in
+`evidence_conditions`. Each heuristic record also retains the twelve narrative fields required
+by the activation comment; the component table is the mechanical surface, and the narrative
+never overrides it.
 
 ### 27.2 Heuristic records (H1–H8)
 
@@ -2419,11 +2435,11 @@ narrative never overrides it.
   other.
 - **Component table:**
 
-| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
-|---|---|---|---|---|---|---|---|
-| descriptive_observation (local ordering vs. successor paths, per stipulated transition) | applies | same_as_control | {ordering_evidence_contract, current_observation} | ⟨D5 path: unresolved⟩ (no ordering contract exists; resolvable per T18 transition once declared) | not_a_policy | — | T16, T18, T34: armed_not_triggered |
-| policy_conclusion ("select the ordering-top") | applies | same_as_control | {ordering_evidence_contract} | — | prohibited_output (claimed optimal selection) | — | T22, T40: armed_not_triggered |
-| universal_form ("always") | applies | same_as_control | — | — | — | universal_form_rejected(T16) | T16: armed_not_triggered |
+| Component | Context | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guard results |
+|---|---|---|---|---|---|---|---|---|
+| descriptive_observation (ordering vs. successor paths) | any M1–M3 family; no ordering contract declared | applies | same_as_control | {ordering_evidence_contract, current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T16: armed_not_triggered; T18: armed_not_triggered; T34: armed_not_triggered |
+| policy_conclusion ("select the ordering-top") | any | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T40: rejects_attempted_read; T22: armed_not_triggered |
+| universal_form ("always") | any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T16: rejects_attempted_read |
 
 #### H2 — "Always secure quarterbacks early in superflex"
 
@@ -2453,11 +2469,13 @@ narrative never overrides it.
   format declaration alone.
 - **Component table:**
 
-| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
-|---|---|---|---|---|---|---|---|
-| premise (superflex expands QB eligibility and maximum QB-eligible lineup capacity) | applies (F2); does_not_apply (F1: no superflex slot) | redeclared (union declaration) | none | — (format-static structural fact) | not_a_policy | — | T24: armed_not_triggered |
-| policy_conclusion ("acquire QBs early") | applies (M1–M3 only); does_not_apply (M4: no rounds) | same_as_control | {ordering_evidence_contract, survival_evidence_contract} | — | prohibited_output (explicit activation prohibition on early-QB claims; optimal timing prohibited) | — | T31, T35, T40: armed_not_triggered |
-| universal_form ("always") | applies | same_as_control | — | — | — | universal_form_rejected(T24, T35) | T24, T35: armed_not_triggered |
+| Component | Context | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guard results |
+|---|---|---|---|---|---|---|---|---|
+| premise (superflex expands QB eligibility and maximum QB-eligible lineup capacity) | F2 | applies | redeclared | none | no_runtime_read | not_applicable | descriptive_only | T24: armed_not_triggered |
+| premise (same) | F1 — no superflex slot | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | descriptive_only | T24: armed_not_triggered |
+| policy_conclusion ("acquire QBs early") | M1–M3 | applies | same_as_control | {ordering_evidence_contract, survival_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T40: rejects_attempted_read; T35: armed_not_triggered |
+| policy_conclusion (same) | M4 — round cadence has no referent | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | prohibited_output | T35: rejects_attempted_read |
+| universal_form ("always") | any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T24: rejects_attempted_read; T35: rejects_attempted_read |
 
 #### H3 — "Avoid drafting for need"
 
@@ -2473,8 +2491,9 @@ narrative never overrides it.
   opportunities, need is a binding constraint: paths that ignore it resolve `defined-empty`
   under `O-Path(F)` observation. The R4 overlay switches what "need" denotes (starter demand
   versus bench/depth demand) at the obligation-fill regime boundary (NE3).
-- **Families:** F1 early states (bounded coherence); F3/F4 late or deep states (failure); F7b/c
-  (rookie-dependent obligations reshape need).
+- **Families (exposure contexts only — outcomes arise solely from stipulated observations and
+  transitions, never from family membership):** F1 (ordinary obligation structure); F3/F4
+  (compressed supply-demand contexts); F7b/c (partitioned-pool obligation structure).
 - **D2 dimensions:** E1, E2, E8, E10.
 - **D3:** R4 regime overlay is load-bearing; T4 roster-relativity.
 - **D4:** remaining-opportunity counts are cadence-dependent (consumer-owned numerics).
@@ -2488,11 +2507,13 @@ narrative never overrides it.
   need" claim ignores the regime switch and the binding case.
 - **Component table:**
 
-| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
-|---|---|---|---|---|---|---|---|
-| descriptive_observation (need bindingness at a state; consequence per stipulated transition) | applies | same_as_control | {current_observation}; transition claims additionally require T18 provenance | ⟨D5 path: per stipulated transition — defined / defined-empty / unresolved⟩ | not_a_policy | — | T4, T18, T34: armed_not_triggered |
-| policy_conclusion ("never draft for need") | applies | same_as_control | {ordering_evidence_contract} | — | prohibited_output (selection directive) | — | T31, T40: armed_not_triggered |
-| universal_form ("always avoid need") | applies | same_as_control | — | — | — | universal_form_rejected(T4; NE3 regime switch) | T4: armed_not_triggered |
+| Component | Context | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guard results |
+|---|---|---|---|---|---|---|---|---|
+| descriptive_observation (need bindingness at an observed state) | stipulated state observation; witnesses resolved for stated patterns | applies | same_as_control | {current_observation} | d5_path | defined | descriptive_only | T4: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation (need-binding closure across a transition) | stipulated T18 transition; resolved post-state witness set empty for a stated pattern | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined-empty | descriptive_only | T18: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation (either of the above) | no stipulated observation or transition | applies | same_as_control | {current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T34: armed_not_triggered |
+| policy_conclusion ("never draft for need") | any | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T40: rejects_attempted_read |
+| universal_form ("always avoid need") | any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T4: rejects_attempted_read |
 
 #### H4 — "Ignore roster construction until later rounds"
 
@@ -2507,8 +2528,11 @@ narrative never overrides it.
 - **Failure context:** F4-class depth can bind constraints early (with `O-Path(F4)` evidence);
   F2 changes capacity structure; F7b/c change obligation structure; F6 makes the binding moment
   mutable via trades; "later rounds" has no referent under F8/M4.
-- **Families:** F1 (bounded observations); F2/F4/F6/F7b/F7c (failure or restructure); F8
-  (`does_not_apply` — no rounds).
+- **Families (exposure contexts only — outcomes arise solely from stipulated observations and
+  transitions, never from family membership):** F1 (ordinary structure); F2 (altered eligibility
+  capacity); F4 (compressed supply-demand); F6 (mutable opportunity structure); F7b/c
+  (partitioned-pool obligations); F8 (auction opportunity structure — bindingness applies with
+  redeclared inputs; only the round-timing predicate has no referent).
 - **D2 dimensions:** E8, E10, E5.
 - **D3:** R4 regime overlay; composed baselines as evidence only.
 - **D4:** round structure exists only under M1–M3; trade events move the binding moment (T21).
@@ -2525,11 +2549,18 @@ narrative never overrides it.
   property of a specific format and board state, not of round labels.
 - **Component table:**
 
-| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
-|---|---|---|---|---|---|---|---|
-| descriptive_observation (constraint bindingness at a state; consequence per stipulated transition) | applies (M1–M3); does_not_apply (M4: "rounds" have no referent) | same_as_control | {current_observation}; transition claims additionally require T18 provenance | ⟨D5 path: per stipulated transition — defined / defined-empty / unresolved⟩ | not_a_policy | — | T21, T25, T34: armed_not_triggered |
-| policy_conclusion ("ignore construction until later rounds") | applies (M1–M3); does_not_apply (M4) | same_as_control | {ordering_evidence_contract}; "later" boundary undeclared | — | prohibited_output (selection-priority directive) | — | T35, T40: armed_not_triggered |
-| universal_form ("always ignorable early") | applies | same_as_control | — | — | — | universal_form_rejected(T35 undeclared boundary; T23/T25-style slack import) | T23, T25, T35: armed_not_triggered |
+| Component | Context | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guard results |
+|---|---|---|---|---|---|---|---|---|
+| descriptive_observation (constraint/path bindingness at a state) | M1–M3; stipulated state observation, witnesses resolved | applies | same_as_control | {current_observation} | d5_path | defined | descriptive_only | T34: armed_not_triggered |
+| descriptive_observation (bindingness closure across a transition) | M1–M3; stipulated T18 transition, post-state witness set empty for a stated pattern | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined-empty | descriptive_only | T18: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation (either of the above) | M1–M3; no stipulated observation or transition | applies | same_as_control | {current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T34: armed_not_triggered |
+| descriptive_observation (constraint/path bindingness) | M4; `O-Path(F8)`-complete stipulated inputs, witnesses resolved | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | defined | descriptive_only | T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation (constraint/path bindingness) | M4; incomplete auction inputs | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | unresolved | descriptive_only | T29: armed_not_triggered |
+| descriptive_observation ("early/later rounds" timing predicate) | M1–M3; boundary undeclared | applies | same_as_control | none | no_runtime_read | not_applicable | descriptive_only | T35: armed_not_triggered |
+| descriptive_observation (timing predicate) | M4 — round cadence has no referent | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | descriptive_only | T35: armed_not_triggered |
+| policy_conclusion ("ignore construction until later rounds") | M1–M3 | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T40: rejects_attempted_read |
+| policy_conclusion (same) | M4 — timing component has no referent | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | prohibited_output | T35: rejects_attempted_read |
+| universal_form ("always ignorable early") | any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T35: rejects_attempted_read; T25: rejects_attempted_read |
 
 #### H5 — "Depth can always be found on waivers"
 
@@ -2554,7 +2585,8 @@ narrative never overrides it.
   component (T19).
 - **D6 relationships:** R1 tuple carries `{current_observation}` in deep formats; statuses
   resolve only per O-F1r/O-F3r/O-F4r-class observations; T25 armed.
-- **Missing evidence/contract:** the current pool observation (runtime producer unassigned).
+- **Missing evidence/contract:** the current pool observation (runtime producer unassigned);
+  the depth/adequacy evidence contract; the ordering/evidence contract for any comparative use.
 - **Misuse risk:** importing pool status across formats or moments (T25); reading
   `pool_resolved_empty` as permanent (NE7).
 - **Structural consequence (descriptive):** R1 pool status is a time-indexed, format-relative
@@ -2563,11 +2595,15 @@ narrative never overrides it.
   usable depth** — the two directions are asymmetric (T36).
 - **Component table:**
 
-| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
-|---|---|---|---|---|---|---|---|
-| descriptive_observation (eligible acquisition membership at t) | applies | same_as_control (F1); redeclared (F7b/c, F8 pool boundaries) | {current_observation} | ⟨D3 pool: per observation — pool_resolved_nonempty / pool_resolved_empty / pool_unresolved⟩ | not_a_policy | — | T25, T36: armed_not_triggered |
-| descriptive_observation ("usable depth" — adequacy claim) | applies | same_as_control | {current_observation, depth_adequacy_contract; ordering_evidence_contract where comparative} | ⟨D3 pool + adequacy: unresolved⟩ (no depth/adequacy contract exists) | not_a_policy | — | T36: armed_not_triggered |
-| universal_form ("always") | applies | same_as_control | — | — | — | universal_form_rejected(T36 — refutable by one pool_resolved_empty observation; never validated by nonemptiness) | T25, T36: armed_not_triggered |
+| Component | Context | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guard results |
+|---|---|---|---|---|---|---|---|---|
+| descriptive_observation (eligible acquisition membership at t) | F1-class combined pool; fresh observation, ≥1 eligible member | applies | same_as_control | {current_observation} | d3_pool | pool_resolved_nonempty | descriptive_only | T25: armed_not_triggered; T36: armed_not_triggered |
+| descriptive_observation (same) | F4-class; fresh observation, zero eligible members | applies | same_as_control | {current_observation} | d3_pool | pool_resolved_empty | descriptive_only | T25: armed_not_triggered; T36: armed_not_triggered |
+| descriptive_observation (same) | F7b/F7c/F8 partitioned pool boundary; fresh observation, ≥1 eligible member | applies | redeclared | {current_observation} | d3_pool | pool_resolved_nonempty | descriptive_only | T25: armed_not_triggered; T36: armed_not_triggered |
+| descriptive_observation (same) | any format; no fresh observation | applies | same_as_control | {current_observation} | d3_pool | pool_unresolved | descriptive_only | T36: armed_not_triggered |
+| descriptive_observation ("usable depth" — adequacy claim, non-comparative) | any; may depend on a d3_pool result but never reuses that namespace | applies | same_as_control | {current_observation, depth_adequacy_contract} | d7_consumer_evidence | unresolved | descriptive_only | T36: armed_not_triggered |
+| descriptive_observation ("usable depth" — comparative case) | any comparison or ranking use | applies | same_as_control | {current_observation, depth_adequacy_contract, ordering_evidence_contract} | d7_consumer_evidence | unresolved | descriptive_only | T36: armed_not_triggered |
+| universal_form ("always") | any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | descriptive_only | T36: rejects_attempted_read |
 
 #### H6 — "Positional runs should always be faded"
 
@@ -2607,12 +2643,15 @@ narrative never overrides it.
   structure alone.
 - **Component table:**
 
-| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
-|---|---|---|---|---|---|---|---|
-| premise (clustered same-position selection pattern, M1–M3 predicate) | applies (M1–M3); does_not_apply (M4: predicate declared for selection sequences only) | same_as_control | {current_observation, trade_event_provenance where trading} | ⟨board/E7 observation under D4 staleness: per read; stale → unresolved⟩ | not_a_policy | — | T13, T21, T37: armed_not_triggered |
-| descriptive_observation (auction acquisition-clustering analogue) | applies (M4) | redeclared | {acquisition_event_observation_contract} | ⟨board/E7 observation: unresolved⟩ (contract undeclared) | not_a_policy | — | T37: armed_not_triggered |
-| policy_conclusion (follow or fade) | applies | same_as_control | none | — | prohibited_output (behavioral response modeling; symmetric in both directions) | — | T37, T40: armed_not_triggered |
-| universal_form ("always fade") | applies | same_as_control | — | — | — | universal_form_rejected(T37) | T37: armed_not_triggered |
+| Component | Context | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guard results |
+|---|---|---|---|---|---|---|---|---|
+| premise (clustered same-position selection pattern, M1–M3 predicate) | M1–M3 without in-draft trading; fresh board observation | applies | same_as_control | {current_observation} | d7_consumer_evidence | resolved | descriptive_only | T13: armed_not_triggered; T37: armed_not_triggered |
+| premise (same) | M1–M3 with in-draft trading; current trade-event stamp | applies | same_as_control | {current_observation, trade_event_provenance} | d7_consumer_evidence | resolved | descriptive_only | T13: armed_not_triggered; T21: armed_not_triggered; T37: armed_not_triggered |
+| premise (same) | M1–M3 with trading; stale or absent stamp | applies | same_as_control | {current_observation, trade_event_provenance} | d7_consumer_evidence | unresolved | descriptive_only | T21: armed_not_triggered; T37: armed_not_triggered |
+| premise (same) | M4 — predicate declared for selection sequences only | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | descriptive_only | T37: armed_not_triggered |
+| descriptive_observation (auction acquisition-clustering analogue) | M4; observation contract undeclared | applies | redeclared | {acquisition_event_observation_contract} | d7_consumer_evidence | unresolved | descriptive_only | T37: armed_not_triggered |
+| policy_conclusion (follow or fade — symmetric) | any | applies | same_as_control | none | no_runtime_read | not_applicable | prohibited_output | T37: rejects_attempted_read; T40: rejects_attempted_read |
+| universal_form ("always fade") | any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T37: rejects_attempted_read |
 
 #### H7 — "Age and insulation always dominate current production"
 
@@ -2646,11 +2685,11 @@ narrative never overrides it.
   production-dominance rule** — the rejection is of the universal form only.
 - **Component table:**
 
-| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
-|---|---|---|---|---|---|---|---|
-| premise (timeline and production are distinct evidence axes with V1-defined concepts) | applies | same_as_control | none | — (definitional; cites accepted V1) | not_a_policy | — | T38: armed_not_triggered |
-| descriptive_observation (bounded weighting of the axes in a declared context) | applies | redeclared | {consumer_weighting_contract; age_band/experience_band/role_security_signal future contracts} | ⟨consumer evidence: unresolved⟩ (no producer for any required input) | unresolved_pending_contract | — | T38: armed_not_triggered |
-| universal_form ("always dominate") | applies | same_as_control | — | — | — | universal_form_rejected(T38 — conflicts with `cannot_override_forge_evidence`; endorses no inverse rule) | T38: armed_not_triggered |
+| Component | Context | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guard results |
+|---|---|---|---|---|---|---|---|---|
+| premise (timeline and production are distinct evidence axes with V1-defined concepts) | any; definitional, cites accepted V1 | applies | same_as_control | none | no_runtime_read | not_applicable | descriptive_only | T38: armed_not_triggered |
+| descriptive_observation (bounded weighting of the axes in a declared context) | any; no producer exists for any required input | applies | redeclared | {consumer_weighting_contract, age_experience_role_security_contracts} | d7_consumer_evidence | unresolved | descriptive_only | T38: armed_not_triggered |
+| universal_form ("always dominate") | any — conflicts with `cannot_override_forge_evidence`; endorses no inverse rule | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | descriptive_only | T38: rejects_attempted_read |
 
 #### H8 — "Balanced rosters are always safer than concentrated builds"
 
@@ -2666,7 +2705,9 @@ narrative never overrides it.
   exists in the chain; and the accepted negative cases explicitly reject balance-superiority
   and concentration-recklessness as defaults (issue v0.2 §9; D5 mandatory negative boundary;
   V1 `tr_concentration_share_is_not_quality`).
-- **Families:** all; shape description available everywhere, risk ordering nowhere.
+- **Families:** shape *semantics* apply across all families; current shape instances remain
+  `unresolved` without the required resolved inputs, and risk ordering is `unresolved`
+  everywhere absent a risk contract.
 - **D2 dimensions:** E10 (shape relates to path structure descriptively).
 - **D3:** `alpha_concentration` boundary applies (distribution ≠ quality).
 - **D4:** none directly.
@@ -2682,53 +2723,59 @@ narrative never overrides it.
   superiority directions.
 - **Component table:**
 
-| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
-|---|---|---|---|---|---|---|---|
-| premise (balance/concentration as shape semantics) | applies (all families) | same_as_control | none | — (definitional) | not_a_policy | — | T39: armed_not_triggered |
-| descriptive_observation (a current shape instance for an actual roster) | applies | same_as_control | {current_observation; resolved E10/roster/FORGE/consumer inputs} | ⟨consumer shape read: unresolved absent the resolved inputs⟩ | not_a_policy | — | T39: armed_not_triggered |
-| descriptive_observation (risk ordering over shapes) | applies | redeclared | {risk_evidence_contract} | ⟨consumer risk read: unresolved⟩ (no risk contract exists) | unresolved_pending_contract | — | T39: armed_not_triggered |
-| policy_conclusion (prefer balanced builds) | applies | same_as_control | none | — | prohibited_output (shape preference; symmetric — preferring concentration is equally prohibited) | — | T22, T40: armed_not_triggered |
-| universal_form ("always safer") | applies | same_as_control | — | — | — | universal_form_rejected(T22, T39; accepted negative cases; endorses neither shape) | T22, T39: armed_not_triggered |
+| Component | Context | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guard results |
+|---|---|---|---|---|---|---|---|---|
+| premise (balance/concentration as shape semantics) | all families; definitional | applies | same_as_control | none | no_runtime_read | not_applicable | descriptive_only | T39: armed_not_triggered |
+| descriptive_observation (a current shape instance for an actual roster) | any; required inputs not resolved | applies | same_as_control | {shape_instance_inputs} | d7_consumer_evidence | unresolved | descriptive_only | T39: armed_not_triggered |
+| descriptive_observation (risk ordering over shapes) | any; no risk contract exists | applies | redeclared | {risk_evidence_contract} | d7_consumer_evidence | unresolved | descriptive_only | T39: armed_not_triggered |
+| policy_conclusion (prefer a shape — symmetric in both directions) | any | applies | same_as_control | none | no_runtime_read | not_applicable | prohibited_output | T40: rejects_attempted_read; T22: armed_not_triggered |
+| universal_form ("always safer") | any — accepted negative cases; endorses neither shape | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | descriptive_only | T22: rejects_attempted_read; T39: rejects_attempted_read |
 
-### 27.3 Summary matrix (component-level; mechanically consistent with §27.2)
+### 27.3 Summary projection (partial; the §27.2 component tables are authoritative)
 
-Each row restates one component from the detailed records; every field is single-valued and
-drawn from the declared token sets. Rows with `—` in a field have no value of that kind.
+This summary **projects only four fields** per component group — component, runtime
+namespace:state, policy boundary, and any `rejects_attempted_read` guard results — and
+consistency is claimed **only for these projected fields**. Context keys, applicability,
+input-contract, evidence-conditions, and full guard maps live solely in the authoritative §27.2
+tables; where a component has multiple context-keyed rows, the projection shows the
+no-declared-contract / no-stipulated-observation row's runtime state.
 
-| H | Component | Runtime | Policy disposition | Universal-form guard |
+| H | Component | Runtime (namespace: state) | Policy boundary | Guards with rejects_attempted_read |
 |---|---|---|---|---|
-| H1 | descriptive_observation (ordering vs. successor paths) | ⟨D5 path: unresolved⟩ | not_a_policy | — |
-| H1 | policy_conclusion (select ordering-top) | — | prohibited_output | — |
-| H1 | universal_form | — | — | universal_form_rejected(T16) |
-| H2 | premise (eligibility/capacity expansion, F2) | — (format-static fact) | not_a_policy | — |
-| H2 | policy_conclusion (acquire QBs early) | — | prohibited_output | — |
-| H2 | universal_form | — | — | universal_form_rejected(T24, T35) |
-| H3 | descriptive_observation (need bindingness / transitions) | ⟨D5 path: per stipulated transition⟩ | not_a_policy | — |
-| H3 | policy_conclusion (never draft for need) | — | prohibited_output | — |
-| H3 | universal_form | — | — | universal_form_rejected(T4; NE3) |
-| H4 | descriptive_observation (bindingness / transitions) | ⟨D5 path: per stipulated transition⟩ | not_a_policy | — |
-| H4 | policy_conclusion (ignore construction early) | — | prohibited_output | — |
-| H4 | universal_form | — | — | universal_form_rejected(T35; T23/T25) |
-| H5 | descriptive_observation (eligible membership at t) | ⟨D3 pool: per observation⟩ | not_a_policy | — |
-| H5 | descriptive_observation (usable-depth adequacy) | ⟨D3 pool + adequacy: unresolved⟩ | not_a_policy | — |
-| H5 | universal_form | — | — | universal_form_rejected(T36) |
-| H6 | premise (M1–M3 selection-run pattern) | ⟨board/E7 under D4 staleness: per read⟩ | not_a_policy | — |
-| H6 | descriptive_observation (M4 acquisition-clustering analogue) | ⟨board/E7: unresolved⟩ (contract undeclared) | not_a_policy | — |
-| H6 | policy_conclusion (follow or fade) | — | prohibited_output | — |
-| H6 | universal_form | — | — | universal_form_rejected(T37) |
-| H7 | premise (distinct evidence axes per V1) | — (definitional) | not_a_policy | — |
-| H7 | descriptive_observation (bounded weighting) | ⟨consumer evidence: unresolved⟩ | unresolved_pending_contract | — |
-| H7 | universal_form | — | — | universal_form_rejected(T38) |
-| H8 | premise (shape semantics) | — (definitional) | not_a_policy | — |
-| H8 | descriptive_observation (current shape instance) | ⟨consumer shape read: unresolved absent resolved inputs⟩ | not_a_policy | — |
-| H8 | descriptive_observation (risk ordering) | ⟨consumer risk read: unresolved⟩ | unresolved_pending_contract | — |
-| H8 | policy_conclusion (prefer a shape) | — | prohibited_output | — |
-| H8 | universal_form | — | — | universal_form_rejected(T22, T39) |
+| H1 | descriptive_observation (ordering vs. successor paths) | d5_path: unresolved | descriptive_only | none |
+| H1 | policy_conclusion (select ordering-top) | no_runtime_read: not_applicable | prohibited_output | T40 |
+| H1 | universal_form | no_runtime_read: not_applicable | prohibited_output | T16 |
+| H2 | premise (eligibility/capacity expansion; F2 row) | no_runtime_read: not_applicable | descriptive_only | none |
+| H2 | policy_conclusion (acquire QBs early; M1–M3 row) | no_runtime_read: not_applicable | prohibited_output | T40 |
+| H2 | universal_form | no_runtime_read: not_applicable | prohibited_output | T24, T35 |
+| H3 | descriptive_observation (need bindingness; unstipulated row) | d5_path: unresolved | descriptive_only | none |
+| H3 | policy_conclusion (never draft for need) | no_runtime_read: not_applicable | prohibited_output | T40 |
+| H3 | universal_form | no_runtime_read: not_applicable | prohibited_output | T4 |
+| H4 | descriptive_observation (bindingness; unstipulated M1–M3 row) | d5_path: unresolved | descriptive_only | none |
+| H4 | descriptive_observation (bindingness; M4 incomplete-inputs row) | d5_path: unresolved | descriptive_only | none |
+| H4 | policy_conclusion (ignore construction early; M1–M3 row) | no_runtime_read: not_applicable | prohibited_output | T40 |
+| H4 | universal_form | no_runtime_read: not_applicable | prohibited_output | T35, T25 |
+| H5 | descriptive_observation (eligible membership; no-observation row) | d3_pool: pool_unresolved | descriptive_only | none |
+| H5 | descriptive_observation (usable-depth adequacy; non-comparative row) | d7_consumer_evidence: unresolved | descriptive_only | none |
+| H5 | universal_form | no_runtime_read: not_applicable | descriptive_only | T36 |
+| H6 | premise (selection-run pattern; stale-stamp row) | d7_consumer_evidence: unresolved | descriptive_only | none |
+| H6 | descriptive_observation (M4 acquisition-clustering analogue) | d7_consumer_evidence: unresolved | descriptive_only | none |
+| H6 | policy_conclusion (follow or fade) | no_runtime_read: not_applicable | prohibited_output | T37, T40 |
+| H6 | universal_form | no_runtime_read: not_applicable | prohibited_output | T37 |
+| H7 | premise (distinct evidence axes per V1) | no_runtime_read: not_applicable | descriptive_only | none |
+| H7 | descriptive_observation (bounded weighting) | d7_consumer_evidence: unresolved | descriptive_only | none |
+| H7 | universal_form | no_runtime_read: not_applicable | descriptive_only | T38 |
+| H8 | premise (shape semantics) | no_runtime_read: not_applicable | descriptive_only | none |
+| H8 | descriptive_observation (current shape instance) | d7_consumer_evidence: unresolved | descriptive_only | none |
+| H8 | descriptive_observation (risk ordering) | d7_consumer_evidence: unresolved | descriptive_only | none |
+| H8 | policy_conclusion (prefer a shape) | no_runtime_read: not_applicable | prohibited_output | T40 |
+| H8 | universal_form | no_runtime_read: not_applicable | descriptive_only | T22, T39 |
 
-Reading discipline: `universal_form_rejected` is a form/guard result that competes with no
-runtime state or disposition and endorses nothing; `prohibited_output` is a permanent policy
-boundary, never a missing input; every missing-evidence outcome is preserved as `unresolved` in
-its correct namespace; and no cell is advice (T40).
+Reading discipline: a `rejects_attempted_read` result marks an explicitly supplied
+malformed/prohibited read, competes with no runtime state, and endorses nothing;
+`prohibited_output` is a permanent policy boundary, never a missing input; every
+missing-evidence outcome is preserved as the exact `unresolved`-class state of its declared
+namespace; and no cell is advice (T40).
 
 ---
 
@@ -2736,11 +2783,12 @@ its correct namespace; and no cell is advice (T40).
 
 ### 28.1 Mechanically encodable tests (extending T1–T31)
 
-- **T32 — Claim-component gate.** Every heuristic evaluation must name the claim component it
-  addresses (`premise` / `descriptive_observation` / `policy_conclusion` / `universal_form`);
-  results never transfer between components; `universal_form_rejected` is a form/guard result
-  that competes with no runtime state, evidence gap, or applicability value, and a rejected
-  universal neither rejects nor endorses any bounded component or its negation.
+- **T32 — Claim-component gate.** Every heuristic evaluation is a component instance keyed by
+  ⟨heuristic, component, context case⟩; rows must split whenever format, mechanism, or
+  observation changes any field value; results never transfer between components or contexts.
+  A universal-form rejection is recorded solely as a `rejects_attempted_read` guard result in
+  that row — it competes with no runtime state, evidence gap, or applicability value, and it
+  neither rejects nor endorses any bounded component or any negation.
 - **T33 — Ordering-contract gate.** Any component that presupposes an ordering over assets is
   `unresolved` in its runtime namespace absent a declared consumer ordering/evidence contract
   (none exists) — distinct from `prohibited_output`, which no contract can ever cure.
@@ -2785,22 +2833,28 @@ its correct namespace; and no cell is advice (T40).
   disposition, or rejection — may be rendered as an imperative, preference, recommendation, or
   claimed optimal strategy on any surface; and `prohibited_output` may never be downgraded to a
   pending-evidence status (caps the family; extends T14/T22/T31).
-- **T41 — Component-completeness gate.** Every heuristic claim component must carry explicit,
-  single-valued applicability, input-contract, evidence-conditions, runtime
-  (namespace + state), policy-disposition, and guard-registry fields; a component whose D6
-  relationships are implicit, bundled into prose, or compound-valued is rejected as
-  mechanically uninterpretable.
+- **T41 — Mechanical-contract gate.** Every component instance must satisfy all of: (a) atomic
+  context keying — one row per ⟨heuristic, component, context case⟩; (b) exactly one declared
+  token per scalar field; (c) declared null tokens only (`none` / `not_applicable` /
+  `no_runtime_read`) — an undeclared dash or blank is rejected; (d) separate policy and
+  evidence axes (`policy_boundary` never encodes evidence status, and runtime state never
+  encodes policy); (e) an exact declared runtime namespace with a state valid in that namespace
+  (accepted D6 namespaces, or the declared D7-only `d7_consumer_evidence`); (f)
+  evidence-condition cells containing registry tokens only — prose qualifiers are rejected;
+  and (g) exactly one D6 Axis-C result per guard ID per row. Any violation renders the
+  component mechanically uninterpretable and the row is rejected.
 
 ### 28.2 D7 boundary confirmation
 
-D7 answers Q7 only. All eight authorized heuristic families were decomposed into claim
-components, each carrying single-valued applicability, input-contract, evidence-condition,
-runtime, policy-disposition, and guard fields; every universal form was rejected as a form/guard
-result competing with nothing; every evidence gap was preserved as `unresolved` in its correct
-namespace rather than resolved by assumption; every prohibited policy direction (follow/fade,
-shape preference, timing directives, ordering-top selection) was marked `prohibited_output`
-symmetrically and kept out of the missing-contract registry — nothing here endorses any
-negation. **No player names or IDs, rankings,
+D7 answers Q7 only. All eight authorized heuristic families were decomposed into atomic
+context-keyed component instances, each carrying exactly one declared token per scalar field
+across applicability, input-contract, evidence-conditions, runtime namespace and state,
+policy-boundary, and per-guard-ID Axis-C results; every universal form was rejected as a
+`rejects_attempted_read` guard result competing with nothing; every evidence gap was preserved
+as the exact `unresolved`-class state of its declared namespace rather than resolved by
+assumption; every prohibited policy direction (follow/fade, shape preference, timing
+directives, ordering-top selection) was marked `prohibited_output` symmetrically and kept out
+of the missing-contract registry — nothing here endorses any negation. **No player names or IDs, rankings,
 tiers, projections, ADP, market data, live draft state, replacement values, VOR, scarcity
 premiums, optimal timing, slot values, preferred players/positions/paths/shapes/slots, or
 imperative language appear in §§27–28.** Accepted D1–D6 text and semantics are unchanged; the
