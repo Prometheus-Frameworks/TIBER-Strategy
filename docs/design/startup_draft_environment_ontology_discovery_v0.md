@@ -91,6 +91,17 @@
 >   `5018212640`; independent review verdict PASS at that head), and activates
 >   `D7 — heuristic failure matrix (issue #2, Q7 only)` as the sole active frontier. D7 may not
 >   resolve S1 or alter accepted D1–D6; Q8, later frontiers, and implementation remain inactive.
+> - **D7 semantic correction:** operator-directed correction within the active D7 frontier
+>   (2026-07-20; not D7 acceptance): the classification model was refactored into single-valued
+>   claim-component fields (with `prohibited_output` distinct from missing-evidence
+>   `unresolved`, and `universal_form_rejected` as a form/guard result that competes with
+>   nothing); H5/T36 narrowed to eligible-membership semantics; H6's run predicate limited to
+>   ordered-pick mechanisms with the auction acquisition-clustering analogue recorded
+>   undeclared/unresolved and follow/fade reclassified as prohibited output; H1/H3/H4
+>   transition claims bound to stipulated T16/T18 transitions; H7 narrowed to what V1 actually
+>   establishes; H8's semantic applicability separated from runtime instance resolution; all D6
+>   relationships made explicit per component; H2 wording aligned to the accepted D6 statement.
+>   Accepted D1–D6 semantics unchanged; S1 untouched.
 > - This document makes **no final startup-draft concept-inventory decisions, no schema changes,
 >   and no implementation**. D7 adds the Q7 heuristic failure matrix and guards only. Nothing
 >   here activates Q8, any later discovery frontier, or implementation.
@@ -2349,25 +2360,29 @@ frontier explicitly.
 > All accepted D1–D6 machinery is used as-is; S1 remains unresolved and untouched. Candidate
 > concept vocabulary remains unaccepted pointers.
 
-### 27.1 Evaluation vocabulary and record shape
+### 27.1 Claim-component model and record shape
 
-Each heuristic is evaluated in **two forms**, never conflated (T32): its **bounded form** (the
-claim restricted to an explicitly declared context) and its **universal form** (the "always"
-claim as stated). Each form receives exactly one classification:
+Each heuristic decomposes into **claim components**, and every component carries **exactly one
+value per field** — no compound results, and no field competes with a field of another kind
+(T32/T41). The component fields:
 
-| Classification | Meaning |
-|---|---|
-| `coherent_in_declared_context` | descriptively coherent within a stated format/evidence context, with the context named |
-| `conditional` | coherence depends on explicit format, regime, or evidence conditions that must be stated per use |
-| `unsupported` | cannot be evaluated because a required evidence source or contract is missing — preserved as `unresolved`, never resolved by assumption |
-| `inapplicable` | presupposes structure absent in the referenced format (resolves `undefined` there) |
-| `universal_form_rejected` | the "always" claim fails at least one declared family or guard; the malformed universal is rejected while bounded forms are assessed separately |
+| Field | Declared values | Notes |
+|---|---|---|
+| `component` | `premise` \| `descriptive_observation` \| `policy_conclusion` \| `universal_form` | what kind of claim the row evaluates |
+| `applicability` | `applies` \| `does_not_apply` | D6 axis-A semantic applicability, per format where format-relative |
+| `input_contract` | `same_as_control` \| `redeclared` \| `—` | D6 axis-A contract relationship (`—` only under `does_not_apply`) |
+| `evidence_conditions` | set from the registry (or `none`) | registry extends D6's with: `ordering_evidence_contract`, `depth_adequacy_contract`, `consumer_weighting_contract`, `risk_evidence_contract`, `acquisition_event_observation_contract` |
+| `runtime` | `⟨namespace: state⟩` or `—` | the correct D6 namespace (D5 path state / D3 pool status / D4 staleness) and its per-read state; `—` for purely definitional components with no runtime instance |
+| `policy_disposition` | `not_a_policy` \| `unresolved_pending_contract` \| `prohibited_output` | **`prohibited_output` is a permanent policy boundary and is never encoded as missing evidence**; `unresolved_pending_contract` marks claims that could resolve if a named contract existed |
+| `universal_form_guard` | `universal_form_rejected(T-ref)` \| `—` | a **form/guard result only** — it never competes with runtime states, evidence gaps, or applicability |
+| `guard_registry` | guard IDs with D6 registry results | `armed_not_triggered` throughout this well-formed record |
 
-Each record carries the twelve fields required by the activation comment: descriptive meaning;
-valid structural context; failure context; applicable families/subcases; D2 dimensions; D3
-baselines/overlays; D4 consequences; D5 path implications; D6 relationships (axis-A tuple
-fields, evidence conditions, runtime namespaces, guards); missing evidence/contract; misuse
-risk; and a descriptive structural consequence.
+A rejected universal form endorses nothing — not its negation, and not any bounded component.
+Missing-evidence outcomes are preserved as `unresolved` in the correct runtime namespace;
+prohibited outputs are marked `prohibited_output` and are **not** carried in any
+missing-contract registry. Each heuristic record also retains the twelve narrative fields
+required by the activation comment; the component table is the mechanical surface, and the
+narrative never overrides it.
 
 ### 27.2 Heuristic records (H1–H8)
 
@@ -2375,10 +2390,12 @@ risk; and a descriptive structural consequence.
 
 - **Descriptive meaning:** at every selection, take the top element of some ordering over
   currently eligible assets, independent of roster structure.
-- **Valid structural context:** where a consumer-declared ordering exists *and* resolved
-  successor-state path evidence shows constraint patterns retain admissible witnesses, the
-  bounded claim "local-ordering selection did not close the observed paths" can be coherent —
-  as a resolved observation, not a rule.
+- **Valid structural context:** where a consumer-declared ordering exists *and* a **stipulated
+  transition** is resolved — comparable pre/post `O-Path` states, the selection event, its
+  provenance, and the resolved witness result (T16/T18) — the bounded claim "this
+  local-ordering selection did not close the observed paths *across this resolved transition*"
+  can be coherent as a resolved observation, never as a rule. A current state with wide witness
+  sets establishes nothing about any selection's consequence by itself.
 - **Failure context:** wherever path constraints bind: a locally maximal selection can map to a
   successor state whose resolved witness set for a stated pattern is empty (F4-class states,
   cap-constrained R6 states, late-obligation states).
@@ -2400,8 +2417,13 @@ risk; and a descriptive structural consequence.
 - **Structural consequence (descriptive):** local-ordering maximality and path preservation are
   independent properties; each requires its own resolved evidence, and neither implies the
   other.
-- **Classification:** bounded form `conditional` (declared ordering + resolved path evidence);
-  universal form `universal_form_rejected` (T16) and `unsupported` absent the ordering contract.
+- **Component table:**
+
+| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
+|---|---|---|---|---|---|---|---|
+| descriptive_observation (local ordering vs. successor paths, per stipulated transition) | applies | same_as_control | {ordering_evidence_contract, current_observation} | ⟨D5 path: unresolved⟩ (no ordering contract exists; resolvable per T18 transition once declared) | not_a_policy | — | T16, T18, T34: armed_not_triggered |
+| policy_conclusion ("select the ordering-top") | applies | same_as_control | {ordering_evidence_contract} | — | prohibited_output (claimed optimal selection) | — | T22, T40: armed_not_triggered |
+| universal_form ("always") | applies | same_as_control | — | — | — | universal_form_rejected(T16) | T16: armed_not_triggered |
 
 #### H2 — "Always secure quarterbacks early in superflex"
 
@@ -2412,8 +2434,8 @@ risk; and a descriptive structural consequence.
 - **Failure context:** the *timing conclusion* is an optimal-timing claim. Optimal timing is
   prohibited output, and its evaluation would anyway require realized demand/supply/behavioral
   evidence (consumer-owned, absent) plus an ordering contract (absent).
-- **Families:** F2 (premise); F1 (premise absent — `inapplicable`); F8 (no rounds — "early" is
-  `inapplicable` under M4).
+- **Families:** F2 (premise applies); F1 (premise `does_not_apply` — no superflex slot); F8
+  ("early" `does_not_apply` under M4 — no rounds).
 - **D2 dimensions:** E3, E1.
 - **D3:** fixed-QB-slot positional reads and superflex union reads remain distinct (T5/T24).
 - **D4:** "early" presupposes an ordered round structure (M1–M3 only).
@@ -2425,19 +2447,28 @@ risk; and a descriptive structural consequence.
   contract (R3 instances `unresolved`).
 - **Misuse risk:** converting eligibility expansion into a numeric premium (NE5) or a timing
   command (T31); silently sharing demand structure across F1/F2 (T24).
-- **Structural consequence (descriptive):** in F2 the QB-inclusive union competes for more
-  lineup capacity than in F1; what follows for the timing of any particular selection is
-  unresolved without consumer-owned evidence.
-- **Classification:** premise `coherent_in_declared_context` (F2); timing claim `unsupported`;
-  universal form `universal_form_rejected` (also `inapplicable` in F1 and under F8/M4).
+- **Structural consequence (descriptive):** a superflex slot expands QB eligibility and raises
+  the maximum QB-eligible lineup capacity per franchise (the accepted D6 F2 statement, exactly);
+  nothing about realized demand, competition, narrowing, or selection timing follows from the
+  format declaration alone.
+- **Component table:**
+
+| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
+|---|---|---|---|---|---|---|---|
+| premise (superflex expands QB eligibility and maximum QB-eligible lineup capacity) | applies (F2); does_not_apply (F1: no superflex slot) | redeclared (union declaration) | none | — (format-static structural fact) | not_a_policy | — | T24: armed_not_triggered |
+| policy_conclusion ("acquire QBs early") | applies (M1–M3 only); does_not_apply (M4: no rounds) | same_as_control | {ordering_evidence_contract, survival_evidence_contract} | — | prohibited_output (explicit activation prohibition on early-QB claims; optimal timing prohibited) | — | T31, T35, T40: armed_not_triggered |
+| universal_form ("always") | applies | same_as_control | — | — | — | universal_form_rejected(T24, T35) | T24, T35: armed_not_triggered |
 
 #### H3 — "Avoid drafting for need"
 
 - **Descriptive meaning:** the negative form of H1: roster-obligation state ("need") ought not
   influence selection.
-- **Valid structural context:** in resolved early states where every stated constraint pattern
-  retains wide witness sets, need is non-binding and ignoring it has no observed path
-  consequence — coherent as a bounded, evidence-resolved observation.
+- **Valid structural context:** a state observation can show that need was non-binding *at that
+  observed state* (wide resolved witness sets). But "ignoring need had no consequence" is a
+  **transition claim**, valid only under a stipulated transition — comparable pre/post `O-Path`
+  states, the selection event, event provenance, and the resolved witness result (T16/T18/T34).
+  State observations and policy conclusions are distinct: the former never establishes the
+  latter.
 - **Failure context:** when unfilled obligations approach the count of remaining acquisition
   opportunities, need is a binding constraint: paths that ignore it resolve `defined-empty`
   under `O-Path(F)` observation. The R4 overlay switches what "need" denotes (starter demand
@@ -2455,8 +2486,13 @@ risk; and a descriptive structural consequence.
 - **Structural consequence (descriptive):** need is a roster-relative, regime-switched
   constraint whose bindingness is an observation, not a stance; a universal "never consider
   need" claim ignores the regime switch and the binding case.
-- **Classification:** bounded form `conditional` (regime- and evidence-dependent); universal
-  form `universal_form_rejected` (NE3/T4).
+- **Component table:**
+
+| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
+|---|---|---|---|---|---|---|---|
+| descriptive_observation (need bindingness at a state; consequence per stipulated transition) | applies | same_as_control | {current_observation}; transition claims additionally require T18 provenance | ⟨D5 path: per stipulated transition — defined / defined-empty / unresolved⟩ | not_a_policy | — | T4, T18, T34: armed_not_triggered |
+| policy_conclusion ("never draft for need") | applies | same_as_control | {ordering_evidence_contract} | — | prohibited_output (selection directive) | — | T31, T40: armed_not_triggered |
+| universal_form ("always avoid need") | applies | same_as_control | — | — | — | universal_form_rejected(T4; NE3 regime switch) | T4: armed_not_triggered |
 
 #### H4 — "Ignore roster construction until later rounds"
 
@@ -2464,11 +2500,15 @@ risk; and a descriptive structural consequence.
   rounds.
 - **Valid structural context:** in F1-class formats, resolved early-state observations can show
   wide witness sets — the bounded observation "constraints were non-binding at this observed
-  state" is coherent when resolved.
+  state" is coherent when resolved. Any claim that *ignoring construction* preserved or closed
+  paths is a transition claim requiring the stipulated T16/T18/T34 discipline (comparable
+  pre/post `O-Path` states, event, provenance, resolved witness result); format membership
+  alone establishes neither heuristic success nor failure.
 - **Failure context:** F4-class depth can bind constraints early (with `O-Path(F4)` evidence);
   F2 changes capacity structure; F7b/c change obligation structure; F6 makes the binding moment
   mutable via trades; "later rounds" has no referent under F8/M4.
-- **Families:** F1 (bounded); F2/F4/F6/F7b/F7c (failure or restructure); F8 (`inapplicable`).
+- **Families:** F1 (bounded observations); F2/F4/F6/F7b/F7c (failure or restructure); F8
+  (`does_not_apply` — no rounds).
 - **D2 dimensions:** E8, E10, E5.
 - **D3:** R4 regime overlay; composed baselines as evidence only.
 - **D4:** round structure exists only under M1–M3; trade events move the binding moment (T21).
@@ -2483,16 +2523,25 @@ risk; and a descriptive structural consequence.
   treating "later" as if it named a defined round.
 - **Structural consequence (descriptive):** when path constraints begin to bind is a resolved
   property of a specific format and board state, not of round labels.
-- **Classification:** bounded form `conditional`; universal form `universal_form_rejected`;
-  `inapplicable` under F8/M4.
+- **Component table:**
+
+| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
+|---|---|---|---|---|---|---|---|
+| descriptive_observation (constraint bindingness at a state; consequence per stipulated transition) | applies (M1–M3); does_not_apply (M4: "rounds" have no referent) | same_as_control | {current_observation}; transition claims additionally require T18 provenance | ⟨D5 path: per stipulated transition — defined / defined-empty / unresolved⟩ | not_a_policy | — | T21, T25, T34: armed_not_triggered |
+| policy_conclusion ("ignore construction until later rounds") | applies (M1–M3); does_not_apply (M4) | same_as_control | {ordering_evidence_contract}; "later" boundary undeclared | — | prohibited_output (selection-priority directive) | — | T35, T40: armed_not_triggered |
+| universal_form ("always ignorable early") | applies | same_as_control | — | — | — | universal_form_rejected(T35 undeclared boundary; T23/T25-style slack import) | T23, T25, T35: armed_not_triggered |
 
 #### H5 — "Depth can always be found on waivers"
 
 - **Descriptive meaning:** a standing R1 liquidity presumption: the post-startup unrostered
   pool reliably contains usable depth.
-- **Valid structural context:** F1-class formats where a fresh observation resolves
-  `pool_resolved_nonempty` across declared classes — coherent as a *resolved observation about
-  that moment*.
+- **Valid structural context:** a `pool_resolved_nonempty` observation establishes **only that
+  at least one eligible unrostered acquisition member exists** at that moment — per the
+  accepted D3 record, it establishes no adequacy, usefulness, value, or ordering. The
+  narrowed descriptive claim "eligible acquisition membership existed at t" is coherent per
+  observation; the heuristic's own phrase "usable depth" invokes an adequacy judgment that
+  remains `unresolved` pending a declared depth/adequacy evidence contract (plus an ordering
+  contract wherever comparison or ranking is involved).
 - **Failure context:** F3 (observation-dependent), F4 (a stipulated fresh observation can
   resolve `pool_resolved_empty`); the issue's own §9 negative case; NE7 cuts both directions
   (present dryness proves no permanent law; future liquidity may not be assumed either).
@@ -2509,10 +2558,16 @@ risk; and a descriptive structural consequence.
 - **Misuse risk:** importing pool status across formats or moments (T25); reading
   `pool_resolved_empty` as permanent (NE7).
 - **Structural consequence (descriptive):** R1 pool status is a time-indexed, format-relative
-  observation; "always" asserts an invariant that a single `pool_resolved_empty` observation
-  falsifies.
-- **Classification:** bounded form `conditional` (per-observation); universal form
-  `universal_form_rejected` (F4 counter-observation; T25).
+  observation of eligible membership. A `pool_resolved_empty` observation refutes the literal
+  universal availability claim; a `pool_resolved_nonempty` observation **does not validate
+  usable depth** — the two directions are asymmetric (T36).
+- **Component table:**
+
+| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
+|---|---|---|---|---|---|---|---|
+| descriptive_observation (eligible acquisition membership at t) | applies | same_as_control (F1); redeclared (F7b/c, F8 pool boundaries) | {current_observation} | ⟨D3 pool: per observation — pool_resolved_nonempty / pool_resolved_empty / pool_unresolved⟩ | not_a_policy | — | T25, T36: armed_not_triggered |
+| descriptive_observation ("usable depth" — adequacy claim) | applies | same_as_control | {current_observation, depth_adequacy_contract; ordering_evidence_contract where comparative} | ⟨D3 pool + adequacy: unresolved⟩ (no depth/adequacy contract exists) | not_a_policy | — | T36: armed_not_triggered |
+| universal_form ("always") | applies | same_as_control | — | — | — | universal_form_rejected(T36 — refutable by one pool_resolved_empty observation; never validated by nonemptiness) | T25, T36: armed_not_triggered |
 
 #### H6 — "Positional runs should always be faded"
 
@@ -2521,12 +2576,19 @@ risk; and a descriptive structural consequence.
   response is to select elsewhere.
 - **Valid structural context:** only the *premise* is structural: runs are observable board
   events (E7), and run exposure is real candidate vocabulary (pointer only).
-- **Failure context:** the *response* claim ("fade") is a behavioral-policy conclusion. Its
-  evaluation would require modeling other managers' behavior — **manager-tendency modeling is
-  prohibited** — plus an ordering contract. The response claim is therefore out of scope, not
-  merely unevidenced; and the mirror claim ("follow runs") is equally out of scope.
-- **Families:** any ordered-mechanism family (M1–M3) for run observation; `inapplicable` under
-  F8/M4 (no selection sequence to cluster).
+- **Failure context:** the *response* claim ("fade") is a behavioral-policy conclusion whose
+  production would require modeling other managers' behavior — **a prohibited output, not a
+  missing input**: it is never registered as a future evidence dependency, and the mirror claim
+  ("follow runs") is prohibited symmetrically.
+- **Families and mechanism scoping:** the current "positional run" predicate is **declared for
+  ordered-pick mechanisms M1–M3 only** (clustered same-position *selections* in a selection
+  sequence). M4 removes selection cadence and R3 but **preserves nomination/acquisition events,
+  R2, and E7 board depletion** — so clustered same-position *acquisition* patterns are
+  observable under auctions; that auction analogue is a distinct predicate that is currently
+  **undeclared**: any read of it is `unresolved` pending a redeclared
+  acquisition-event observation contract (explicitly *not* the deferred budget-pressure
+  structure, which this record does not introduce). Cadence-specific framing and auction
+  acquisition clustering are never merged.
 - **D2 dimensions:** E7, E8; R5 union coupling is board-evidence-dependent (accepted D6 F5a
   correction).
 - **D3:** run effects on pools are R2-composed evidence reads (with applicable overlays).
@@ -2534,16 +2596,23 @@ risk; and a descriptive structural consequence.
   (T13/T21).
 - **D5:** whether a run closes paths is an `O-Path` question, not a presumption.
 - **D6 relationships:** guards T14/T22/T31 cap any response conversion.
-- **Missing evidence/contract:** board observations; behavioral evidence (whose modeling is
-  prohibited); ordering contract.
+- **Missing evidence/contract:** current board observations (with cadence provenance under
+  M1–M3); the undeclared M4 acquisition-event observation contract. (Behavioral response
+  modeling is a **prohibited output** and deliberately absent from this registry.)
 - **Misuse risk:** converting run detection into follow/fade directives in either direction;
-  asserting cross-union coupling without board evidence.
+  asserting cross-union coupling without board evidence; treating the M4 acquisition analogue
+  as if the M1–M3 predicate covered it.
 - **Structural consequence (descriptive):** a run is an observable depletion pattern whose
   path and pool consequences are resolvable per read; no response policy follows from the
   structure alone.
-- **Classification:** premise `coherent_in_declared_context` (observed events); response claim
-  **rejected as out of scope** (prohibited modeling) — recorded as `unsupported` with a
-  prohibition, never resolvable inside Strategy; universal form `universal_form_rejected`.
+- **Component table:**
+
+| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
+|---|---|---|---|---|---|---|---|
+| premise (clustered same-position selection pattern, M1–M3 predicate) | applies (M1–M3); does_not_apply (M4: predicate declared for selection sequences only) | same_as_control | {current_observation, trade_event_provenance where trading} | ⟨board/E7 observation under D4 staleness: per read; stale → unresolved⟩ | not_a_policy | — | T13, T21, T37: armed_not_triggered |
+| descriptive_observation (auction acquisition-clustering analogue) | applies (M4) | redeclared | {acquisition_event_observation_contract} | ⟨board/E7 observation: unresolved⟩ (contract undeclared) | not_a_policy | — | T37: armed_not_triggered |
+| policy_conclusion (follow or fade) | applies | same_as_control | none | — | prohibited_output (behavioral response modeling; symmetric in both directions) | — | T37, T40: armed_not_triggered |
+| universal_form ("always fade") | applies | same_as_control | — | — | — | universal_form_rejected(T37) | T37: armed_not_triggered |
 
 #### H7 — "Age and insulation always dominate current production"
 
@@ -2552,11 +2621,13 @@ risk; and a descriptive structural consequence.
 - **Valid structural context:** the underlying *axis distinction* is real and already owned by
   the accepted V1 ontology: timeline value and production evidence are distinct axes
   (`production_window`, `role_security`, `age_curve_risk` versus FORGE production evidence).
-- **Failure context:** the accepted V1 guard structure treats the axes as jointly required and
-  mutually non-overriding — `durable_anchor` requires **both** production evidence and timeline
-  durability, and consumer safety rule `cannot_override_forge_evidence` forbids timeline
-  concepts outranking production evidence. A universal dominance claim inverts that accepted
-  structure.
+- **Failure context:** what V1 actually establishes is narrower than a global theorem: (a) the
+  consumer safety rule `cannot_override_forge_evidence` — Strategy/timeline concepts cannot
+  replace, change, or outrank FORGE production evidence; and (b) a **both-input requirement for
+  specific concepts** (e.g. `durable_anchor` requires both production evidence and timeline
+  durability). V1 does *not* establish that the axes are always jointly required or universally
+  "mutually non-overriding." The universal timeline-dominance claim conflicts with (a); bounded
+  weighting claims are simply unresolvable today.
 - **Families:** all — but nowhere resolvable today.
 - **D2 dimensions:** none directly (asset-level, not environment-level).
 - **D3:** interacts with baselines only through consumer evidence components.
@@ -2568,21 +2639,29 @@ risk; and a descriptive structural consequence.
   `future_contract_decisions` in the promoted artifact).
 - **Misuse risk:** using the heuristic to discount observed production without any resolvable
   timeline input; presenting either axis as dominant.
-- **Structural consequence (descriptive):** under the accepted ontology the two axes are
-  jointly required and neither overrides the other; a dominance claim is structurally contrary
-  to the accepted guard rules, and no instance is resolvable while the timeline inputs lack
-  producers.
-- **Classification:** `unsupported` (missing contracts) **and** universal form
-  `universal_form_rejected` (contradicts the accepted V1 guard structure — cited, not
-  modified).
+- **Structural consequence (descriptive):** the universal timeline-dominance claim conflicts
+  with the V1 safety rule (`cannot_override_forge_evidence`); bounded weighting between the
+  axes remains `unresolved` without the `future_contract` timeline inputs **and** a declared
+  consumer weighting contract; and rejecting timeline dominance **endorses no inverse
+  production-dominance rule** — the rejection is of the universal form only.
+- **Component table:**
+
+| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
+|---|---|---|---|---|---|---|---|
+| premise (timeline and production are distinct evidence axes with V1-defined concepts) | applies | same_as_control | none | — (definitional; cites accepted V1) | not_a_policy | — | T38: armed_not_triggered |
+| descriptive_observation (bounded weighting of the axes in a declared context) | applies | redeclared | {consumer_weighting_contract; age_band/experience_band/role_security_signal future contracts} | ⟨consumer evidence: unresolved⟩ (no producer for any required input) | unresolved_pending_contract | — | T38: armed_not_triggered |
+| universal_form ("always dominate") | applies | same_as_control | — | — | — | universal_form_rejected(T38 — conflicts with `cannot_override_forge_evidence`; endorses no inverse rule) | T38: armed_not_triggered |
 
 #### H8 — "Balanced rosters are always safer than concentrated builds"
 
 - **Descriptive meaning:** a risk-ordering claim over roster shapes: distributed value
   configurations carry less risk than concentrated ones.
 - **Valid structural context:** balance and concentration are legitimate *shape descriptions*
-  (V1 `alpha_concentration` distribution signal; D5 path-width descriptions) — describing a
-  shape is coherent.
+  (V1 `alpha_concentration` distribution signal; D5 path-width descriptions) — the semantics
+  are applicable across format families. **Semantic applicability is not runtime
+  availability:** a *current* shape instance (an `alpha_concentration` band or path-shape read
+  for an actual roster) still requires the appropriate resolved E10, roster, FORGE, or
+  consumer-owned inputs, and is `unresolved` without them.
 - **Failure context:** "safer" presupposes a declared risk measure. No risk/evidence contract
   exists in the chain; and the accepted negative cases explicitly reject balance-superiority
   and concentration-recklessness as defaults (issue v0.2 §9; D5 mandatory negative boundary;
@@ -2592,7 +2671,7 @@ risk; and a descriptive structural consequence.
 - **D3:** `alpha_concentration` boundary applies (distribution ≠ quality).
 - **D4:** none directly.
 - **D5:** T22 — path width, balance, or concentration never becomes a superiority claim.
-- **D6 relationships:** any risk claim is `unsupported` absent a declared risk contract; T22/T31
+- **D6 relationships:** any risk claim is `unresolved` absent a declared risk contract; T22/T31
   armed.
 - **Missing evidence/contract:** a declared risk/evidence contract (none exists; none is
   proposed here).
@@ -2601,25 +2680,55 @@ risk; and a descriptive structural consequence.
 - **Structural consequence (descriptive):** shape is describable; risk ordering over shapes is
   not resolvable without a risk contract, and the accepted records reject both default
   superiority directions.
-- **Classification:** shape description `coherent_in_declared_context`; risk claim
-  `unsupported`; universal form `universal_form_rejected` (T22; accepted negative cases).
+- **Component table:**
 
-### 27.3 Summary matrix (mechanical)
+| Component | Applicability | Input contract | Evidence conditions | Runtime | Policy disposition | Universal-form guard | Guard registry |
+|---|---|---|---|---|---|---|---|
+| premise (balance/concentration as shape semantics) | applies (all families) | same_as_control | none | — (definitional) | not_a_policy | — | T39: armed_not_triggered |
+| descriptive_observation (a current shape instance for an actual roster) | applies | same_as_control | {current_observation; resolved E10/roster/FORGE/consumer inputs} | ⟨consumer shape read: unresolved absent the resolved inputs⟩ | not_a_policy | — | T39: armed_not_triggered |
+| descriptive_observation (risk ordering over shapes) | applies | redeclared | {risk_evidence_contract} | ⟨consumer risk read: unresolved⟩ (no risk contract exists) | unresolved_pending_contract | — | T39: armed_not_triggered |
+| policy_conclusion (prefer balanced builds) | applies | same_as_control | none | — | prohibited_output (shape preference; symmetric — preferring concentration is equally prohibited) | — | T22, T40: armed_not_triggered |
+| universal_form ("always safer") | applies | same_as_control | — | — | — | universal_form_rejected(T22, T39; accepted negative cases; endorses neither shape) | T22, T39: armed_not_triggered |
 
-| Heuristic | Bounded form | Universal ("always") form | Governing guards | Load-bearing missing evidence/contract |
+### 27.3 Summary matrix (component-level; mechanically consistent with §27.2)
+
+Each row restates one component from the detailed records; every field is single-valued and
+drawn from the declared token sets. Rows with `—` in a field have no value of that kind.
+
+| H | Component | Runtime | Policy disposition | Universal-form guard |
 |---|---|---|---|---|
-| H1 best-player-available | conditional | universal_form_rejected | T16, T18, T22, T33, T34 | ordering/evidence contract; successor-state path resolution |
-| H2 QBs early in superflex | premise coherent_in_declared_context; timing claim unsupported | universal_form_rejected | T5, T24, T31, T33, T35 | realized-demand evidence; ordering contract; survival/evidence contract |
-| H3 avoid drafting for need | conditional | universal_form_rejected | T4, NE3, T31, T34 | ordering contract; per-state path resolution |
-| H4 ignore construction early | conditional | universal_form_rejected | T21, T23, T25, T35 | per-state path resolution; declared "early/later" boundary |
-| H5 depth from waivers | conditional | universal_form_rejected | T25, NE7, T36 | current R1 pool observation |
-| H6 always fade runs | premise coherent_in_declared_context; response unsupported (prohibited modeling) | universal_form_rejected | T13, T21, T31, T37 | board observations; behavioral evidence (modeling prohibited); ordering contract |
-| H7 age/insulation dominate | unsupported | universal_form_rejected | T38; V1 `cannot_override_forge_evidence` | age/experience/role-security `future_contract` inputs |
-| H8 balance always safer | shape coherent_in_declared_context; risk claim unsupported | universal_form_rejected | T22, T31, T39 | declared risk/evidence contract |
+| H1 | descriptive_observation (ordering vs. successor paths) | ⟨D5 path: unresolved⟩ | not_a_policy | — |
+| H1 | policy_conclusion (select ordering-top) | — | prohibited_output | — |
+| H1 | universal_form | — | — | universal_form_rejected(T16) |
+| H2 | premise (eligibility/capacity expansion, F2) | — (format-static fact) | not_a_policy | — |
+| H2 | policy_conclusion (acquire QBs early) | — | prohibited_output | — |
+| H2 | universal_form | — | — | universal_form_rejected(T24, T35) |
+| H3 | descriptive_observation (need bindingness / transitions) | ⟨D5 path: per stipulated transition⟩ | not_a_policy | — |
+| H3 | policy_conclusion (never draft for need) | — | prohibited_output | — |
+| H3 | universal_form | — | — | universal_form_rejected(T4; NE3) |
+| H4 | descriptive_observation (bindingness / transitions) | ⟨D5 path: per stipulated transition⟩ | not_a_policy | — |
+| H4 | policy_conclusion (ignore construction early) | — | prohibited_output | — |
+| H4 | universal_form | — | — | universal_form_rejected(T35; T23/T25) |
+| H5 | descriptive_observation (eligible membership at t) | ⟨D3 pool: per observation⟩ | not_a_policy | — |
+| H5 | descriptive_observation (usable-depth adequacy) | ⟨D3 pool + adequacy: unresolved⟩ | not_a_policy | — |
+| H5 | universal_form | — | — | universal_form_rejected(T36) |
+| H6 | premise (M1–M3 selection-run pattern) | ⟨board/E7 under D4 staleness: per read⟩ | not_a_policy | — |
+| H6 | descriptive_observation (M4 acquisition-clustering analogue) | ⟨board/E7: unresolved⟩ (contract undeclared) | not_a_policy | — |
+| H6 | policy_conclusion (follow or fade) | — | prohibited_output | — |
+| H6 | universal_form | — | — | universal_form_rejected(T37) |
+| H7 | premise (distinct evidence axes per V1) | — (definitional) | not_a_policy | — |
+| H7 | descriptive_observation (bounded weighting) | ⟨consumer evidence: unresolved⟩ | unresolved_pending_contract | — |
+| H7 | universal_form | — | — | universal_form_rejected(T38) |
+| H8 | premise (shape semantics) | — (definitional) | not_a_policy | — |
+| H8 | descriptive_observation (current shape instance) | ⟨consumer shape read: unresolved absent resolved inputs⟩ | not_a_policy | — |
+| H8 | descriptive_observation (risk ordering) | ⟨consumer risk read: unresolved⟩ | unresolved_pending_contract | — |
+| H8 | policy_conclusion (prefer a shape) | — | prohibited_output | — |
+| H8 | universal_form | — | — | universal_form_rejected(T22, T39) |
 
-Reading discipline: every `universal_form_rejected` is a rejection of a malformed universal
-claim, not an endorsement of its negation; every `unsupported` is preserved as `unresolved`,
-never resolved by assumption; and no cell is advice (T40).
+Reading discipline: `universal_form_rejected` is a form/guard result that competes with no
+runtime state or disposition and endorses nothing; `prohibited_output` is a permanent policy
+boundary, never a missing input; every missing-evidence outcome is preserved as `unresolved` in
+its correct namespace; and no cell is advice (T40).
 
 ---
 
@@ -2627,46 +2736,71 @@ never resolved by assumption; and no cell is advice (T40).
 
 ### 28.1 Mechanically encodable tests (extending T1–T31)
 
-- **T32 — Heuristic form gate.** Every heuristic evaluation must state whether it addresses the
-  bounded declared-context form or the universal ("always") form; conclusions about one form
-  never transfer to the other, and a rejected universal never rejects (or endorses) a bounded
-  form.
-- **T33 — Ordering-contract gate.** Any heuristic application that presupposes an ordering over
-  assets (H1, H2's timing, H3, H6's response) is `unsupported`/`unresolved` absent a declared
-  consumer ordering/evidence contract; none exists in the chain.
-- **T34 — Local/path transfer gate.** A claim that a locally selected asset preserves or closes
-  roster paths requires successor-state `O-Path` resolution with comparable pre/post states and
-  event provenance (extends T16/T18); local eligibility alone is rejected as evidence.
-- **T35 — Timing-claim gate.** "Early/late" heuristic claims require a declared ordered round
-  structure (M1–M3) and a declared boundary; they are `undefined` under M4 and `unresolved`
-  under M5; optimal-timing claims are prohibited output in every mechanism.
-- **T36 — Liquidity-presumption gate.** Any depth-from-waivers claim must carry a current R1
-  observation resolving in the D3 pool-status namespace; imports across formats or moments are
-  rejected (extends T25); a single `pool_resolved_empty` observation falsifies the universal
-  form.
-- **T37 — Run-response gate.** Run detection requires current board observation under valid
-  cadence provenance; any follow-or-fade response claim requires behavioral evidence whose
-  modeling is prohibited — the response claim is rejected as out of scope, never resolved in
-  either direction.
-- **T38 — Future-contract heuristic gate.** A heuristic weighing `future_contract` inputs
-  (age/experience/role security) is `unresolved` while those inputs lack producers; and no
-  heuristic may invert the accepted evidence structure (`cannot_override_forge_evidence`; both
-  axes jointly required per the V1 guard rules).
-- **T39 — Shape-preference gate.** Balance and concentration are shape descriptions; a safety
-  or superiority ordering over shapes requires a declared risk/evidence contract and is
-  otherwise rejected (extends T22); the rejection endorses neither shape.
-- **T40 — No heuristic becomes advice.** No D7 classification — coherent, conditional,
-  unsupported, inapplicable, or rejected — may be rendered as an imperative, preference,
-  recommendation, or claimed optimal strategy on any surface (caps the family; extends
-  T14/T22/T31).
+- **T32 — Claim-component gate.** Every heuristic evaluation must name the claim component it
+  addresses (`premise` / `descriptive_observation` / `policy_conclusion` / `universal_form`);
+  results never transfer between components; `universal_form_rejected` is a form/guard result
+  that competes with no runtime state, evidence gap, or applicability value, and a rejected
+  universal neither rejects nor endorses any bounded component or its negation.
+- **T33 — Ordering-contract gate.** Any component that presupposes an ordering over assets is
+  `unresolved` in its runtime namespace absent a declared consumer ordering/evidence contract
+  (none exists) — distinct from `prohibited_output`, which no contract can ever cure.
+- **T34 — Transition-claim gate.** Any claim that a selection (or a policy of ignoring a
+  constraint) preserved, closed, or had no effect on roster paths requires a stipulated
+  transition: comparable pre/post `O-Path` states, the relevant event, event provenance, and
+  the resolved witness result (extends T16/T18). Current-state observations, wide witness sets,
+  local eligibility, and format membership are each individually rejected as evidence for a
+  transition claim — in the success and failure directions alike.
+- **T35 — Timing-claim gate.** Descriptive "early/late" structure requires a declared ordered
+  round structure (M1–M3) and a declared boundary; it is `undefined` under M4 and `unresolved`
+  under M5. Timing *directives* and optimal-timing claims are `prohibited_output` in every
+  mechanism — a permanent boundary, not an evidence gap.
+- **T36 — Membership/adequacy gate.** A `pool_resolved_nonempty` observation proves only that
+  at least one eligible unrostered acquisition member exists; it establishes no adequacy,
+  usefulness, value, or ordering (accepted D3). "Usable depth" claims are `unresolved` pending
+  a declared depth/adequacy evidence contract (plus an ordering contract where comparison is
+  used). A `pool_resolved_empty` observation may refute the literal universal-availability
+  claim; a `pool_resolved_nonempty` observation never validates usable depth — the directions
+  are asymmetric. Pool-status imports across formats or moments are rejected (extends T25).
+- **T37 — Run-scope and response gate.** The declared positional-run predicate covers ordered
+  selection sequences (M1–M3) only; under M4, clustered same-position *acquisition* patterns
+  remain observable (nomination/acquisition events, R2, E7 survive) but constitute a distinct,
+  currently undeclared predicate — `unresolved` pending a redeclared acquisition-event
+  observation contract, and never covered by cadence framing. Any follow-or-fade response
+  claim is `prohibited_output` (behavioral response modeling), symmetric in both directions,
+  and is never registered as a missing-evidence dependency.
+- **T38 — Weighting gate.** A component weighing `future_contract` inputs (age/experience/role
+  security) is `unresolved` while those inputs lack producers *and* absent a declared consumer
+  weighting contract. The universal timeline-dominance form conflicts with the V1 safety rule
+  `cannot_override_forge_evidence` (which forbids timeline concepts replacing, changing, or
+  outranking production evidence) and is rejected; the rejection endorses no inverse
+  production-dominance rule, and V1's both-input requirements are cited as concept-specific,
+  never as a global theorem.
+- **T39 — Shape gate.** Shape semantics (balance/concentration) may be applicable across
+  families, but a current shape instance requires resolved E10/roster/FORGE/consumer inputs and
+  is `unresolved` without them — semantic applicability never substitutes for runtime
+  resolution. A safety or superiority ordering over shapes requires a declared risk/evidence
+  contract and is otherwise `unresolved`; shape *preference* is `prohibited_output` in both
+  directions (extends T22).
+- **T40 — No heuristic becomes advice.** No D7 component result — premise, observation,
+  disposition, or rejection — may be rendered as an imperative, preference, recommendation, or
+  claimed optimal strategy on any surface; and `prohibited_output` may never be downgraded to a
+  pending-evidence status (caps the family; extends T14/T22/T31).
+- **T41 — Component-completeness gate.** Every heuristic claim component must carry explicit,
+  single-valued applicability, input-contract, evidence-conditions, runtime
+  (namespace + state), policy-disposition, and guard-registry fields; a component whose D6
+  relationships are implicit, bundled into prose, or compound-valued is rejected as
+  mechanically uninterpretable.
 
 ### 28.2 D7 boundary confirmation
 
-D7 answers Q7 only. All eight authorized heuristic families were evaluated in both forms; every
-universal form was rejected as malformed while bounded forms were classified descriptively;
-every evidence gap was preserved as `unresolved` rather than resolved by assumption; and the two
-prohibited response directions (follow/fade, balanced/concentrated, early/late QB timing) were
-rejected symmetrically — nothing here endorses any negation. **No player names or IDs, rankings,
+D7 answers Q7 only. All eight authorized heuristic families were decomposed into claim
+components, each carrying single-valued applicability, input-contract, evidence-condition,
+runtime, policy-disposition, and guard fields; every universal form was rejected as a form/guard
+result competing with nothing; every evidence gap was preserved as `unresolved` in its correct
+namespace rather than resolved by assumption; every prohibited policy direction (follow/fade,
+shape preference, timing directives, ordering-top selection) was marked `prohibited_output`
+symmetrically and kept out of the missing-contract registry — nothing here endorses any
+negation. **No player names or IDs, rankings,
 tiers, projections, ADP, market data, live draft state, replacement values, VOR, scarcity
 premiums, optimal timing, slot values, preferred players/positions/paths/shapes/slots, or
 imperative language appear in §§27–28.** Accepted D1–D6 text and semantics are unchanged; the
@@ -2674,8 +2808,11 @@ accepted V1 ontology is cited, not modified; S1 remains unresolved and untouched
 concept-inventory decision, artifact-shape selection, implementation proposal,
 runtime-producer assignment, or Q8 synthesis occurred. Unresolved items carried forward: the
 runtime decision-envelope producer (§13.2); the ordering/evidence, tier/survival,
-risk/evidence, and age/experience/role-security contracts; the deferred budget-pressure
-structure; synthesis item S1; D1 parked items P3/P4/P5/P7/P8. Only this canonical document
+risk/evidence, depth/adequacy, consumer-weighting, acquisition-event observation, and
+age/experience/role-security contracts; the deferred budget-pressure structure; synthesis item
+S1; D1 parked items P3/P4/P5/P7/P8. (Prohibited outputs — behavioral response modeling, timing
+directives, shape preferences, ordering-top selection — are permanent boundaries and are
+deliberately **not** in this registry.) Only this canonical document
 changed; no PR, no merge; D8 and all later frontiers remain inactive.
 
 ---
