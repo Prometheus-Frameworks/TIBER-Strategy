@@ -123,6 +123,16 @@
 >   (`run_predicate_declaration`) so no read resolves from freshness alone; H7/H8 narrative
 >   contract fields completed; §27.3 made an explicitly non-exhaustive ID-matched projection;
 >   T32/T35/T37/T41 updated; an explicit table audit was run and passed.
+> - **Fourth D7 semantic correction (acceptance-closure):** operator-directed correction after
+>   independent review (REQUIRES_REVISION on semantic coverage the parser could not detect).
+>   The M5 control-case default was removed (M5 handled by a global T30 mechanism-guard rule,
+>   no Axis-A row); transition contexts redefined with same-named-path identity and resolved
+>   pre-state witnesses; auction path coverage completed (H3 M4 state/transition cases, H4 M4
+>   transitions, an explicit H1 M4 ordering-versus-acquisition-path component); H4 timing split
+>   by trading status; guard completeness made derivable (component-specific + property-derived
+>   expected sets, verified by the audit, with corrected fired results); the §28.2
+>   unresolved-dependency registry made canonical and complete with §29 referencing it; the
+>   expanded table audit passed on 64 atomic rows.
 > - This document makes **no final startup-draft concept-inventory decisions, no schema changes,
 >   and no implementation**. D7 adds the Q7 heuristic failure matrix and guards only. Nothing
 >   here activates Q8, any later discovery frontier, or implementation.
@@ -2412,41 +2422,79 @@ status is expressed by `runtime_state` = `unresolved` plus the named contract to
 by the activation comment; the component table is the mechanical surface, and the narrative
 never overrides it.
 
-**Component registry** (every `component_id` used in §27.2/§27.3; kind and label are registry
-data, not cell content):
+**Global mechanism-guard rule (M5).** M5 is a **fail-closed guard state, not a ninth format
+family**: no Axis-A component row exists for M5 anywhere in §27.2. Under M5 the mechanism
+skeleton and mechanism-dependent applicability are themselves unresolved — neither `applies`
+nor `does_not_apply` may be asserted, no input contract may default to `same_as_control`
+(F1/M1), and every attempted mechanism-dependent read (timing, run, cadence, path) is
+`unresolved` **through T30** for every heuristic (H1–H8 alike). T35's M5 statement resolves
+through this rule, not through any component row.
 
-| component_id | component_kind | Label |
-|---|---|---|
-| h1_obs_ordering_paths | descriptive_observation | local ordering vs. successor paths |
-| h1_pol_select_top | policy_conclusion | select the ordering-top |
-| h1_uni | universal_form | "always take best player available" |
-| h2_pre_superflex_capacity | premise | superflex expands QB eligibility and maximum QB-eligible lineup capacity |
-| h2_pol_early_qb | policy_conclusion | acquire QBs early |
-| h2_uni | universal_form | "always secure QBs early in superflex" |
-| h3_obs_state_bindingness | descriptive_observation | need bindingness at an observed state |
-| h3_obs_transition | descriptive_observation | need-related preservation/closure across a transition |
-| h3_pol_never_need | policy_conclusion | never draft for need |
-| h3_uni | universal_form | "always avoid drafting for need" |
-| h4_obs_state_bindingness | descriptive_observation | constraint/path bindingness at an observed state |
-| h4_obs_transition | descriptive_observation | bindingness preservation/closure across a transition |
-| h4_obs_timing | descriptive_observation | "early/later rounds" timing read |
-| h4_pol_ignore_early | policy_conclusion | ignore roster construction until later rounds |
-| h4_uni | universal_form | "always ignorable early" |
-| h5_obs_membership | descriptive_observation | eligible acquisition membership at t |
-| h5_obs_adequacy | descriptive_observation | "usable depth" adequacy claim |
-| h5_uni | universal_form | "depth can always be found on waivers" |
-| h6_pre_run_pattern | premise | clustered same-position selection pattern (M1–M3 predicate) |
-| h6_obs_acq_clustering | descriptive_observation | auction acquisition-clustering analogue |
-| h6_pol_follow_fade | policy_conclusion | follow or fade runs |
-| h6_uni | universal_form | "positional runs should always be faded" |
-| h7_pre_distinct_axes | premise | timeline and production are distinct evidence axes per V1 |
-| h7_obs_weighting | descriptive_observation | bounded weighting of the axes |
-| h7_uni | universal_form | "age and insulation always dominate current production" |
-| h8_pre_shape_semantics | premise | balance/concentration as shape semantics |
-| h8_obs_shape_instance | descriptive_observation | current shape instance for an actual roster |
-| h8_obs_risk_ordering | descriptive_observation | risk ordering over shapes |
-| h8_pol_prefer_shape | policy_conclusion | prefer a roster shape |
-| h8_uni | universal_form | "balanced rosters are always safer" |
+**Global validators versus row-semantic guards.** T32 (registered/atomic structure), T41
+(mechanical table validity), and T40 as output validator are **global validators** over the
+whole matrix; row guard maps carry row-semantic guards plus T40 on `prohibited_output` rows.
+Each row's expected guard-key set is **derived, not self-declared**: expected =
+component-specific guards (component registry, below) ∪ property-derived guards (derivation
+registry, below); the scripted audit computes this expectation and compares it with the row's
+actual keys — listing keys is never self-certifying.
+
+**Row-guard derivation registry** (property → derived guards):
+
+| Row property | Derived guards |
+|---|---|
+| runtime_namespace = d5_path | T17, T34 |
+| evidence includes transition_provenance | T18 |
+| runtime_namespace = d5_path **and** context_id begins `ctx_m4` | T20, T29 |
+| evidence includes ordering_evidence_contract | T33 |
+| evidence includes trade_event_provenance | T13, T21 |
+| runtime_namespace = d3_pool | T25, T36 |
+| evidence includes depth_adequacy_contract | T36 |
+| evidence includes survival_evidence_contract | T15 |
+| evidence includes consumer_weighting_contract or age_experience_role_security_contracts | T38 |
+| evidence includes shape_instance_inputs or risk_evidence_contract | T39 |
+| policy_boundary = prohibited_output | T40 |
+
+**Guard-result rule:** `T40 → rejects_attempted_read` on every `prohibited_output` row;
+component-specific guards → `rejects_attempted_read` on `universal_form` and
+`policy_conclusion` rows (the explicitly supplied malformed/prohibited reads) and
+`armed_not_triggered` elsewhere; every other derived guard → `armed_not_triggered`.
+
+**Component registry** (every `component_id` used in §27.2/§27.3; kind, label, and
+component-specific guards are registry data, not cell content):
+
+| component_id | component_kind | Label | Component-specific guards |
+|---|---|---|---|
+| h1_obs_ordering_paths | descriptive_observation | local ordering vs. successor same-path reachability (ordered mechanisms) | T16 |
+| h1_obs_ordering_acq_paths | descriptive_observation | local ordering vs. auction acquisition-path reachability (M4) | T16 |
+| h1_pol_select_top | policy_conclusion | select the ordering-top | T22 |
+| h1_uni | universal_form | "always take best player available" | T16 |
+| h2_pre_superflex_capacity | premise | superflex expands QB eligibility and maximum QB-eligible lineup capacity | T24 |
+| h2_pol_early_qb | policy_conclusion | acquire QBs early | T35 |
+| h2_uni | universal_form | "always secure QBs early in superflex" | T24, T35 |
+| h3_obs_state_bindingness | descriptive_observation | need bindingness at an observed state | T4 |
+| h3_obs_transition | descriptive_observation | same-path reachability/closure across a need-relevant transition | T4 |
+| h3_pol_never_need | policy_conclusion | never draft for need | none |
+| h3_uni | universal_form | "always avoid drafting for need" | T4 |
+| h4_obs_state_bindingness | descriptive_observation | constraint/path bindingness at an observed state | none |
+| h4_obs_transition | descriptive_observation | same-path reachability/closure across a transition | none |
+| h4_obs_timing | descriptive_observation | "early/later rounds" timing read | T35 |
+| h4_pol_ignore_early | policy_conclusion | ignore roster construction until later rounds | T35 |
+| h4_uni | universal_form | "always ignorable early" | T25, T35 |
+| h5_obs_membership | descriptive_observation | eligible acquisition membership at t | none |
+| h5_obs_adequacy | descriptive_observation | "usable depth" adequacy claim | none |
+| h5_uni | universal_form | "depth can always be found on waivers" | T36 |
+| h6_pre_run_pattern | premise | clustered same-position selection pattern (M1–M3 predicate) | T37 |
+| h6_obs_acq_clustering | descriptive_observation | auction acquisition-clustering analogue | T37 |
+| h6_pol_follow_fade | policy_conclusion | follow or fade runs | T37 |
+| h6_uni | universal_form | "positional runs should always be faded" | T37 |
+| h7_pre_distinct_axes | premise | timeline and production are distinct evidence axes per V1 | T38 |
+| h7_obs_weighting | descriptive_observation | bounded weighting of the axes | none |
+| h7_uni | universal_form | "age and insulation always dominate current production" | T38 |
+| h8_pre_shape_semantics | premise | balance/concentration as shape semantics | T39 |
+| h8_obs_shape_instance | descriptive_observation | current shape instance for an actual roster | none |
+| h8_obs_risk_ordering | descriptive_observation | risk ordering over shapes | none |
+| h8_pol_prefer_shape | policy_conclusion | prefer a roster shape | T22 |
+| h8_uni | universal_form | "balanced rosters are always safer" | T22, T39 |
 
 **Context registry** (every `context_id` used in §27.2/§27.3):
 
@@ -2457,13 +2505,15 @@ data, not cell content):
 | ctx_f2 | F2 family (superflex declared) |
 | ctx_m13 | ordered-pick mechanisms M1–M3 |
 | ctx_m4 | auction/salary mechanism M4 |
-| ctx_m5 | undeclared mechanism M5 |
 | ctx_m13_obs_w | M1–M3; stipulated current-state observation, complete inputs, ≥1 admissible witness |
 | ctx_m13_obs_0 | M1–M3; stipulated current-state observation, complete inputs, zero admissible witnesses |
 | ctx_m13_obs_x | M1–M3; current-state observation missing or incomplete |
-| ctx_m13_tr_w | M1–M3; stipulated T18 transition, complete inputs, post-state witness set ≥1 (preservation observed) |
-| ctx_m13_tr_0 | M1–M3; stipulated T18 transition, complete inputs, post-state witness set zero (closure observed) |
-| ctx_m13_tr_x | M1–M3; transition observation missing or incomplete |
+| ctx_m13_tr_w | M1–M3; stipulated same-path transition: one named target path/constraint pattern, comparable pre/post structural states, ≥1 resolved **pre-state** witness, the selection event with event/transaction provenance, complete post-state inputs, resolved post-state witness set ≥1 → **the named target path remains reachable** |
+| ctx_m13_tr_0 | M1–M3; same stipulations with ≥1 resolved pre-state witness and resolved post-state witness set zero → **the named target path closed** |
+| ctx_m13_tr_x | M1–M3; missing path identity, pre-state witness resolution, inputs, provenance, or resolved post-state result |
+| ctx_m4_tr_w | M4; same-path transition discipline over redeclared auction opportunity inputs; resolved pre-state witness ≥1 and post-state witness set ≥1 → named target path remains reachable |
+| ctx_m4_tr_0 | M4; same discipline; pre-state witness ≥1, post-state witness set zero → named target path closed |
+| ctx_m4_tr_x | M4; missing path identity, pre-state resolution, inputs, provenance, or resolved result |
 | ctx_m4_op_w | M4; O-F8p: complete auction path inputs, ≥1 admissible witness |
 | ctx_m4_op_0 | M4; O-F8p′: complete auction path inputs, zero admissible witnesses |
 | ctx_m4_op_x | M4; auction path inputs missing or incomplete |
@@ -2493,8 +2543,12 @@ data, not cell content):
 - **Failure context:** wherever path constraints bind: a locally maximal selection can map to a
   successor state whose resolved witness set for a stated pattern is empty (F4-class states,
   cap-constrained R6 states, late-obligation states).
-- **Families:** F1 (bounded coherence with evidence); F4 (failure exposure); all families for
-  the missing-ordering dimension.
+- **Families (exposure contexts only — outcomes arise solely from stipulated observations and
+  transitions):** ordered-mechanism families via `h1_obs_ordering_paths`; **M4/F8 via the
+  separately identified `h1_obs_ordering_acq_paths` component** (ordering versus auction
+  acquisition-path reachability, `redeclared` with auction opportunity inputs) — the
+  missing-ordering dimension spans all families and the authoritative table now covers both
+  mechanism classes; M5 flows through the global T30 fail-closed rule, not a component row.
 - **D2 dimensions:** E10, E7, E1/E2 (obligation structure).
 - **D3:** composed baseline reads enter only as guarded evidence components (T19).
 - **D4:** between-pick depletion (gap structure) determines how much board change separates
@@ -2515,8 +2569,9 @@ data, not cell content):
 
 | component_kind | component_id | context_id | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guards (complete applicable set) |
 |---|---|---|---|---|---|---|---|---|---|
-| descriptive_observation | h1_obs_ordering_paths | ctx_m13 | applies | same_as_control | {ordering_evidence_contract, current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T16: armed_not_triggered; T18: armed_not_triggered; T34: armed_not_triggered |
-| policy_conclusion | h1_pol_select_top | ctx_any | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T22: rejects_attempted_read; T40: rejects_attempted_read |
+| descriptive_observation | h1_obs_ordering_paths | ctx_m13 | applies | same_as_control | {ordering_evidence_contract, current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T16: armed_not_triggered; T17: armed_not_triggered; T18: armed_not_triggered; T33: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h1_obs_ordering_acq_paths | ctx_m4 | applies | redeclared | {ordering_evidence_contract, auction_opportunity_inputs, current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T16: armed_not_triggered; T17: armed_not_triggered; T18: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T33: armed_not_triggered; T34: armed_not_triggered |
+| policy_conclusion | h1_pol_select_top | ctx_any | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T22: rejects_attempted_read; T33: armed_not_triggered; T40: rejects_attempted_read |
 | universal_form | h1_uni | ctx_any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T16: rejects_attempted_read; T40: rejects_attempted_read |
 
 #### H2 — "Always secure quarterbacks early in superflex"
@@ -2551,7 +2606,7 @@ data, not cell content):
 |---|---|---|---|---|---|---|---|---|---|
 | premise | h2_pre_superflex_capacity | ctx_f2 | applies | redeclared | none | no_runtime_read | not_applicable | descriptive_only | T24: armed_not_triggered |
 | premise | h2_pre_superflex_capacity | ctx_f1 | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | descriptive_only | T24: armed_not_triggered |
-| policy_conclusion | h2_pol_early_qb | ctx_m13 | applies | same_as_control | {ordering_evidence_contract, survival_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T35: rejects_attempted_read; T40: rejects_attempted_read |
+| policy_conclusion | h2_pol_early_qb | ctx_m13 | applies | same_as_control | {ordering_evidence_contract, survival_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T15: armed_not_triggered; T33: armed_not_triggered; T35: rejects_attempted_read; T40: rejects_attempted_read |
 | policy_conclusion | h2_pol_early_qb | ctx_m4 | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | prohibited_output | T35: rejects_attempted_read; T40: rejects_attempted_read |
 | universal_form | h2_uni | ctx_any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T24: rejects_attempted_read; T35: rejects_attempted_read; T40: rejects_attempted_read |
 
@@ -2587,13 +2642,19 @@ data, not cell content):
 
 | component_kind | component_id | context_id | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guards (complete applicable set) |
 |---|---|---|---|---|---|---|---|---|---|
-| descriptive_observation | h3_obs_state_bindingness | ctx_m13_obs_w | applies | same_as_control | {current_observation} | d5_path | defined | descriptive_only | T4: armed_not_triggered; T34: armed_not_triggered |
-| descriptive_observation | h3_obs_state_bindingness | ctx_m13_obs_0 | applies | same_as_control | {current_observation} | d5_path | defined-empty | descriptive_only | T4: armed_not_triggered; T34: armed_not_triggered |
-| descriptive_observation | h3_obs_state_bindingness | ctx_m13_obs_x | applies | same_as_control | {current_observation} | d5_path | unresolved | descriptive_only | T34: armed_not_triggered |
-| descriptive_observation | h3_obs_transition | ctx_m13_tr_w | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined | descriptive_only | T18: armed_not_triggered; T34: armed_not_triggered |
-| descriptive_observation | h3_obs_transition | ctx_m13_tr_0 | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined-empty | descriptive_only | T18: armed_not_triggered; T34: armed_not_triggered |
-| descriptive_observation | h3_obs_transition | ctx_m13_tr_x | applies | same_as_control | {current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T34: armed_not_triggered |
-| policy_conclusion | h3_pol_never_need | ctx_any | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T40: rejects_attempted_read |
+| descriptive_observation | h3_obs_state_bindingness | ctx_m13_obs_w | applies | same_as_control | {current_observation} | d5_path | defined | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_state_bindingness | ctx_m13_obs_0 | applies | same_as_control | {current_observation} | d5_path | defined-empty | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_state_bindingness | ctx_m13_obs_x | applies | same_as_control | {current_observation} | d5_path | unresolved | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_state_bindingness | ctx_m4_op_w | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | defined | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_state_bindingness | ctx_m4_op_0 | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | defined-empty | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_state_bindingness | ctx_m4_op_x | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | unresolved | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_transition | ctx_m13_tr_w | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T18: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_transition | ctx_m13_tr_0 | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined-empty | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T18: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_transition | ctx_m13_tr_x | applies | same_as_control | {current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T18: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_transition | ctx_m4_tr_w | applies | redeclared | {auction_opportunity_inputs, current_observation, transition_provenance} | d5_path | defined | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T18: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_transition | ctx_m4_tr_0 | applies | redeclared | {auction_opportunity_inputs, current_observation, transition_provenance} | d5_path | defined-empty | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T18: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h3_obs_transition | ctx_m4_tr_x | applies | redeclared | {auction_opportunity_inputs, current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T4: armed_not_triggered; T17: armed_not_triggered; T18: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| policy_conclusion | h3_pol_never_need | ctx_any | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T33: armed_not_triggered; T40: rejects_attempted_read |
 | universal_form | h3_uni | ctx_any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T4: rejects_attempted_read; T40: rejects_attempted_read |
 
 #### H4 — "Ignore roster construction until later rounds"
@@ -2632,21 +2693,28 @@ data, not cell content):
 
 | component_kind | component_id | context_id | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guards (complete applicable set) |
 |---|---|---|---|---|---|---|---|---|---|
-| descriptive_observation | h4_obs_state_bindingness | ctx_m13_obs_w | applies | same_as_control | {current_observation} | d5_path | defined | descriptive_only | T34: armed_not_triggered |
-| descriptive_observation | h4_obs_state_bindingness | ctx_m13_obs_0 | applies | same_as_control | {current_observation} | d5_path | defined-empty | descriptive_only | T34: armed_not_triggered |
-| descriptive_observation | h4_obs_state_bindingness | ctx_m13_obs_x | applies | same_as_control | {current_observation} | d5_path | unresolved | descriptive_only | T34: armed_not_triggered |
-| descriptive_observation | h4_obs_state_bindingness | ctx_m4_op_w | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | defined | descriptive_only | T29: armed_not_triggered; T34: armed_not_triggered |
-| descriptive_observation | h4_obs_state_bindingness | ctx_m4_op_0 | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | defined-empty | descriptive_only | T29: armed_not_triggered; T34: armed_not_triggered |
-| descriptive_observation | h4_obs_state_bindingness | ctx_m4_op_x | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | unresolved | descriptive_only | T29: armed_not_triggered |
-| descriptive_observation | h4_obs_transition | ctx_m13_tr_w | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined | descriptive_only | T18: armed_not_triggered; T34: armed_not_triggered |
-| descriptive_observation | h4_obs_transition | ctx_m13_tr_0 | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined-empty | descriptive_only | T18: armed_not_triggered; T34: armed_not_triggered |
-| descriptive_observation | h4_obs_transition | ctx_m13_tr_x | applies | same_as_control | {current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T34: armed_not_triggered |
-| descriptive_observation | h4_obs_timing | ctx_m13 | applies | same_as_control | {timing_boundary_declaration} | d4_cadence | unresolved | descriptive_only | T35: armed_not_triggered |
+| descriptive_observation | h4_obs_state_bindingness | ctx_m13_obs_w | applies | same_as_control | {current_observation} | d5_path | defined | descriptive_only | T17: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_state_bindingness | ctx_m13_obs_0 | applies | same_as_control | {current_observation} | d5_path | defined-empty | descriptive_only | T17: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_state_bindingness | ctx_m13_obs_x | applies | same_as_control | {current_observation} | d5_path | unresolved | descriptive_only | T17: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_state_bindingness | ctx_m4_op_w | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | defined | descriptive_only | T17: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_state_bindingness | ctx_m4_op_0 | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | defined-empty | descriptive_only | T17: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_state_bindingness | ctx_m4_op_x | applies | redeclared | {auction_opportunity_inputs, current_observation} | d5_path | unresolved | descriptive_only | T17: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_transition | ctx_m13_tr_w | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined | descriptive_only | T17: armed_not_triggered; T18: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_transition | ctx_m13_tr_0 | applies | same_as_control | {current_observation, transition_provenance} | d5_path | defined-empty | descriptive_only | T17: armed_not_triggered; T18: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_transition | ctx_m13_tr_x | applies | same_as_control | {current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T17: armed_not_triggered; T18: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_transition | ctx_m4_tr_w | applies | redeclared | {auction_opportunity_inputs, current_observation, transition_provenance} | d5_path | defined | descriptive_only | T17: armed_not_triggered; T18: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_transition | ctx_m4_tr_0 | applies | redeclared | {auction_opportunity_inputs, current_observation, transition_provenance} | d5_path | defined-empty | descriptive_only | T17: armed_not_triggered; T18: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_transition | ctx_m4_tr_x | applies | redeclared | {auction_opportunity_inputs, current_observation, transition_provenance} | d5_path | unresolved | descriptive_only | T17: armed_not_triggered; T18: armed_not_triggered; T20: armed_not_triggered; T29: armed_not_triggered; T34: armed_not_triggered |
+| descriptive_observation | h4_obs_timing | ctx_m13_notrade | applies | same_as_control | {timing_boundary_declaration} | d4_cadence | unresolved | descriptive_only | T35: armed_not_triggered |
+| descriptive_observation | h4_obs_timing | ctx_m13_trading | applies | same_as_control | {timing_boundary_declaration, trade_event_provenance} | d4_cadence | unresolved | descriptive_only | T13: armed_not_triggered; T21: armed_not_triggered; T35: armed_not_triggered |
 | descriptive_observation | h4_obs_timing | ctx_m4 | does_not_apply | not_applicable | not_applicable | d4_cadence | undefined | descriptive_only | T35: armed_not_triggered |
-| descriptive_observation | h4_obs_timing | ctx_m5 | applies | same_as_control | {timing_boundary_declaration} | d4_cadence | unresolved | descriptive_only | T35: armed_not_triggered |
-| policy_conclusion | h4_pol_ignore_early | ctx_m13 | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T35: rejects_attempted_read; T40: rejects_attempted_read |
+| policy_conclusion | h4_pol_ignore_early | ctx_m13 | applies | same_as_control | {ordering_evidence_contract} | no_runtime_read | not_applicable | prohibited_output | T33: armed_not_triggered; T35: rejects_attempted_read; T40: rejects_attempted_read |
 | policy_conclusion | h4_pol_ignore_early | ctx_m4 | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | prohibited_output | T35: rejects_attempted_read; T40: rejects_attempted_read |
 | universal_form | h4_uni | ctx_any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | prohibited_output | T25: rejects_attempted_read; T35: rejects_attempted_read; T40: rejects_attempted_read |
+
+*(M5 has no row here or anywhere: per the §27.1 global mechanism-guard rule, an M5 timing —
+or any mechanism-dependent — read is `unresolved` through T30 without asserting applicability
+or contract.)*
 
 #### H5 — "Depth can always be found on waivers"
 
@@ -2690,10 +2758,10 @@ data, not cell content):
 | descriptive_observation | h5_obs_membership | ctx_pool_f8_nonempty | applies | same_as_control | {current_observation} | d3_pool | pool_resolved_nonempty | descriptive_only | T25: armed_not_triggered; T36: armed_not_triggered |
 | descriptive_observation | h5_obs_membership | ctx_pool_f4_empty | applies | same_as_control | {current_observation} | d3_pool | pool_resolved_empty | descriptive_only | T25: armed_not_triggered; T36: armed_not_triggered |
 | descriptive_observation | h5_obs_membership | ctx_pool_f7bc_nonempty | applies | redeclared | {current_observation} | d3_pool | pool_resolved_nonempty | descriptive_only | T25: armed_not_triggered; T36: armed_not_triggered |
-| descriptive_observation | h5_obs_membership | ctx_pool_ctrl_missing | applies | same_as_control | {current_observation} | d3_pool | pool_unresolved | descriptive_only | T36: armed_not_triggered |
-| descriptive_observation | h5_obs_membership | ctx_pool_f7bc_missing | applies | redeclared | {current_observation} | d3_pool | pool_unresolved | descriptive_only | T36: armed_not_triggered |
+| descriptive_observation | h5_obs_membership | ctx_pool_ctrl_missing | applies | same_as_control | {current_observation} | d3_pool | pool_unresolved | descriptive_only | T25: armed_not_triggered; T36: armed_not_triggered |
+| descriptive_observation | h5_obs_membership | ctx_pool_f7bc_missing | applies | redeclared | {current_observation} | d3_pool | pool_unresolved | descriptive_only | T25: armed_not_triggered; T36: armed_not_triggered |
 | descriptive_observation | h5_obs_adequacy | ctx_adq_noncomp | applies | same_as_control | {current_observation, depth_adequacy_contract} | d7_consumer_evidence | unresolved | descriptive_only | T36: armed_not_triggered |
-| descriptive_observation | h5_obs_adequacy | ctx_adq_comp | applies | same_as_control | {current_observation, depth_adequacy_contract, ordering_evidence_contract} | d7_consumer_evidence | unresolved | descriptive_only | T36: armed_not_triggered |
+| descriptive_observation | h5_obs_adequacy | ctx_adq_comp | applies | same_as_control | {current_observation, depth_adequacy_contract, ordering_evidence_contract} | d7_consumer_evidence | unresolved | descriptive_only | T33: armed_not_triggered; T36: armed_not_triggered |
 | universal_form | h5_uni | ctx_any | applies | same_as_control | not_applicable | no_runtime_read | not_applicable | descriptive_only | T36: rejects_attempted_read |
 
 *(F8's R1 read carries `same_as_control` per accepted D6 §24.3 — F8 is a combined pool; the
@@ -2742,7 +2810,7 @@ boundary. Only F7b/F7c carry `redeclared` R1 contracts.)*
 
 | component_kind | component_id | context_id | Applicability | Input contract | Evidence conditions | Namespace | State | Policy boundary | Guards (complete applicable set) |
 |---|---|---|---|---|---|---|---|---|---|
-| premise | h6_pre_run_pattern | ctx_m13_notrade | applies | same_as_control | {current_observation, run_predicate_declaration} | d7_consumer_evidence | unresolved | descriptive_only | T13: armed_not_triggered; T37: armed_not_triggered |
+| premise | h6_pre_run_pattern | ctx_m13_notrade | applies | same_as_control | {current_observation, run_predicate_declaration} | d7_consumer_evidence | unresolved | descriptive_only | T37: armed_not_triggered |
 | premise | h6_pre_run_pattern | ctx_m13_trading | applies | same_as_control | {current_observation, trade_event_provenance, run_predicate_declaration} | d7_consumer_evidence | unresolved | descriptive_only | T13: armed_not_triggered; T21: armed_not_triggered; T37: armed_not_triggered |
 | premise | h6_pre_run_pattern | ctx_m4 | does_not_apply | not_applicable | not_applicable | no_runtime_read | not_applicable | descriptive_only | T37: armed_not_triggered |
 | descriptive_observation | h6_obs_acq_clustering | ctx_m4 | applies | redeclared | {acquisition_event_observation_contract} | d7_consumer_evidence | unresolved | descriptive_only | T37: armed_not_triggered |
@@ -2848,6 +2916,7 @@ evidence-conditions, and full guard maps live solely in the authoritative §27.2
 | component_id | context_id (shown row) | Runtime (namespace: state) | Policy boundary | Guards with rejects_attempted_read |
 |---|---|---|---|---|
 | h1_obs_ordering_paths | ctx_m13 | d5_path: unresolved | descriptive_only | none |
+| h1_obs_ordering_acq_paths | ctx_m4 | d5_path: unresolved | descriptive_only | none |
 | h1_pol_select_top | ctx_any | no_runtime_read: not_applicable | prohibited_output | T22, T40 |
 | h1_uni | ctx_any | no_runtime_read: not_applicable | prohibited_output | T16, T40 |
 | h2_pre_superflex_capacity | ctx_f2 | no_runtime_read: not_applicable | descriptive_only | none |
@@ -2859,7 +2928,7 @@ evidence-conditions, and full guard maps live solely in the authoritative §27.2
 | h3_uni | ctx_any | no_runtime_read: not_applicable | prohibited_output | T4, T40 |
 | h4_obs_state_bindingness | ctx_m13_obs_x | d5_path: unresolved | descriptive_only | none |
 | h4_obs_transition | ctx_m13_tr_x | d5_path: unresolved | descriptive_only | none |
-| h4_obs_timing | ctx_m13 | d4_cadence: unresolved | descriptive_only | none |
+| h4_obs_timing | ctx_m13_notrade | d4_cadence: unresolved | descriptive_only | none |
 | h4_pol_ignore_early | ctx_m13 | no_runtime_read: not_applicable | prohibited_output | T35, T40 |
 | h4_uni | ctx_any | no_runtime_read: not_applicable | prohibited_output | T25, T35, T40 |
 | h5_obs_membership | ctx_pool_ctrl_missing | d3_pool: pool_unresolved | descriptive_only | none |
@@ -2902,16 +2971,26 @@ namespace; and no cell is advice (T40).
   (none exists) — distinct from `prohibited_output`, which no contract can ever cure.
 - **T34 — Transition-claim gate.** Any claim that a selection (or a policy of ignoring a
   constraint) preserved, closed, or had no effect on roster paths requires a stipulated
-  transition: comparable pre/post `O-Path` states, the relevant event, event provenance, and
-  the resolved witness result (extends T16/T18). Current-state observations, wide witness sets,
-  local eligibility, and format membership are each individually rejected as evidence for a
-  transition claim — in the success and failure directions alike.
+  **same-path transition**: one named target path or constraint pattern held fixed across the
+  transition; comparable pre/post structural states; **at least one resolved pre-state
+  witness for that named path**; the relevant selection/acquisition event; event and
+  transaction provenance; complete post-state inputs; and the resolved post-state witness
+  result (extends T16/T18). Then: pre reachable + post ≥1 witness → *the named target path
+  remains reachable*; pre reachable + post zero witnesses → *the named target path closed*;
+  missing identity, pre-state resolution, inputs, provenance, or resolved result →
+  `unresolved`. A single reachable target path is **never** labelled "preserves multiple
+  paths" — the accepted D5 result requires more than one distinct complete-roster constraint
+  pattern with witnesses. Current-state observations, wide witness sets, local eligibility,
+  and format membership are each individually rejected as evidence for a transition claim —
+  in the success and failure directions alike.
 - **T35 — Timing-claim gate.** A descriptive "early/late" timing read requires a declared
   ordered round structure (M1–M3) **and** the registered `timing_boundary_declaration` evidence
   token; with the boundary undeclared the read resolves `d4_cadence: unresolved` — never
   `none`-conditioned. An attempted timing read under M4 resolves `d4_cadence: undefined` (the
   accepted D4 state) even though the predicate `does_not_apply` on axis A — both layers are
-  recorded. Under M5 the read is `d4_cadence: unresolved` (mechanism undeclared). Timing
+  recorded. Under M5 the read remains `unresolved` **through the global T30 mechanism-guard
+  rule** (§27.1) — no Axis-A component row exists for M5, and neither applicability nor an
+  input contract may be asserted there. Timing
   *directives* and optimal-timing claims are `prohibited_output` in every mechanism — a
   permanent boundary, not an evidence gap.
 - **T36 — Membership/adequacy gate.** A `pool_resolved_nonempty` observation proves only that
@@ -2984,13 +3063,17 @@ premiums, optimal timing, slot values, preferred players/positions/paths/shapes/
 imperative language appear in §§27–28.** Accepted D1–D6 text and semantics are unchanged; the
 accepted V1 ontology is cited, not modified; S1 remains unresolved and untouched; no
 concept-inventory decision, artifact-shape selection, implementation proposal,
-runtime-producer assignment, or Q8 synthesis occurred. Unresolved items carried forward: the
-runtime decision-envelope producer (§13.2); the ordering/evidence, tier/survival,
-risk/evidence, depth/adequacy, consumer-weighting, acquisition-event observation, and
-age/experience/role-security contracts; the deferred budget-pressure structure; synthesis item
-S1; D1 parked items P3/P4/P5/P7/P8. (Prohibited outputs — behavioral response modeling, timing
-directives, shape preferences, ordering-top selection — are permanent boundaries and are
-deliberately **not** in this registry.) Only this canonical document
+runtime-producer assignment, or Q8 synthesis occurred. **Canonical unresolved-dependency registry** (complete; every unresolved D7 dependency is
+carried forward here): `timing_boundary_declaration`; `run_predicate_declaration`; the
+ordering/evidence contract; the tier/survival evidence contract; the risk/evidence contract;
+the depth/adequacy evidence contract; the consumer weighting contract; the acquisition-event
+observation contract; the age/experience/role-security contracts; `shape_instance_inputs`
+(resolved E10/roster/FORGE/consumer inputs for current shape instances); trade-event provenance
+where unavailable (producer unassigned); rookie-draft structure declarations (F7b/c); the
+deferred budget-pressure structure; the runtime decision-envelope producer (§13.2); synthesis
+item S1; and D1 parked items P3/P4/P5/P7/P8. (Prohibited outputs — behavioral response
+modeling, timing directives, shape preferences, ordering-top selection — are permanent
+boundaries and are deliberately **not** in this registry.) Only this canonical document
 changed; no PR, no merge; D8 and all later frontiers remain inactive.
 
 ---
@@ -3002,10 +3085,9 @@ D8 — minimum structural input contract (issue #2, Q8 only)
 ```
 
 Rationale: Q8 is the last unanswered discovery question, and D7 sharpened exactly what it must
-synthesize: the discovery now carries a complete registry of load-bearing missing contracts
-(ordering/evidence, tier/survival, risk/evidence, age/experience/role-security, trade-event
-provenance, rookie-draft structure declarations) alongside the consumer-owned runtime values
-fixed by D2–D6. Q8's deliverable — the minimum structural input contract, classified across
+synthesize: **the canonical unresolved-dependency registry in §28.2** — referenced here without
+restatement so no partial copy can drift — alongside the consumer-owned runtime values fixed by
+D2–D6. Q8's deliverable — the minimum structural input contract, classified across
 format-static / board-dynamic / hybrid / consumer-owned / unavailable / future-contract, without
 designing a TIBER-Fantasy adapter — can now be assembled from verified material only.
 
