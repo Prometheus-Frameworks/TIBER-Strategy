@@ -75,6 +75,14 @@
 >   defined-empty semantics with stipulated synthetic observations, corrects F2/F5/F7/F8
 >   consequence claims, and removes overclaims. Accepted D1–D5 semantics were clarified, not
 >   reopened.
+> - **Second D6 semantic correction:** the second independent review (verdict REQUIRES_REVISION
+>   on head `a41e42e`; prior seven findings materially corrected) required one further bounded
+>   correction: observation splitting by read type (cadence/R3/path), complete path-observation
+>   discipline, separated R2-versus-path input contracts under M4, R6 rookie-pool filtering in
+>   F7c, an Axis-A refactor into separate mechanical fields, an explicit guard-registry result
+>   set, separate D3-pool versus D5-path state namespaces, and removal of remaining unsupported
+>   consequences. The D3 empty-versus-nearly-empty terminology ambiguity is recorded as an
+>   unresolved synthesis item rather than altering accepted D3 text.
 > - This document makes **no final startup-draft concept-inventory decisions, no schema changes,
 >   and no implementation**. D6 adds the Q6 stress-test matrix and guards only. Nothing here
 >   activates Q7–Q8, any later discovery frontier, or implementation.
@@ -1765,43 +1773,73 @@ new signed activation comment on issue #2 authorizes the next frontier explicitl
 D6 outcomes are recorded on **three mechanically separate axes**. No token of one axis may
 substitute for a token of another; every mechanical field carries exactly one declared token.
 
-**Axis A — definition-survival outcome** (one token per structural claim per family/subcase):
+**Axis A — definition survival**, recorded as a **tuple of three separate mechanical fields**
+(contract relationship and per-read evidence conditions are independent — a claim may carry
+both):
 
-| Token | Meaning |
-|---|---|
-| `survives_same_inputs` | the accepted D1–D5 definition applies with the same input declarations as the F1 control case |
-| `survives_redeclared_inputs` | the definition applies only after re-declaring inputs the control case leaves implicit (eligibility unions, pool boundaries, acquisition-opportunity structure) |
-| `survives_conditional` | the definition applies only under an explicit per-read condition (e.g. event provenance) that must be stated and evidenced on every read |
-| `does_not_apply` | the predicate has no referent in this format; every read of it resolves to runtime `undefined` |
+| Field | Declared values | Meaning |
+|---|---|---|
+| `applicability` | `applies` \| `does_not_apply` | whether the accepted D1–D5 predicate has a referent in this format; `does_not_apply` means every read resolves to runtime `undefined` |
+| `input_contract` | `same_as_control` \| `redeclared` | whether the claim uses the F1 control-case input declarations or requires re-declaring inputs the control case leaves implicit (eligibility unions, pool boundaries, acquisition-opportunity structure) |
+| `evidence_conditions` | a set (possibly `none`) drawn from the registry: `current_observation`, `trade_event_provenance`, `survival_evidence_contract`, `rookie_draft_structure_declaration`, `auction_opportunity_inputs` | per-read evidence or freshness conditions beyond the input contract; these belong to the runtime/evidence layer and are **not** an alternative to `redeclared` |
 
-`survives_conditional` is a survival outcome, **not** a runtime state.
+A definition "becomes conditional" (the activation-required distinction) exactly when its
+`evidence_conditions` set is non-empty; the condition is represented explicitly here, never
+mixed into the runtime state or the contract delta. Axis-A cells in §24.3 are written as the
+tuple `⟨applicability, input_contract, evidence_conditions⟩`.
 
-**Axis B — runtime resolution state** (the exact accepted D5 tokens, unchanged):
+**Axis B — runtime resolution, in two separate namespaces** (never interchanged):
+
+- **D5 path runtime state** (exact accepted D5 tokens, reserved for path reads):
+
+  ```text
+  defined | defined-empty | undefined | unresolved
+  ```
+
+  `defined-empty` is **reserved for a resolved path witness set containing no admissible
+  witness**, with every required input declared, current, and resolved. A witness set containing
+  at least one admissible witness is `defined`.
+
+- **D3 pool status** (for pool reads; separate namespace, no D5 token reuse):
+
+  ```text
+  pool_resolved_nonempty | pool_resolved_empty | pool_unresolved | pool_undefined
+  ```
+
+  The accepted D3 record's descriptive degeneracy wording applies as *description* of a
+  `pool_resolved_nonempty` pool with sparse membership. The accepted D3 text's combined
+  "defined-empty / degenerate (empty or nearly empty)" phrasing is **not reinterpreted here**;
+  its empty-versus-nearly-empty terminology ambiguity is recorded as unresolved synthesis item
+  **S1** (§25.2). Resolving S1 may require amending accepted D3 text, which this authority does
+  not permit.
+
+- Cadence reads resolve under the accepted D4 staleness semantics: current under their
+  trade-event stamp, otherwise stale = `unresolved` (D4 §18.2.6).
+
+Axis-B rules: runtime states resolve **per read against stipulated current observations, never
+per format** — a format-static declaration alone establishes no current pool membership, no path
+witness set, no fresh trade-event state, and no auction reachability.
+
+**Complete path-observation discipline.** For any family F, `O-Path(F)` denotes the complete
+accepted D5 input set — declared format rules, current roster obligations, board state,
+remaining structural supply, eligibility and roster constraints, current acquisition
+opportunities, and applicable provenance — all declared, current, and resolved, **plus a
+resolved witness result**. Complete inputs make resolution *possible*; they never select the
+outcome: the resolved witness result does. `O-Path(F)` with at least one admissible witness →
+`defined`; `O-Path(F)` with no admissible witness → `defined-empty`; any missing, stale, or
+undeclared component → `unresolved`. Every path-read row in §24.2/§24.3 uses this discipline.
+
+**Axis C — guard registry** (not an outcome axis): each guard (T23–T31) carries one declared
+result per record:
 
 ```text
-defined | defined-empty | undefined | unresolved
+not_applicable | armed_not_triggered | rejects_attempted_read
 ```
 
-Axis-B rules:
-
-- runtime states resolve **per read against stipulated current observations, never per format**:
-  a format-static declaration alone establishes no current pool membership, no path witness set,
-  no fresh trade-event state, and no auction reachability;
-- **`defined-empty` for a path** holds only when the predicate applies, every required input is
-  declared, fresh, and resolved, the witness set has been resolved, and **no admissible witness
-  exists**. A near-empty witness set containing at least one witness is `defined` and reachable;
-- **pool reads:** the accepted D3 record's descriptive "degenerate" wording (empty or nearly
-  empty) is preserved as description; in axis-B terms a resolved pool with at least one eligible
-  member is `defined` (degeneracy is a description of it, not a state), and only a resolved pool
-  with **zero** eligible members is `defined-empty`. This distinguishes D3's pool-degeneracy
-  wording from D5's exact no-witness path state without altering either accepted record.
-
-**Axis C — assumption-guard result** (orthogonal to A and B): each guard (T23–T31) is `armed`
-or not per family; an armed guard **fires only when a read attempts the guarded conflation**,
-and a fired guard rejects that read. A guard result is not mutually exclusive with definition
-survival or runtime resolution: a claim may survive (axis A) and resolve (axis B) while a guard
-fires against a different, malformed read in the same family. `armed` is not an outcome and no
-guard fires in a well-formed record.
+`rejects_attempted_read` occurs **only when a malformed read is explicitly supplied for the
+test** (as in the worked T9-style examples); a well-formed synthetic record reports
+`armed_not_triggered` for every armed guard. Guard applicability is orthogonal to definition
+applicability (Axis A) and runtime resolution (Axis B).
 
 ### 24.2 Format families (F1–F8)
 
@@ -1819,16 +1857,16 @@ Each record carries the eleven fields required by the activation comment.
   absent); R6 is the identity overlay in this family.
 - **D2 dimensions under stress:** none — this case *generates* the ordinary assumptions; E1–E10
   sit in their ordinary ranges.
-- **D3 baseline/overlays (axis A):** R2 `survives_same_inputs` in-draft; R3
-  `survives_same_inputs` while picks remain; R1 `survives_same_inputs` post-draft; R5 applies to
-  the single flex slot; R6 identity.
+- **D3 baseline/overlays (axis A):** R2, R3 (while picks remain), and R1 (post-draft) are all
+  `⟨applies, same_as_control, none⟩`; R5 applies to the single flex slot; R6 identity (no
+  mechanics and no pool separation declared).
 - **D4 cadence:** fully applicable; no staleness source exists (no trades declared).
-- **D5 path state (axis B, per read):** *stipulated synthetic observation O-F1p* — a mid-draft
-  read with fresh board, roster, and supply observations resolves a witness for each stated
-  constraint pattern → `defined`. Without those observations the read is `unresolved`.
-  *Stipulated observation O-F1r* — a fresh post-startup pool observation resolves at least one
-  eligible unrostered member in every declared position class → the R1 read is `defined`.
-  Without O-F1r the R1 read is `unresolved`. Format declarations alone resolve nothing.
+- **D5 path state / R1 pool status (axis B, per read):** *path:* `O-Path(F1)` complete with at
+  least one admissible witness per stated constraint pattern → `defined`; any missing component
+  → `unresolved`. *Pool:* *stipulated observation O-F1r* — a fresh post-startup pool observation
+  resolves at least one eligible unrostered member in every declared position class → R1 pool
+  status `pool_resolved_nonempty`. Without O-F1r → `pool_unresolved`. Format declarations alone
+  resolve nothing.
 - **Assumption exposed:** none — F1 is the *source* of the assumptions the other rows test. Its
   matrix role is calibration, and its danger is exportation (T23/T25 guard the export).
 - **Missing evidence/contract:** the global gaps — consumer ordering/evidence contract, tier
@@ -1849,14 +1887,18 @@ Each record carries the eleven fields required by the activation comment.
   acquisition behavior changes — and by how much — requires consumer-owned roster, board,
   supply, or behavioral evidence; without it those consequences are `unresolved`.
 - **D3 baseline/overlays (axis A):** primaries unchanged. Two distinct reads coexist and must
-  not be collapsed: a **positional read for the fixed QB slot** remains valid with the same
-  inputs (`survives_same_inputs`); a **slot-union read for the superflex slot** requires the
-  QB-inclusive union (`survives_redeclared_inputs`). A read must match its referenced slot (T5);
-  R5 is required only where the referenced predicate is the superflex slot's union.
+  not be collapsed: a **positional read for the fixed QB slot** is
+  `⟨applies, same_as_control, none⟩`; a **slot-union read for the superflex slot** is
+  `⟨applies, redeclared, none⟩` (the QB-inclusive union must be declared). A read must match its
+  referenced slot (T5); R5 is required only where the referenced predicate is the superflex
+  slot's union.
 - **D4 cadence:** fully applicable, as F1.
-- **D5 path state (axis B, per read):** with fresh stipulated observations as in O-F1p,
-  `defined`. No claim is made that witness sets narrow faster than F1 — any narrowing-rate
-  claim requires consumer-owned evidence and is `unresolved` without it.
+- **D5 path state (axis B, per read):** *stipulated observation O-F2p* — `O-Path(F2)` complete
+  (including the superflex eligibility constraints) with at least one admissible witness per
+  stated pattern → `defined`; `O-Path(F2)` complete with no admissible witness for a stated
+  pattern → `defined-empty`; any missing component → `unresolved`. No claim is made that witness
+  sets narrow faster than F1 — any narrowing-rate claim requires consumer-owned evidence and is
+  `unresolved` without it.
 - **Assumption exposed:** the one-QB demand assumption — one-QB and superflex formats must not
   silently share eligibility/capacity structure (T24).
 - **Missing evidence/contract:** as F1; realized-demand evidence is consumer-owned and absent;
@@ -1873,16 +1915,20 @@ Each record carries the eleven fields required by the activation comment.
 - **Lineup/roster rules:** as F1; larger total rostered population.
 - **D2 dimensions under stress:** E1 (franchise count), E9 (waiver consequences), E8 (each round
   contains more selections, so more board events occur between a franchise's picks).
-- **D3 baseline/overlays (axis A):** R2/R3 `survives_same_inputs`; **R1 `survives_conditional`**
-  — every R1 read must carry a current pool observation rather than any imported F1 presumption
-  about membership.
+- **D3 baseline/overlays (axis A):** R2/R3 `⟨applies, same_as_control, none⟩`; **R1
+  `⟨applies, same_as_control, {current_observation}⟩`** — the current-pool observation is
+  load-bearing here: every R1 read must carry it rather than any imported F1 presumption about
+  membership.
 - **D4 cadence:** applicable. Gap **classes** are defined relative to mechanism and league size
   (D4 §18.2.3), so F3's classes resolve against F3's own declared format — no gap is
   automatically `long`, and no class is imported from F1.
-- **D5 path state (axis B, per read):** *stipulated observation O-F3* — a fresh post-startup
-  pool observation resolves a reduced but non-empty eligible membership → the R1 read is
-  `defined` (degeneracy, where present, is description, not a state). Path reads with fresh
-  stipulated inputs resolve `defined`. Without the observations, `unresolved`.
+- **D5 path state / R1 pool status (axis B, per read):** *pool:* *stipulated observation
+  O-F3r* — a fresh post-startup pool observation resolves a reduced but non-empty eligible
+  membership → R1 pool status `pool_resolved_nonempty` (sparse membership may be described with
+  D3's degeneracy wording; description, not a state). Without O-F3r → `pool_unresolved`.
+  *Path:* *stipulated observation O-F3p* — `O-Path(F3)` complete with at least one admissible
+  witness per stated pattern → `defined`; complete with no admissible witness → `defined-empty`;
+  any missing component → `unresolved`.
 - **Assumption exposed:** waiver-liquidity portability — ordinary and deep formats must not
   silently share R1 survival outcome or runtime state (T25).
 - **Missing evidence/contract:** current pool observation becomes load-bearing (runtime producer
@@ -1892,29 +1938,33 @@ Each record carries the eleven fields required by the activation comment.
 
 #### F4 — 32-team extreme-depth dynasty
 
-- **Format-static inputs:** 32 franchises; F1-like lineup; ordinary bench (~15–25 spots) —
-  total rostered population approaches the entire startable NFL population.
+- **Format-static inputs:** 32 franchises; F1-like lineup; ordinary bench (~15–25 spots). The
+  aggregate roster capacity is large relative to any typically declared player-pool size; any
+  claim about the rostered share of a specific population requires a declared pool size plus a
+  current observation, and is `unresolved` without them.
 - **Mechanism / acquisition:** M1 snake.
 - **Player-pool composition:** combined pool.
 - **Lineup/roster rules:** as F1 at 32-franchise scale; E1 compression extreme.
 - **D2 dimensions under stress:** E1 (extreme), E7 (board depletion can reach per-position
-  exhaustion), E9 (waiver consequences extreme), E10 (path narrowing).
-- **D3 baseline/overlays (axis A):** R2/R3 `survives_same_inputs` in-draft; **R1
-  `survives_conditional`** — its runtime state is an observation question, resolved per read
-  below.
+  exhaustion — an observation-resolved possibility, not a format consequence), E9 (waiver
+  consequences extreme), E10 (stressed only through the O-F4p observations below; format scale
+  alone establishes no path consequence).
+- **D3 baseline/overlays (axis A):** R2/R3 `⟨applies, same_as_control, none⟩` in-draft; **R1
+  `⟨applies, same_as_control, {current_observation}⟩`** — its pool status is an observation
+  question, resolved per read below.
 - **D4 cadence:** applicable; the per-round selection count is the largest **within the declared
   F1–F8 comparison set** (the stated universe). Tier-survival claims across such gaps are doubly
   gated (board evidence + missing tier contract → T15).
-- **D5 path state (axis B, per read):** *stipulated observation O-F4r* — a fresh post-startup
-  pool observation resolves **exactly zero** eligible unrostered members in the referenced
-  position classes → that R1 read is `defined-empty`. A variant observation resolving a small
-  but non-zero membership → `defined` (degenerate as description). Without a fresh observation
-  → `unresolved`; format scale alone proves nothing. *Stipulated observation O-F4p* — a
-  mid-draft path read with every required input declared, fresh, and resolved, whose resolved
+- **D5 path state / R1 pool status (axis B, per read):** *pool:* *stipulated observation
+  O-F4r* — a fresh post-startup pool observation resolves **exactly zero** eligible unrostered
+  members in the referenced position classes → R1 pool status `pool_resolved_empty`. Variant
+  *O-F4r′* — a small but non-zero membership → `pool_resolved_nonempty` (D3 degeneracy wording
+  as description). Without a fresh observation → `pool_unresolved`; format scale alone proves
+  nothing. *Path:* *stipulated observation O-F4p* — `O-Path(F4)` complete, and the resolved
   witness set contains **no admissible witness** for a stated constraint pattern → that path is
-  `defined-empty` (theoretically defined, structurally unreachable). Patterns whose resolved
-  witness set contains at least one witness are `defined`, however narrow. Without complete
-  fresh inputs → `unresolved`.
+  `defined-empty` (theoretically defined, structurally unreachable). Variant *O-F4p′* —
+  `O-Path(F4)` complete with at least one admissible witness → `defined`, however narrow the
+  set. Any missing component → `unresolved`.
 - **Assumption exposed:** two guarded conflations — (a) modeling 32 teams as a scaled 12-team
   structure: every E1/E2/E9-derived input must be re-declared against the 32-team format, not
   multiplied up from a shallow one (T23 fires on any read that attempts the scaling);
@@ -1937,13 +1987,17 @@ separately; a combined league declares both and takes both subcases' consequence
 - **D2 dimensions under stress:** E3 (eligibility structure — slot unions govern more of the
   lineup than fixed positional slots do).
 - **D3 baseline/overlays (axis A):** primaries unchanged; for **flex-class slots**, replacement
-  reads are `survives_redeclared_inputs` (the union must be declared); for **fixed positional
-  slots**, positional reads remain `survives_same_inputs`. A positional read offered where the
-  referenced slot is a flex union is a T28 omission failure.
-- **D4 cadence:** applicable; positional-run structure couples across union positions
-  (structural note, no valuation).
-- **D5 path state (axis B):** with fresh stipulated inputs as in O-F1p, `defined`. No claim
-  about widened or narrowed witness sets is made without consumer-owned evidence.
+  reads are `⟨applies, redeclared, none⟩` (the union must be declared); for **fixed positional
+  slots**, positional reads remain `⟨applies, same_as_control, none⟩`. A positional read offered
+  where the referenced slot is a flex union is a T28 omission failure.
+- **D4 cadence:** applicable. Whether positional runs couple across union positions is a
+  board-dynamic question requiring current board evidence — `unresolved` without it; the
+  eligibility structure alone establishes no run consequence.
+- **D5 path state (axis B, per read):** *stipulated observation O-F5ap* — `O-Path(F5a)`
+  complete (including the declared union constraints) with at least one admissible witness per
+  stated pattern → `defined`; complete with no admissible witness → `defined-empty`; any
+  missing component → `unresolved`. No claim about widened or narrowed witness sets is made
+  without consumer-owned evidence.
 - **Assumption exposed:** the stable-positional-partition assumption — positional reads are not
   portable to slots whose eligibility is a union (T28).
 - **Missing evidence/contract:** as F1.
@@ -1956,8 +2010,8 @@ separately; a combined league declares both and takes both subcases' consequence
 - **Mechanism / acquisition:** M1 snake (declared). **Player-pool composition:** combined pool.
 - **D2 dimensions under stress:** E3 (scoring rule only). **TE-premium does not alter slot
   eligibility**: no union changes, R5 consequences do not arise from it.
-- **D3 baseline/overlays (axis A):** all reads `survives_same_inputs` — the scoring rule changes
-  no pool boundary, union, or baseline structure.
+- **D3 baseline/overlays (axis A):** all reads `⟨applies, same_as_control, none⟩` — the scoring
+  rule changes no pool boundary, union, or baseline structure.
 - **D4 cadence:** applicable, unchanged.
 - **D5 path state (axis B):** structural path reachability is unaffected by a scoring rule; reads
   resolve as in F1. **Any effect of TE-premium on player value, scarcity, ordering, path
@@ -1978,17 +2032,27 @@ separately; a combined league declares both and takes both subcases' consequence
 - **Lineup/roster rules:** as F1.
 - **D2 dimensions under stress:** E6 (transaction structure), E8 (skeleton/realization split is
   now load-bearing).
-- **D3 baseline/overlays (axis A):** R2 `survives_same_inputs`; **R3 `survives_conditional`** —
-  every R3 composition requires trade-event provenance and a current realized schedule as its
-  per-read condition.
+- **D3 baseline/overlays (axis A):** R2 `⟨applies, same_as_control, none⟩`; **R3
+  `⟨applies, same_as_control, {trade_event_provenance, survival_evidence_contract}⟩`** — every
+  R3 composition requires trade-event provenance and a current realized schedule, and its
+  survival-expectation component additionally requires the (currently nonexistent)
+  survival/evidence contract. Cadence and path reads carry `{trade_event_provenance}`.
 - **D4 cadence:** applicable but **staleness-governed**: any cadence read is valid only under
   its trade-event stamp (T10/T13).
-- **D5 path state (axis B, per read):** *stipulated observation O-F6* — a read carrying the
-  complete fresh trade-event log and the current realized schedule, with stamp current at
-  resolution time, resolves `defined`. Any cadence, R3, or path read whose stamp predates the
-  latest observed trade event — or that carries skeleton-only provenance — is `unresolved` until
-  re-resolved (T21/T26). The format-static trading *permission* alone establishes no fresh
-  trade-event state.
+- **Runtime resolution (axis B, split by read type — the three reads are never bundled):**
+  - *Cadence read, O-F6c:* the complete fresh trade-event log plus the current realized
+    schedule, stamp current at resolution time → the cadence read resolves current (D4
+    staleness semantics). A stamp predating the latest observed trade event, or skeleton-only
+    provenance, → `unresolved` until re-resolved (T10/T13/T26).
+  - *R3 read, O-F6r:* requires O-F6c **plus** current board state, a held future pick, **and
+    the required survival/evidence contract**. That contract has no producer in the chain
+    (D1 P6, D3 R3 record), so **a current R3 instance must not be resolved `defined`; it
+    remains `unresolved` until the contract exists**, even with every other input fresh.
+  - *Path read, O-F6p:* `O-Path(F6)` complete — including trade-event provenance as the
+    applicable-provenance component — with at least one admissible witness → `defined`;
+    complete with no admissible witness → `defined-empty`; any missing or stale component
+    (including a stale event stamp, T21) → `unresolved`.
+  The format-static trading *permission* alone establishes no fresh trade-event state.
 - **Assumption exposed:** the static-order assumption — order is board state here, not rule
   state; T26 fires on any skeleton-as-realized read.
 - **Missing evidence/contract:** trade-event feed provenance (runtime producer unassigned — the
@@ -2012,18 +2076,24 @@ and is declared explicitly per subcase.
   common or typical.
 - **D2 dimensions under stress:** E5 (dominant), E2 (taxi in F7b only), E9 (what post-startup
   acquisition means differs across subcases).
-- **D3 baseline/overlays (axis A):** R2 `survives_redeclared_inputs` in F7b/F7c — the same
-  phrase "board replacement" ranges over a different pool than in F7a; R2
-  `survives_same_inputs` in F7a. **R6 is mandatory in F7b only** (where the taxi rule is
-  declared); in F7a/F7c, R6 taxi filtering is `does_not_apply` and R6 is otherwise identity as
-  declared. R1's post-startup membership boundary differs per subcase (rookie strata inside or
-  outside it).
+- **D3 baseline/overlays (axis A):** R2 is `⟨applies, redeclared, none⟩` in F7b/F7c — the same
+  phrase "board replacement" ranges over a different pool than in F7a — and
+  `⟨applies, same_as_control, none⟩` in F7a. **R6 (per the accepted D3 record) filters both E2
+  roster mechanics and E5 combined-versus-separated rookie-pool boundaries. It is therefore
+  required in F7b for rookie-pool separation *plus* the declared taxi rule, and still required
+  in F7c for rookie-pool separation — only the taxi component is absent there.** R6 is identity
+  only in F7a (combined pool, no mechanics declared). R1's post-startup membership boundary
+  differs per subcase (rookie strata inside or outside it).
 - **D4 cadence:** applicable in all subcases; unchanged by composition rule.
-- **D5 path state (axis B, one state per read per subcase):** F7a — with fresh stipulated inputs
-  as in O-F1p, `defined`. F7b/F7c — a path read that depends on rookie acquisition is
-  `unresolved` until the rookie-draft acquisition structure is declared; with that declaration
-  plus fresh inputs, the read resolves `defined`. Non-rookie-dependent path reads resolve as in
-  F1 under fresh inputs.
+- **D5 path state (axis B, one state per read per subcase):** F7a — *O-F7ap:* `O-Path(F7a)`
+  complete with at least one admissible witness → `defined`; complete with none →
+  `defined-empty`; missing components → `unresolved`. F7b/F7c — path predicates are
+  `⟨applies, redeclared, {rookie_draft_structure_declaration}⟩` (both a redeclared contract
+  *and* a per-read condition — the fields are independent): a rookie-dependent path read is
+  `unresolved` until the rookie-draft acquisition structure is declared; *O-F7bp/O-F7cp:* with
+  that declaration and `O-Path(F7b/F7c)` complete (R6 pool-separation filtering applied; taxi
+  filtering additionally in F7b), at least one admissible witness → `defined`, none →
+  `defined-empty`, missing components → `unresolved`.
 - **Assumption exposed:** the shared-supply-boundary assumption — combined and separated pools
   never share supply or replacement reads by default; T27 fires on any read that omits its
   composition declaration.
@@ -2042,21 +2112,31 @@ and is declared explicitly per subcase.
 - **Lineup/roster rules:** as F1.
 - **D2 dimensions under stress:** E4 (dominant — the mechanism itself), E8 (inapplicable by
   mechanism).
-- **D3 baseline/overlays (axis A):** **R2 `survives_redeclared_inputs`** — the meaning of the
+- **D3 baseline/overlays (axis A):** **R2 `⟨applies, redeclared, none⟩`** — the meaning of the
   current-board pool is fully preserved (the remaining nomination pool is a well-defined R2
-  pool), but under D6's own axis-A definitions the classification is `redeclared` because the
-  acquisition-opportunity structure input differs from the M1 control declaration; **R3
-  `does_not_apply`** (no ordered future selection — the corrected T12 semantics: every R3 read
-  resolves `undefined`, not `unresolved`); R5/R6 compose normally over R2.
+  pool); the contract is `redeclared` because the acquisition-opportunity structure input
+  differs from the M1 control declaration; **R3 `⟨does_not_apply, —, —⟩`** (no ordered future
+  selection — the corrected T12 semantics: every R3 read resolves `undefined`, not
+  `unresolved`); R5/R6 compose normally over R2.
 - **D4 cadence:** the entire cadence family (turns, round trips, gaps, slot asymmetry, cadence
-  mutation) is `does_not_apply` under the accepted §18.3 scoping decision — every read of it
-  resolves `undefined`, never adapted, never converted to `unresolved`.
-- **D5 path state (axis B, per read):** the path-reachability **predicate remains applicable**
-  through the auction opportunity model (accepted D5 auction case) — but applicability is not
-  resolution. *Stipulated observation O-F8* — a path read carrying fresh current-pool,
-  budget-state, eligibility, roster-constraint, and acquisition-opportunity observations
-  resolves `defined`. **Absent any of those inputs the read is `unresolved`.** Budget *values*
-  remain consumer-owned and budget-pressure structure remains deferred.
+  mutation) is `⟨does_not_apply, —, —⟩` under the accepted §18.3 scoping decision — every read
+  of it resolves `undefined`, never adapted, never converted to `unresolved`.
+- **Runtime resolution (axis B, split by read type — R2 and path reads have separate input
+  contracts):**
+  - *R2 pool read, O-F8r2:* resolves against **its own D3 contract only** — a fresh
+    current-board/pool-composition observation plus every actually applicable overlay (R5/R6).
+    It does **not** require budget state, roster constraints, or any path witness. With O-F8r2
+    → pool status `pool_resolved_nonempty` or `pool_resolved_empty` per the observation;
+    without it → `pool_unresolved`.
+  - *Path read (predicate `⟨applies, redeclared, {auction_opportunity_inputs}⟩`):* applicability
+    is not resolution. *O-F8p (defined variant):* `O-Path(F8)` complete — with the auction
+    acquisition-opportunity and budget-state inputs as its opportunity/provenance components —
+    and **at least one resolved admissible auction witness** → `defined`. *O-F8p′
+    (defined-empty variant):* `O-Path(F8)` complete and the resolved witness set contains **no
+    admissible witness** → `defined-empty`. Any missing input → `unresolved`. Complete inputs
+    make resolution possible; only the resolved witness result selects `defined` versus
+    `defined-empty`. Budget *values* remain consumer-owned and budget-pressure structure
+    remains deferred.
 - **Assumption exposed:** cadence universality — pool and path *meanings* survive the mechanism
   change while cadence meanings do not (`undefined`); and applicability-implies-resolution is
   itself a guarded conflation (T29).
@@ -2071,59 +2151,74 @@ and is declared explicitly per subcase.
 falls into if its mechanism declaration is missing. All mechanism-dependent rows become
 `unresolved` and fail closed; nothing defaults to F1/M1 behavior. Encoded as T30.)*
 
-### 24.3 Cross-case matrices (one per axis; every cell single-valued, exact tokens only)
+### 24.3 Cross-case matrices (one per axis; every field single-valued, exact declared tokens)
 
-**Axis A — definition-survival outcomes** (tokens from §24.1; subcases listed separately so each
-cell is single-valued):
+**Axis A — definition-survival tuples** `⟨applicability, input_contract, evidence_conditions⟩`
+(fields per §24.1; `—` marks fields with no value under `does_not_apply`):
 
 | Family | R2 read | R3 read | R1 read | D4 cadence family | Fixed-slot positional read | Flex-slot union read (R5) | D5 path predicate |
 |---|---|---|---|---|---|---|---|
-| F1 | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
-| F2 | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs | survives_same_inputs |
-| F3 | survives_same_inputs | survives_same_inputs | survives_conditional | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
-| F4 | survives_same_inputs | survives_same_inputs | survives_conditional | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
-| F5a | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs | survives_same_inputs |
-| F5b | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
-| F6 | survives_same_inputs | survives_conditional | survives_same_inputs | survives_conditional | survives_same_inputs | survives_same_inputs | survives_conditional |
-| F7a | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs |
-| F7b | survives_redeclared_inputs | survives_same_inputs | survives_redeclared_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs |
-| F7c | survives_redeclared_inputs | survives_same_inputs | survives_redeclared_inputs | survives_same_inputs | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs |
-| F8 | survives_redeclared_inputs | does_not_apply | survives_same_inputs | does_not_apply | survives_same_inputs | survives_same_inputs | survives_redeclared_inputs |
+| F1 | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ |
+| F2 | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, redeclared, none⟩ | ⟨applies, same_as_control, none⟩ |
+| F3 | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, {current_observation}⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ |
+| F4 | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, {current_observation}⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ |
+| F5a | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, redeclared, none⟩ | ⟨applies, same_as_control, none⟩ |
+| F5b | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ |
+| F6 | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, {trade_event_provenance, survival_evidence_contract}⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, {trade_event_provenance}⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, {trade_event_provenance}⟩ |
+| F7a | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ |
+| F7b | ⟨applies, redeclared, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, redeclared, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, redeclared, {rookie_draft_structure_declaration}⟩ |
+| F7c | ⟨applies, redeclared, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, redeclared, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, redeclared, {rookie_draft_structure_declaration}⟩ |
+| F8 | ⟨applies, redeclared, none⟩ | ⟨does_not_apply, —, —⟩ | ⟨applies, same_as_control, none⟩ | ⟨does_not_apply, —, —⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, same_as_control, none⟩ | ⟨applies, redeclared, {auction_opportunity_inputs}⟩ |
 
-**Axis B — runtime resolution states** (exact D5 tokens; resolved only per stipulated read,
-never per format):
+**Axis B — runtime resolution** (path reads use exact D5 tokens; pool reads use the D3
+pool-status namespace; cadence reads use D4 staleness semantics; one variant per row):
 
-| Stipulated read | Stipulated synthetic observation | State with observation | State without |
+| Stipulated read | Stipulated synthetic observation | Result with observation | Without |
 |---|---|---|---|
-| F1 R1 post-startup read | O-F1r: fresh pool observation, at least one eligible member in every declared class | defined | unresolved |
-| F1 path read (mid-draft) | O-F1p: fresh board/roster/supply observations; witness resolved per pattern | defined | unresolved |
-| F3 R1 post-startup read | O-F3: fresh pool observation, reduced but non-empty membership | defined | unresolved |
-| F4 R1 post-startup read | O-F4r: fresh pool observation, exactly zero eligible members in referenced classes | defined-empty | unresolved |
-| F4 R1 post-startup read (variant) | O-F4r′: fresh pool observation, small non-zero membership | defined | unresolved |
-| F4 path read (stated pattern) | O-F4p: complete fresh inputs; resolved witness set contains no admissible witness | defined-empty | unresolved |
-| F4 path read (variant pattern) | O-F4p′: complete fresh inputs; at least one admissible witness | defined | unresolved |
-| F6 R3/cadence/path read | O-F6: complete fresh trade-event log + current realized schedule, stamp current | defined | unresolved |
-| F8 path read | O-F8: fresh current-pool, budget-state, eligibility, roster-constraint, acquisition-opportunity observations | defined | unresolved |
+| F1 R1 pool read | O-F1r: fresh pool observation, ≥1 eligible member in every declared class | pool_resolved_nonempty | pool_unresolved |
+| F1 path read | O-Path(F1) complete; ≥1 admissible witness per stated pattern | defined | unresolved |
+| F2 path read (witness variant) | O-F2p: O-Path(F2) complete; ≥1 admissible witness | defined | unresolved |
+| F3 R1 pool read | O-F3r: fresh pool observation, reduced but non-empty membership | pool_resolved_nonempty | pool_unresolved |
+| F3 path read (witness variant) | O-F3p: O-Path(F3) complete; ≥1 admissible witness | defined | unresolved |
+| F4 R1 pool read (empty variant) | O-F4r: fresh pool observation, exactly zero eligible members in referenced classes | pool_resolved_empty | pool_unresolved |
+| F4 R1 pool read (non-empty variant) | O-F4r′: fresh pool observation, small non-zero membership | pool_resolved_nonempty | pool_unresolved |
+| F4 path read (no-witness variant) | O-F4p: O-Path(F4) complete; resolved witness set contains no admissible witness | defined-empty | unresolved |
+| F4 path read (witness variant) | O-F4p′: O-Path(F4) complete; ≥1 admissible witness | defined | unresolved |
+| F5a path read (witness variant) | O-F5ap: O-Path(F5a) complete; ≥1 admissible witness | defined | unresolved |
+| F6 cadence read | O-F6c: complete fresh trade-event log + current realized schedule, stamp current | current (D4 staleness semantics) | unresolved |
+| F6 R3 read | O-F6r: O-F6c + current board + held future pick + survival/evidence contract — **contract unavailable in the chain** | unresolved (until the contract exists) | unresolved |
+| F6 path read (witness variant) | O-F6p: O-Path(F6) complete incl. trade-event provenance; ≥1 admissible witness | defined | unresolved |
+| F7a path read (witness variant) | O-F7ap: O-Path(F7a) complete; ≥1 admissible witness | defined | unresolved |
+| F7b path read (witness variant) | O-F7bp: rookie-draft structure declared + O-Path(F7b) complete (R6 separation + taxi filtering); ≥1 admissible witness | defined | unresolved |
+| F7c path read (witness variant) | O-F7cp: rookie-draft structure declared + O-Path(F7c) complete (R6 separation filtering; no taxi component); ≥1 admissible witness | defined | unresolved |
+| F8 R2 pool read (non-empty variant) | O-F8r2: fresh current-board/pool-composition observation + applicable overlays; ≥1 member | pool_resolved_nonempty | pool_unresolved |
+| F8 R2 pool read (empty variant) | O-F8r2′: same inputs; zero members | pool_resolved_empty | pool_unresolved |
+| F8 path read (witness variant) | O-F8p: O-Path(F8) complete incl. auction acquisition-opportunity + budget-state inputs; ≥1 resolved admissible auction witness | defined | unresolved |
+| F8 path read (no-witness variant) | O-F8p′: O-Path(F8) complete; no admissible witness | defined-empty | unresolved |
 | F8 R3 or cadence-family read | none possible — predicate does not apply | undefined | undefined |
 
-**Axis C — guard armament** (a guard fires only when a read attempts the guarded conflation;
-firing rejects that read and coexists with axis A/B results):
+**Axis C — guard registry** (declared results: `not_applicable` / `armed_not_triggered` /
+`rejects_attempted_read`; a guard rejects only an explicitly supplied malformed read):
 
-| Guard | Armed in | Fires on |
-|---|---|---|
-| T23 | F3, F4 | a read deriving extreme-depth inputs by scaling a shallow-format declaration |
-| T24 | F1, F2 | a QB claim silently shared across one-QB and superflex eligibility structures |
-| T25 | all families | importing an R1 survival outcome or runtime state across formats or moments |
-| T26 | F6 | a skeleton-provenance or stale-stamped cadence/R3/path read |
-| T27 | F7a, F7b, F7c | a supply/replacement/path read omitting its composition (or claimed taxi) declaration |
-| T28 | F5a, F5b, F7b, and any family declaring taxi/IR/cap/flex/TE-premium rules | an applicable-overlay or input omission |
-| T29 | F8 | a cadence/R3 resolution attempt, or treating path applicability as resolution without O-F8 inputs |
-| T30 | all families | a missing mechanism declaration (M5) resolved by default instead of failing closed |
-| T31 | all families | any matrix outcome presented as advice, preference, or strategy |
+| Guard | Applicability | Fires on | Result in this record |
+|---|---|---|---|
+| T23 | F3, F4 | a read deriving extreme-depth inputs by scaling a shallow-format declaration | armed_not_triggered |
+| T24 | F1, F2 | a QB claim silently shared across one-QB and superflex eligibility structures | armed_not_triggered |
+| T25 | all families | importing an R1 survival tuple or pool status across formats or moments | armed_not_triggered |
+| T26 | F6 | a skeleton-provenance or stale-stamped cadence/R3/path read | armed_not_triggered |
+| T27 | F7a, F7b, F7c | a supply/replacement/path read omitting its composition (or claimed taxi) declaration | armed_not_triggered |
+| T28 | F5a, F5b, F7b, and any family declaring taxi/IR/cap/flex/TE-premium rules | an applicable-overlay or input omission | armed_not_triggered |
+| T29 | F8 | a cadence/R3 resolution attempt, or treating path applicability as resolution without the split O-F8 input contracts | armed_not_triggered |
+| T30 | all families | a missing mechanism declaration (M5) resolved by default instead of failing closed | armed_not_triggered |
+| T31 | all families | any matrix outcome presented as advice, preference, or strategy | armed_not_triggered |
 
-Reading discipline: axis tokens never mix; `defined-empty`, `undefined`, and `unresolved` are
-never interchangeable (T17); a fired guard is a rejected read, not a property of the format; and
-no cell anywhere is a recommendation (T31).
+Every guard reports `armed_not_triggered` here because no malformed read is supplied in this
+record; `rejects_attempted_read` appears only in explicitly supplied counter-example reads (the
+worked T9-style tests). Guards outside their applicability column are `not_applicable`.
+
+Reading discipline: axis fields and namespaces never mix; `defined-empty`, `undefined`, and
+`unresolved` (and their pool-status counterparts) are never interchangeable (T17); a guard
+result describes a read, not a format; and no cell anywhere is a recommendation (T31).
 
 ---
 
@@ -2142,11 +2237,12 @@ no cell anywhere is a recommendation (T31).
   superflex slot are distinct and must each match the referenced slot (T5). No numeric premium
   may be attached in either direction (NE5), and no realized-demand magnitude may be asserted
   without consumer-owned evidence.
-- **T25 — Waiver-liquidity gate.** R1's axis-A survival outcome (`survives_same_inputs` /
-  `survives_conditional` / `survives_redeclared_inputs`) and axis-B runtime state (`defined` /
-  `defined-empty` / `undefined` / `unresolved`) must each be re-resolved per format and per
-  moment; importing F1's R1 outcome or state into a deeper format — or any format's prior R1
-  state into the present — is rejected (extends NE7 and the D3 three-way distinction).
+- **T25 — Waiver-liquidity gate.** R1's axis-A tuple (`⟨applicability, input_contract,
+  evidence_conditions⟩`) and its axis-B pool status (`pool_resolved_nonempty` /
+  `pool_resolved_empty` / `pool_undefined` / `pool_unresolved`) must each be re-resolved per
+  format and per moment; importing F1's R1 tuple or pool status into a deeper format — or any
+  format's prior pool status into the present — is rejected (extends NE7 and the D3 three-way
+  distinction).
 - **T26 — Trading staleness (composed).** In a pick-trading format, every cadence, R3, or path
   read must carry trade-event provenance; a read whose stamp predates the latest observed trade
   event is `unresolved` and must be re-resolved, never reused (composes T10, T13, T21 across
@@ -2162,10 +2258,13 @@ no cell anywhere is a recommendation (T31).
 - **T29 — Auction preservation gate.** Under M4, pool meanings (R2 and its overlays) and the
   path-reachability predicate remain **applicable** (axis A), while every cadence-family or R3
   reference is rejected as `undefined` — never resolved, never converted to `unresolved` (per
-  the corrected T12 semantics). Applicability never implies resolution: an M4 pool or path read
-  resolves `defined` or `defined-empty` only when fresh current-pool, budget-state, eligibility,
-  roster-constraint, and acquisition-opportunity inputs are all present (O-F8); absent any of
-  them the read is `unresolved`.
+  the corrected T12 semantics). Applicability never implies resolution, and **R2 and path reads
+  have separate input contracts**: a bare R2 pool read resolves against its own D3 contract only
+  — fresh current-board/pool-composition observation plus every actually applicable overlay
+  (O-F8r2) — and does **not** require budget state, roster constraints, or any path witness; a
+  path read resolves `defined` or `defined-empty` only under the complete `O-Path(F8)` contract
+  (including auction acquisition-opportunity and budget-state inputs) with a resolved witness
+  result; absent any required input, the respective read is `pool_unresolved` / `unresolved`.
 - **T30 — Undeclared-mechanism gate.** If the mechanism declaration is missing (M5), every
   mechanism-dependent matrix row for that format is `unresolved` and fails closed; no row
   defaults to F1/M1 (snake) behavior.
@@ -2177,11 +2276,13 @@ no cell anywhere is a recommendation (T31).
 ### 25.2 D6 boundary confirmation
 
 D6 answers Q6 only. **The central result is that the D1–D5 semantic framework remains total
-across F1–F8: every structural claim resolves to an explicit axis-A survival outcome, an exact
-axis-B runtime state under stipulated observations, or an axis-C guard result — without silently
-defaulting anywhere.** Some predicates correctly resolve `undefined` (R3 and the cadence family
-under M4) and some reads correctly stay `unresolved` absent observations; totality of explicit
-outcomes, not universal survival, is the claim. The matrix exercises accepted D1–D5 definitions
+across F1–F8: every structural claim resolves to an explicit axis-A survival tuple, an exact
+runtime result in its declared namespace (D5 path state, D3 pool status, or D4 staleness) under
+stipulated observations, or an explicit guard-registry result — without silently defaulting
+anywhere.** Some predicates correctly resolve `undefined` (R3 and the cadence family under M4),
+some reads correctly stay `unresolved` absent observations or contracts (including every current
+R3 instance, pending the survival/evidence contract); totality of explicit outcomes, not
+universal survival, is the claim. The matrix exercises accepted D1–D5 definitions
 across eight synthetic, player-free format families; the structural format numbers used
 (franchise counts, lineup shapes, approximate roster capacities) are format declarations
 permitted by the activation comment, not thresholds, valuations, or empirical claims. **No player names or IDs, rankings,
@@ -2192,7 +2293,12 @@ draft/roster data appear anywhere in §§24–25.** The Q7 heuristic inventory w
 No concept-inventory decision was made (candidate vocabulary remains unaccepted pointers); no
 artifact shape was selected; no implementation proposal was created; the runtime
 decision-envelope producer remains unassigned (§13.2) and the R3 survival-evidence and
-tier-contract gaps remain open. The source truth → artifact → adapter → surface invariant and
+tier-contract gaps remain open. **Unresolved synthesis item S1:** the accepted D3 R1 record's
+combined "defined-empty / degenerate (empty or nearly empty)" wording is terminologically
+ambiguous against D6's separated `pool_resolved_empty` / `pool_resolved_nonempty` statuses; D6
+records the ambiguity without reinterpreting or altering the accepted D3 text. Resolving S1 may
+require amending accepted D3 wording, which requires separate operator authorization at a later
+synthesis frontier. The source truth → artifact → adapter → surface invariant and
 the human final-decision boundary are preserved. Only this canonical document changed; no PR or
 merge; no later frontier activated.
 
