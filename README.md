@@ -33,7 +33,7 @@ exports/promoted/dynasty_strategy_ontology/dynasty_strategy_ontology_v1.json
 | `explanation_templates` | ID-addressed, slotted explanation language for Management |
 | `consumer_manifest` | Safety rules, declared inputs (with availability status), fail-closed behavior, open contract decisions |
 
-The envelope (`artifact_type`, `schema_version`, `model_version`, `generated_at`, `row_count`, `consumer_manifest`) follows the promoted-artifact pattern established by `FORGE_PLAYER_STATIC_V1` and `TIBER_IDENTITY_CROSSWALK_V1`, so a future TIBER-Fantasy adapter can consume it the same way.
+The envelope (`artifact_type`, `schema_version`, `model_version`, `generated_at`, `row_count`, `consumer_manifest`) follows the promoted-artifact pattern established by `FORGE_PLAYER_STATIC_V1` and `TIBER_IDENTITY_CROSSWALK_V1`. TIBER-Fantasy consumes the promoted ontology through the same versioned artifact boundary rather than a live runtime dependency.
 
 ## Concept documentation
 
@@ -63,6 +63,12 @@ The build reads no clock, no environment, and no network. `generated_at` is a fi
 2. Bump `MODEL_VERSION` and `GENERATED_AT` in `src/ontology/meta.js` for content changes.
 3. `npm run build && npm test`.
 
-## Consumption status
+## Consumption status — read-only diagnostics
 
-Not yet wired into TIBER-Fantasy — that is Phase 2, gated on this artifact stabilizing. Several archetype rules require inputs that do not exist in the TIBER evidence chain yet (player age, draft year/experience, role/contract security, market liquidity); these are declared with `status: "future_contract"` in the consumer manifest and documented as open decisions in `future_contract_decisions`. Until those inputs exist, consumers must fail closed: no input, no label.
+`DYNASTY_STRATEGY_ONTOLOGY_V1` is now consumed by TIBER-Fantasy as a versioned, read-only Management diagnostic artifact. TIBER-Fantasy loads and validates a bundled copy of the promoted export and fails closed when the artifact is disabled, missing, or malformed.
+
+This integration does not activate strategy advice or player classification. Archetype assignment, template selection, template rendering, slot interpolation, recommendations, and Team Direction recalculation remain disabled.
+
+Several archetype rules still require inputs that do not exist in the governed TIBER evidence chain yet (player age, draft year/experience, role/contract security, market liquidity). These remain declared with `status: "future_contract"` in the consumer manifest and documented as open decisions in `future_contract_decisions`. Until those inputs and their activation gates exist, the rule remains: **no input, no label**.
+
+The handoff is artifact-based rather than a live runtime dependency. TIBER-Strategy remains the authoritative producer; downstream mirrors should update only from a validated promoted artifact.
