@@ -101,9 +101,17 @@ from them.
 > In 12-team, one-QB, full-PPR redraft with two RB/WR/TE flex spots, a premium pass-catching TE plus
 > front-loaded RB investment may improve the upper tail of the optimized starting lineup when:
 >
-> 1. the TE's advantage over the realistic streaming/waiver baseline plus the RB replacement loss
->    avoided by early RB investment exceeds the WR value surrendered at the TE pick; and
+> 1. the TE's advantage over the realistic streaming/waiver baseline plus any RB replacement loss
+>    actually avoided by the candidate branch exceeds the full value of the RB, WR, or other asset
+>    displaced by the premium-TE selection; and
 > 2. a usable WR tier survives to the manager's next Round 3/4 or Round 4/5 selections.
+
+The opportunity-cost accounting must be hypothesis-specific:
+
+| Hypothesis | Required accounting |
+|---|---|
+| H1 — Bowers exception | If Bowers displaces the second early RB, count that RB and its downstream roster consequences. If Bowers displaces an early WR, count that WR. Credit avoided RB replacement loss only when the matched comparator actually invests less early capital at RB. |
+| H2 — premium-TE tier | In an `RB / RB / premium TE` versus `RB / RB / late TE` pair, hold the two early RBs constant. Count the WR or other asset displaced by the premium TE plus the later TE; do not add an avoided-RB credit to this matched pair. |
 
 This is conditional, falsifiable, and currently unresolved. It is not a universal `elite-or-wait`
 rule and does not claim that any position must be selected in a named round.
@@ -123,16 +131,18 @@ starters:
   FLEX_RB_WR_TE: 2
 ```
 
-The two flex spots matter: a third premium RB can start rather than becoming automatically
-bench-locked. Results must not be generalized to one-flex, half-PPR, superflex, TE-premium, or
-materially different waiver environments without separate declaration and testing.
+The two flex spots permit as many as four RBs to start, while one flex spot still permits three.
+Flex-capacity sensitivities must therefore test the exact third- and fourth-RB boundary rather than
+assuming a third RB is bench-locked in a one-flex league. Results must not be generalized to
+one-flex, zero-flex, half-PPR, superflex, TE-premium, or materially different waiver environments
+without separate declaration and testing.
 
 ## 7. Required comparison constructions
 
 | ID | Construction | Key counterfactual |
 |---|---|---|
 | C1 | Bowers exception | The RB or WR selected instead of early Bowers, plus the later TE |
-| C2 | RB-RB-premium-TE | The WR available at the premium-TE pick, plus later WR recovery |
+| C2 | RB-RB-premium-TE | The RB, WR, QB, or other asset selected instead of premium TE, plus the later TE; compare downstream WR recovery separately |
 | C3 | RB-RB-late-TE | The RB-heavy opening without paying for premium TE |
 | C4 | WR-heavy-late-TE | Early receiver concentration plus a streaming/upside TE |
 | C5 | Balanced best-tier | No forced positional template |
@@ -238,7 +248,7 @@ A sum of season projections is insufficient. No numeric proxy result is calculat
 |---|---|---|
 | TE identity | Bowers / McBride / Loveland | Bowers-specific or tier-wide? |
 | Draft slot | early / middle / turn | Does turn distance change the viable path? |
-| Flex capacity | one / two | Does the RB-heavy advantage disappear when the third RB is bench-locked? |
+| Flex capacity | zero / one / two | When does the third or fourth RB become bench-locked, and how does the startable asset mix change? |
 | Scoring | full PPR / separately declared alternative | Does reception scoring change the WR opportunity cost? |
 | Room shape | RB-heavy / WR-heavy | Which tier disappears first? |
 | Availability shock | preferred player taken immediately before pick | Is there a coherent fallback? |
@@ -340,7 +350,7 @@ counterfactual results.
 | Redraft 2 | `1.09 Amon-Ra / 2.04 Walker / 3.09 Garrett / 4.04 Burden` | Loveland was an alternative; Brenton Strange at `11.09` | Loveland competed with a premium WR decision | Selection was exploratory; no Loveland roster |
 | Redraft 3 | `1.11 Achane / 2.02 Jeanty / 3.11 McConkey / 4.02 Waddle` | Terrance Ferguson at `13.11` | Double-RB plus WR recovery occurred | No premium-TE branch |
 | Redraft 4 | `1.06 McCaffrey / 2.07 Bowers / 3.06 A.J. Brown / 4.07 Egbuka` | Bowers early | Recorded Bowers-unicorn construction | No matched non-Bowers roster |
-| Redraft 5 | `1.02 Gibbs / 2.11 Barkley / 3.02 Allen / 4.11 Zay` | Kyle Pitts at `6.11` | Two flex spots allowed three premium RBs to start | Early-QB and TE costs not counterfactually isolated |
+| Redraft 5 | `1.02 Gibbs / 2.11 Barkley / 3.02 Allen / 4.11 Zay` | Kyle Pitts at `6.11` | Three premium RBs were startable; only one of the two flex spots was needed | Early-QB and TE costs not counterfactually isolated |
 | Redraft 6 | `1.06 Smith-Njigba / 2.07 Bowers / 3.06 Jacobs / 4.07 Garrett / 5.06 Judkins` | Bowers early | Bowers plus elite WR foundation and stable/ceiling RB pair occurred | Different opening from Redraft 4; no matched branch |
 | Dynasty context | `1.12 Bowers` in an 18-team startup | Bowers early | Positional-separation thesis appeared in live play | Different format; excluded from redraft result set |
 
