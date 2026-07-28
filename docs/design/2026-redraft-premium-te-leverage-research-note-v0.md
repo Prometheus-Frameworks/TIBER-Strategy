@@ -102,16 +102,17 @@ from them.
 > front-loaded RB investment may improve the upper tail of the optimized starting lineup when:
 >
 > 1. the TE's advantage over the realistic streaming/waiver baseline plus any RB replacement loss
->    actually avoided by the candidate branch exceeds the full value of the RB, WR, or other asset
->    displaced by the premium-TE selection; and
+>    actually avoided by the candidate branch exceeds the aggregate marginal loss between each
+>    earlier asset displaced by the premium-TE selection and the downstream replacement actually
+>    acquired in the candidate branch; and
 > 2. a usable WR tier survives to the manager's next Round 3/4 or Round 4/5 selections.
 
 The opportunity-cost accounting must be hypothesis-specific:
 
 | Hypothesis | Required accounting |
 |---|---|
-| H1 — Bowers exception | If Bowers displaces the second early RB, count that RB and its downstream roster consequences. If Bowers displaces an early WR, count that WR. Credit avoided RB replacement loss only when the matched comparator actually invests less early capital at RB. |
-| H2 — premium-TE tier | In an `RB / RB / premium TE` versus `RB / RB / late TE` pair, hold the two early RBs constant. Count the WR or other asset displaced by the premium TE plus the later TE; do not add an avoided-RB credit to this matched pair. |
+| H1 — Bowers exception | If Bowers displaces an early RB or WR, measure that asset's advantage over the later RB or WR replacement actually acquired in the Bowers branch; do not charge the Bowers branch the early asset's full value while ignoring its replacement. Credit avoided RB replacement loss only when the comparator actually invests less early capital at RB. Compare the complete rosters. |
+| H2 — premium-TE tier | In an `RB / RB / premium TE` versus `RB / RB / late TE` pair, hold the two early RBs constant. Measure the early RB, WR, QB, or other asset's advantage over its downstream replacement in the premium-TE branch, then compare that marginal loss with the premium TE's advantage over the later TE. Do not add an avoided-RB credit to this pair. Compare the complete rosters. |
 
 This is conditional, falsifiable, and currently unresolved. It is not a universal `elite-or-wait`
 rule and does not claim that any position must be selected in a named round.
@@ -141,8 +142,8 @@ without separate declaration and testing.
 
 | ID | Construction | Key counterfactual |
 |---|---|---|
-| C1 | Bowers exception | The RB or WR selected instead of early Bowers, plus the later TE |
-| C2 | RB-RB-premium-TE | The RB, WR, QB, or other asset selected instead of premium TE, plus the later TE; compare downstream WR recovery separately |
+| C1 | Bowers exception | Compare complete rosters: early Bowers plus its downstream RB/WR replacement versus the early RB/WR alternative plus its later TE; measure the alternatives at the same roster slots and replacement baseline |
+| C2 | RB-RB-premium-TE | With the first two RBs held constant, compare complete rosters: premium TE plus the displaced non-TE position's downstream replacement versus the early non-TE asset plus its later TE; measure the non-TE asset's advantage over the downstream replacement separately from the TE advantage |
 | C3 | RB-RB-late-TE | The RB-heavy opening without paying for premium TE |
 | C4 | WR-heavy-late-TE | Early receiver concentration plus a streaming/upside TE |
 | C5 | Balanced best-tier | No forced positional template |
@@ -173,9 +174,9 @@ For each candidate, a trial must record:
 - the realistic alternative set at that pick;
 - whether the next desired tier survived to the following selection.
 
-## 9. Matched counterfactual mock protocol
+## 9. Counterfactual and observational mock protocol
 
-Run matched branches from the same draft slot and league contract across:
+Run comparison attempts from the same draft slot and league contract across:
 
 ```text
 early:  1.01–1.04
@@ -183,13 +184,24 @@ middle: 1.05–1.08
 turn:   1.09–1.12
 ```
 
-Each matched trial must preserve:
+Classify every comparison before using it as evidence:
+
+| Comparison class | Minimum shared state | Permitted interpretation |
+|---|---|---|
+| `matched_counterfactual` | Same frozen board or seed, same non-manager selections, and the same exogenous availability path through every compared decision; the planned manager selection is the only branch-point change | Complete-roster causal counterfactual |
+| `shared_board_pivot` | Same captured board only at the pivotal decision; downstream availability is not held fixed | Immediate decision-set comparison only, not a complete-roster counterfactual |
+| `repeated_room_observation` | Same league contract and draft slot, but a different live or mock room | Observational construction evidence only |
+
+Every comparison record must preserve:
 
 ```text
 trial_id
+comparison_class
 league_contract
 draft_slot
 room_or_board_reference
+frozen_board_or_seed_id
+shared_board_through_decision_cursor
 primary_branch_pick
 counterfactual_branch_pick
 subsequent_decision_policy
@@ -215,13 +227,19 @@ later-memory reconstruction. A single branch-point snapshot does not satisfy thi
 
 Protocol rules:
 
-1. Change the key TE/RB/WR decision while holding the later decision policy as stable as practical.
+1. Reserve `matched_counterfactual` for branches that share a frozen board or seed and the same
+   non-manager selections through every compared decision. Holding only league, slot, or policy
+   constant is insufficient.
 2. Compare complete rosters, not only the two players at the branch point.
-3. Record when a later pick cannot be held constant because the room changed.
+3. If the room or downstream external availability changes, classify the evidence as
+   `repeated_room_observation`; recording the change does not preserve matched status.
 4. Separate strict ranking, roster construction, value click, and deliberate exploration.
 5. Mark missing state as `not_recorded` or `unavailable`; never reconstruct it from memory.
 6. Treat Sleeper mock rooms as repeated field observations, not deterministic experiments.
-7. Do not create a fixed-board simulator until a governed availability/market model is authorized.
+7. A `shared_board_pivot` can test the choice visible at that moment but cannot support a causal
+   complete-roster claim.
+8. Until a governed fixed-board replay or availability model is authorized, current Sleeper mocks
+   cannot satisfy `matched_counterfactual`.
 
 ## 10. Roster-level evaluation
 
@@ -328,7 +346,8 @@ the premium-TE/RB-heavy family has the highest ceiling.
 The candidate claim is weakened or rejected when:
 
 1. WR recovery at the required turns is not repeatable across realistic rooms.
-2. Premium-TE separation is smaller than the RB/WR opportunity cost.
+2. Premium-TE separation is smaller than the marginal RB/WR opportunity cost after crediting the
+   downstream replacement actually acquired.
 3. Success requires a player to fall beyond a realistic acquisition window.
 4. Bowers succeeds while McBride/Loveland variants fail, rejecting a tier-wide interpretation.
 5. RB-heavy builds create greater injury or replacement fragility than their upside compensates.
@@ -411,8 +430,8 @@ This map records current boundaries. It does not activate a new cross-repository
 
 1. Freeze a timestamped operator-board snapshot, including Gibbs at `1.01` and Bowers' personal
    acquisition/value range, as operator overlay rather than universal ranking.
-2. Run matched trials across early, middle, and turn slots with exact decision cursors and complete
-   roster capture.
+2. Once governed fixed-board replay is authorized, run matched trials across early, middle, and
+   turn slots with exact decision cursors and complete roster capture.
 3. Produce separate Bowers, McBride, and Loveland branches; do not use Bowers as the tier proxy.
 4. Measure whether Flowers/Waddle or the broader usable WR tier actually survives to the required
    turns across realistic rooms.
