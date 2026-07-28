@@ -346,8 +346,8 @@ the premium-TE/RB-heavy family has the highest ceiling.
 The candidate claim is weakened or rejected when:
 
 1. WR recovery at the required turns is not repeatable across realistic rooms.
-2. Premium-TE separation is smaller than the marginal RB/WR opportunity cost after crediting the
-   downstream replacement actually acquired.
+2. Premium-TE separation is smaller than the marginal opportunity cost of any earlier RB, WR, QB,
+   or other asset displaced after crediting the downstream replacement actually acquired.
 3. Success requires a player to fall beyond a realistic acquisition window.
 4. Bowers succeeds while McBride/Loveland variants fail, rejecting a tier-wide interpretation.
 5. RB-heavy builds create greater injury or replacement fragility than their upside compensates.
