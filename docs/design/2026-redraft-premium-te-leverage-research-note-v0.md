@@ -23,11 +23,15 @@ This note is not:
 - a governed ADP or player-availability artifact;
 - a completed historical study, weekly lineup simulation, or 2026 Forecast result;
 - authority to change `DYNASTY_STRATEGY_ONTOLOGY_V1`;
+- authority to execute trials, collect or ingest new evidence, or activate TIBER-Ops issue #52
+  or any research-lab pilot;
 - Draft Assist, TIBER-Fantasy integration, or public product advice.
 
 Named players and acquisition-window statements are operator field evidence. They remain separate
 from observed draft facts, model evidence, and universal Strategy concepts. A merge of this note
-would govern the research record, not prove its candidate claim.
+would govern the research record, not prove its candidate claim or authorize execution. Trial
+execution, evidence collection, and any research-lab pilot require separate operator-approved
+authority.
 
 ## 2. Research question
 
@@ -101,10 +105,11 @@ from them.
 > In 12-team, one-QB, full-PPR redraft with two RB/WR/TE flex spots, a premium pass-catching TE plus
 > front-loaded RB investment may improve the upper tail of the optimized starting lineup when:
 >
-> 1. the TE's advantage over the realistic streaming/waiver baseline plus any RB replacement loss
->    actually avoided by the candidate branch exceeds the aggregate marginal loss between each
->    earlier asset displaced by the premium-TE selection and the downstream replacement actually
->    acquired in the candidate branch; and
+> 1. the premium TE's advantage over the comparator branch's actual TE—using a declared
+>    streaming/waiver baseline only when that comparator branch truly streams—plus any RB
+>    replacement loss actually avoided by the candidate branch exceeds the aggregate marginal loss
+>    between each earlier asset displaced by the premium-TE selection and the downstream
+>    replacement actually acquired in the candidate branch; and
 > 2. a usable WR tier survives to the manager's next Round 3/4 or Round 4/5 selections.
 
 The opportunity-cost accounting must be hypothesis-specific:
@@ -188,7 +193,7 @@ Classify every comparison before using it as evidence:
 
 | Comparison class | Minimum shared state | Permitted interpretation |
 |---|---|---|
-| `matched_counterfactual` | Same frozen board or seed, same non-manager selections, and the same exogenous availability path through every compared decision; the planned manager selection is the only branch-point change | Complete-roster causal counterfactual |
+| `matched_counterfactual` | Same frozen seed and deterministic opponent policies/rankings; the manager decision policy is also frozen except for the declared branch point. Opponent selections are regenerated under those policies, and branch-induced downstream selection and availability changes are preserved | Complete-roster causal counterfactual |
 | `shared_board_pivot` | Same captured board only at the pivotal decision; downstream availability is not held fixed | Immediate decision-set comparison only, not a complete-roster counterfactual |
 | `repeated_room_observation` | Same league contract and draft slot, but a different live or mock room | Observational construction evidence only |
 
@@ -200,8 +205,10 @@ comparison_class
 league_contract
 draft_slot
 room_or_board_reference
-frozen_board_or_seed_id
+frozen_seed_id
+opponent_policy_or_ranking_version
 shared_board_through_decision_cursor
+induced_downstream_selection_changes
 primary_branch_pick
 counterfactual_branch_pick
 subsequent_decision_policy
@@ -227,19 +234,23 @@ later-memory reconstruction. A single branch-point snapshot does not satisfy thi
 
 Protocol rules:
 
-1. Reserve `matched_counterfactual` for branches that share a frozen board or seed and the same
-   non-manager selections through every compared decision. Holding only league, slot, or policy
-   constant is insufficient.
+1. Reserve `matched_counterfactual` for branches that share a frozen seed, deterministic opponent
+   policies or rankings, and the same manager decision policy except for the declared branch point.
+   Regenerate opponent selections under those frozen policies. Do not require identical realized
+   opponent picks: when a branch takes a player an opponent policy would otherwise select, the
+   policy's induced replacement pick and every resulting downstream availability change are part
+   of the counterfactual and must be logged.
 2. Compare complete rosters, not only the two players at the branch point.
-3. If the room or downstream external availability changes, classify the evidence as
-   `repeated_room_observation`; recording the change does not preserve matched status.
+3. If the room changes, or downstream external availability changes for a reason not induced by the
+   declared branch under the frozen policies, classify the evidence as `repeated_room_observation`.
+   Branch-induced availability changes alone do not break matched status.
 4. Separate strict ranking, roster construction, value click, and deliberate exploration.
 5. Mark missing state as `not_recorded` or `unavailable`; never reconstruct it from memory.
 6. Treat Sleeper mock rooms as repeated field observations, not deterministic experiments.
 7. A `shared_board_pivot` can test the choice visible at that moment but cannot support a causal
    complete-roster claim.
-8. Until a governed fixed-board replay or availability model is authorized, current Sleeper mocks
-   cannot satisfy `matched_counterfactual`.
+8. Until a governed fixed-seed replay with deterministic opponent policies or rankings is
+   authorized, current Sleeper mocks cannot satisfy `matched_counterfactual`.
 
 ## 10. Roster-level evaluation
 
@@ -249,7 +260,7 @@ The eventual comparison should evaluate:
 |---|---|---|
 | Expected optimized starter production | Weekly legal lineup, not raw roster sum | Requires governed Forecast distributions |
 | Upper-tail starter outcome | High-end weekly lineup distribution with declared assumptions | Not currently computable |
-| TE separation | Premium TE versus realistic league-specific streaming/waiver TE | Waiver baseline contract missing |
+| TE separation | Premium TE versus the comparator branch's actual TE; use a league-specific streaming/waiver baseline only when that branch truly streams | Comparator-TE and waiver-baseline contracts missing |
 | Avoided RB replacement loss | Early RB versus the RB actually reachable later | Market/availability evidence missing |
 | WR recovery | Quality and usability of WRs obtained at later turns | Field observations exist; no governed comparison |
 | Starter capacity | Whether all premium RB/WR/TE assets can start | Declared by the league contract |
@@ -296,12 +307,17 @@ A defensible historical study requires:
 - provenance-bound historical draft-position evidence;
 - weekly fantasy scoring and player availability;
 - an ex-ante premium-TE identification rule that does not select only famous hits;
+- for every reconstructed branch, an ex-ante preseason board, ranking, or deterministic decision
+  policy that governs every pick—not only premium-TE identification—before outcome data are
+  consulted;
 - complete comparison groups, including failed early-TE constructions;
 - fixed scoring, lineup, and waiver assumptions;
 - explicit treatment of injuries, role changes, and games played.
 
 TIBER-Strategy currently owns no market/ADP artifact. Historical player outcomes alone cannot
-reconstruct what managers could realistically acquire at each pick.
+reconstruct what managers could realistically acquire at each pick. Complete recorded drafts may
+be used as observational evidence, but a reconstructed branch must never choose comparator assets
+or downstream replacements after their outcomes are known.
 
 ### 12.2 Live best-ball or managed-draft evidence
 
@@ -346,8 +362,10 @@ the premium-TE/RB-heavy family has the highest ceiling.
 The candidate claim is weakened or rejected when:
 
 1. WR recovery at the required turns is not repeatable across realistic rooms.
-2. Premium-TE separation is smaller than the marginal opportunity cost of any earlier RB, WR, QB,
-   or other asset displaced after crediting the downstream replacement actually acquired.
+2. The premium TE's advantage over the comparator branch's actual TE—or the declared
+   streaming/waiver baseline when that branch truly streams—plus any RB replacement loss actually
+   avoided by the candidate branch does not exceed the aggregate marginal opportunity cost of all
+   earlier displaced assets after crediting the downstream replacements actually acquired.
 3. Success requires a player to fall beyond a realistic acquisition window.
 4. Bowers succeeds while McBride/Loveland variants fail, rejecting a tier-wide interpretation.
 5. RB-heavy builds create greater injury or replacement fragility than their upside compensates.
@@ -407,8 +425,8 @@ highest_ceiling_language:
   permitted_as_TIBER_finding: false
 ```
 
-The field evidence is sufficient to justify the research program. It is insufficient to prefer a
-construction.
+The field evidence is sufficient to preserve the research question and protocol for review. It is
+insufficient to execute the protocol or prefer a construction.
 
 ## 17. Ownership and missing-contract map
 
@@ -428,10 +446,14 @@ This map records current boundaries. It does not activate a new cross-repository
 
 ## 18. Next evidence before any ontology proposal
 
+These are prerequisites for separately authorized future work, not active work items under this
+note.
+
 1. Freeze a timestamped operator-board snapshot, including Gibbs at `1.01` and Bowers' personal
    acquisition/value range, as operator overlay rather than universal ranking.
-2. Once governed fixed-board replay is authorized, run matched trials across early, middle, and
-   turn slots with exact decision cursors and complete roster capture.
+2. Once a governed fixed-seed replay with deterministic opponent policies or rankings is separately
+   authorized, run matched trials across early, middle, and turn slots with exact decision cursors,
+   induced downstream selection changes, and complete roster capture.
 3. Produce separate Bowers, McBride, and Loveland branches; do not use Bowers as the tier proxy.
 4. Measure whether Flowers/Waddle or the broader usable WR tier actually survives to the required
    turns across realistic rooms.
@@ -460,7 +482,12 @@ No ontology proposal should open until the evidence can distinguish those outcom
 ## 20. Research-state conclusion
 
 The premium-TE/RB-heavy family is a coherent and testable candidate strategy. The present evidence
-supports preserving and executing the protocol, not publishing a recommendation.
+supports preserving the protocol and seeking separate execution authority, not executing it or
+publishing a recommendation.
+
+Merge of this note authorizes no trial execution, replay, evidence collection or ingestion, model,
+data, Strategy, or product activation. It does not activate TIBER-Ops issue #52 or any research-lab
+pilot.
 
 H1 and H2 remain unresolved. Any future finding must report whether it is Bowers-specific,
 tier-wide, slot-dependent, room-dependent, league-contract-dependent, or unsupported.
