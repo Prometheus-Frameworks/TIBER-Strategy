@@ -1,5 +1,7 @@
 # TIBER-Strategy
 
+> **[TIBER Now — what works, what we’re building, and what’s still conceptual](https://github.com/Prometheus-Frameworks/TIBER-Fantasy/blob/main/docs/TIBER_NOW.md)**
+
 TIBER-Strategy teaches TIBER the structure of dynasty/fantasy football decision-making. It is an **artifact producer**: its output is deterministic, schema-validated strategy vocabulary contracts that other TIBER repos (first consumer: TIBER-Fantasy) apply to their own evidence.
 
 **Core principle: ship rules, not per-player labels.**
