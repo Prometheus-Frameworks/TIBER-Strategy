@@ -43,6 +43,10 @@ The envelope (`artifact_type`, `schema_version`, `model_version`, `generated_at`
 - [docs/concepts/timeline_value.md](docs/concepts/timeline_value.md)
 - [docs/concepts/explanation_templates.md](docs/concepts/explanation_templates.md)
 
+## In-season research notes
+
+The [in-season field-notes index](docs/field-notes/README.md) contains player-free research framing for recovering lost starter production and investigating emerging opportunity. These are untested research protocols, separate from the promoted ontology; they establish no thresholds, player labels, recommendations or consumer activation. Related direction: [issue #10](https://github.com/Prometheus-Frameworks/TIBER-Strategy/issues/10).
+
 ## Commands
 
 ```bash
